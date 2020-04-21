@@ -1,0 +1,85 @@
+20.04.2020 21:23:10	This log contains information about the import schema operation into project 'Book Library Data Base' on computer 'DESKTOP-3JLM130' by user 'user'.
+20.04.2020 21:23:10	Import of database schema has started.
+20.04.2020 21:23:18	Gathering database credentials
+20.04.2020 21:23:18	Gathering database options
+20.04.2020 21:23:18	Gathering users
+20.04.2020 21:23:18	Gathering roles
+20.04.2020 21:23:18	Gathering application roles
+20.04.2020 21:23:18	Gathering role memberships
+20.04.2020 21:23:18	Gathering filegroups
+20.04.2020 21:23:18	Gathering full-text catalogs
+20.04.2020 21:23:18	Gathering assemblies
+20.04.2020 21:23:18	Gathering certificates
+20.04.2020 21:23:18	Gathering asymmetric keys
+20.04.2020 21:23:18	Gathering symmetric keys
+20.04.2020 21:23:18	Gathering encrypted symmetric keys
+20.04.2020 21:23:18	Gathering schemas
+20.04.2020 21:23:18	Gathering XML schema collections
+20.04.2020 21:23:18	Gathering user-defined data types
+20.04.2020 21:23:18	Gathering user-defined types
+20.04.2020 21:23:18	Gathering table types
+20.04.2020 21:23:18	Gathering unique keys for table types
+20.04.2020 21:23:18	Gathering primary keys for table types
+20.04.2020 21:23:18	Gathering indexes for table types
+20.04.2020 21:23:18	Gathering check constraints for table types
+20.04.2020 21:23:18	Gathering default constraints for table types
+20.04.2020 21:23:18	Gathering partition functions
+20.04.2020 21:23:18	Gathering partition schemes
+20.04.2020 21:23:18	Gathering functions
+20.04.2020 21:23:18	Gathering encrypted functions
+20.04.2020 21:23:18	Gathering aggregates
+20.04.2020 21:23:18	Gathering procedures
+20.04.2020 21:23:18	Gathering encrypted procedures
+20.04.2020 21:23:18	Gathering tables
+20.04.2020 21:23:18	Gathering primary keys
+20.04.2020 21:23:18	Gathering unique constraints
+20.04.2020 21:23:18	Gathering foreign keys
+20.04.2020 21:23:18	Gathering default constraints
+20.04.2020 21:23:18	Gathering check constraints
+20.04.2020 21:23:18	Gathering views
+20.04.2020 21:23:18	Gathering encrypted views
+20.04.2020 21:23:18	Gathering indexes
+20.04.2020 21:23:18	Gathering statistics
+20.04.2020 21:23:18	Gathering full-text index stoplists
+20.04.2020 21:23:18	Gathering search property lists
+20.04.2020 21:23:18	Gathering search properties
+20.04.2020 21:23:18	Gathering full-text indexes
+20.04.2020 21:23:18	Gathering column store indexes
+20.04.2020 21:23:18	Gathering spatial indexes
+20.04.2020 21:23:18	Gathering XML indexes
+20.04.2020 21:23:18	Gathering Selective XML indexes
+20.04.2020 21:23:18	Gathering encrypted triggers
+20.04.2020 21:23:18	Gathering triggers
+20.04.2020 21:23:18	Gathering encrypted and clr ddl triggers
+20.04.2020 21:23:18	Gathering ddl triggers
+20.04.2020 21:23:18	Gathering synonyms
+20.04.2020 21:23:18	Gathering defaults
+20.04.2020 21:23:18	Gathering data constraint uddt bindings
+20.04.2020 21:23:18	Gathering rules
+20.04.2020 21:23:18	Gathering data constraint uddt bindings
+20.04.2020 21:23:18	Gathering message types
+20.04.2020 21:23:18	Gathering queues
+20.04.2020 21:23:18	Gathering contracts
+20.04.2020 21:23:18	Gathering services
+20.04.2020 21:23:18	Gathering event notifications
+20.04.2020 21:23:18	Gathering remote service bindings
+20.04.2020 21:23:18	Gathering broker priorities
+20.04.2020 21:23:18	Gathering signatures
+20.04.2020 21:23:18	Gathering data compression options
+20.04.2020 21:23:19	Gathering sequence types
+20.04.2020 21:23:19	Gathering security policies
+20.04.2020 21:23:19	Gather column encryption keys
+20.04.2020 21:23:19	Gathering column master keys
+20.04.2020 21:23:19	Gathering external data sources
+20.04.2020 21:23:19	Gathering external file formats
+20.04.2020 21:23:19	Gathering external tables
+20.04.2020 21:23:19	Gathering database permissions
+20.04.2020 21:23:19	Gathering extended properties
+20.04.2020 21:23:19	Gathering credentials
+20.04.2020 21:23:19	Gathering logins
+20.04.2020 21:23:19	Gathering server audits
+20.04.2020 21:23:19	Scanning project for duplicate elements
+20.04.2020 21:23:20	Finished duplicate element processing
+20.04.2020 21:23:20	Finished importing database.
+20.04.2020 21:23:20	A summary of the import was saved to the following location: D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core MVC EF Core DLL\Book Library Data Base\Import Schema Logs\Book Library Data Ba_20200420062310.log
+20.04.2020 21:23:20	Click Finish to continue...

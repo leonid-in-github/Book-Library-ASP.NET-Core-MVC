@@ -1,0 +1,28 @@
+﻿@model Book_Library_ASP.NET_Core_MVC.Models.Accounts.DeleteAccountModel
+
+@{
+    ViewData["Title"] = "Delete account";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron">
+    <h1 class="display-4">Delete account page</h1>
+    <hr class="jumbotron-hr" />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="DeleteAccount">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <span asp-validation-for="DeleteAccountMassege" class="text-danger"></span>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Delete account." class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
