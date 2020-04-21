@@ -12,7 +12,7 @@
 		</CustomData>
 		<CustomData Category="Reference" Type="Assembly">
 			<Metadata Name="LogicalName" Value="Book_Library_Data_Base.dll" />
-			<Metadata Name="FileName" Value="D:\[ROOT]\[DOCUMENTS]\[PROJECTS]\BOOK LIBRARY PROJECT\BOOK LIBRARY ASP.NET CORE MVC EF CORE DLL\BOOK LIBRARY DATA BASE\OBJ\DEBUG\BOOK_LIBRARY_DATA_BASE.DLL" />
+			<Metadata Name="FileName" Value="D:\[ROOT]\[DOCUMENTS]\[PROJECTS]\BOOK LIBRARY PROJECT\BOOK LIBRARY ASP.NET CORE SOLUTION\BOOK LIBRARY DATA BASE\OBJ\DEBUG\BOOK_LIBRARY_DATA_BASE.DLL" />
 			<Metadata Name="AssemblyName" Value="Book_Library_Data_Base" />
 			<Metadata Name="PermissionSet" Value="SAFE" />
 			<Metadata Name="Owner" Value="" />
@@ -20,7 +20,7 @@
 			<Metadata Name="IsVisible" Value="True" />
 			<Metadata Name="IsModelAware" Value="True" />
 			<Metadata Name="SkipCreationIfEmpty" Value="True" />
-			<Metadata Name="AssemblySymbolsName" Value="D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core MVC EF Core DLL\Book Library Data Base\obj\Debug\Book_Library_Data_Base.pdb" />
+			<Metadata Name="AssemblySymbolsName" Value="D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library Data Base\obj\Debug\Book_Library_Data_Base.pdb" />
 		</CustomData>
 		<CustomData Category="SqlCmdVariables" Type="SqlCmdVariable" />
 	</Header>
@@ -2425,7 +2425,7 @@ END;]]></Value>
 						<Relationship Name="Type">
 							<Entry>
 								<Element Type="SqlTypeSpecifier">
-									<Property Name="Length" Value="24" />
+									<Property Name="Length" Value="36" />
 									<Relationship Name="Type">
 										<Entry>
 											<References ExternalSource="BuiltIns" Name="[char]" />
@@ -2463,7 +2463,7 @@ END;]]></Value>
 				<Property Name="Length" Value="644" />
 				<Property Name="StartLine" Value="1" />
 				<Property Name="StartColumn" Value="1" />
-				<Property Name="HeaderContents" Value="&#xD;&#xA;CREATE PROCEDURE [dbo].[GetSessionLastRenewalDate]&#xD;&#xA;&#x9;@SessionId CHAR(24),&#xD;&#xA;&#x9;@SessionLastRenewalDate DATETIME OUTPUT&#xD;&#xA;AS" />
+				<Property Name="HeaderContents" Value="&#xD;&#xA;CREATE PROCEDURE [dbo].[GetSessionLastRenewalDate]&#xD;&#xA;&#x9;@SessionId CHAR(36),&#xD;&#xA;&#x9;@SessionLastRenewalDate DATETIME OUTPUT&#xD;&#xA;AS" />
 			</Annotation>
 		</Element>
 		<Element Type="SqlProcedure" Name="[dbo].[GetSessionUser]">
@@ -2552,7 +2552,7 @@ END;]]></Value>
 						<Relationship Name="Type">
 							<Entry>
 								<Element Type="SqlTypeSpecifier">
-									<Property Name="Length" Value="24" />
+									<Property Name="Length" Value="36" />
 									<Relationship Name="Type">
 										<Entry>
 											<References ExternalSource="BuiltIns" Name="[char]" />
@@ -2658,7 +2658,7 @@ END;]]></Value>
 				<Property Name="Length" Value="636" />
 				<Property Name="StartLine" Value="1" />
 				<Property Name="StartColumn" Value="1" />
-				<Property Name="HeaderContents" Value="&#xD;&#xA;CREATE PROCEDURE [dbo].[GetSessionUser]&#xD;&#xA;&#x9;@SessionId CHAR(24),&#xD;&#xA;&#x9;@AccountId INT OUTPUT,&#xD;&#xA;&#x9;@Login NVARCHAR(32) OUTPUT,&#xD;&#xA;&#x9;@FirstName NVARCHAR(32) OUTPUT,&#xD;&#xA;&#x9;@LastName NVARCHAR(32) OUTPUT,&#xD;&#xA;&#x9;@Email NVARCHAR(32) OUTPUT&#xD;&#xA;AS" />
+				<Property Name="HeaderContents" Value="&#xD;&#xA;CREATE PROCEDURE [dbo].[GetSessionUser]&#xD;&#xA;&#x9;@SessionId CHAR(36),&#xD;&#xA;&#x9;@AccountId INT OUTPUT,&#xD;&#xA;&#x9;@Login NVARCHAR(32) OUTPUT,&#xD;&#xA;&#x9;@FirstName NVARCHAR(32) OUTPUT,&#xD;&#xA;&#x9;@LastName NVARCHAR(32) OUTPUT,&#xD;&#xA;&#x9;@Email NVARCHAR(32) OUTPUT&#xD;&#xA;AS" />
 			</Annotation>
 		</Element>
 		<Element Type="SqlProcedure" Name="[dbo].[GetUser]">

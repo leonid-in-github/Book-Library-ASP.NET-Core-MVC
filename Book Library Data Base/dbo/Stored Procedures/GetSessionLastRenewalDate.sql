@@ -1,6 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[GetSessionLastRenewalDate]
-	@SessionId CHAR(24),
+	@SessionId CHAR(36),
 	@SessionLastRenewalDate DATETIME OUTPUT
 AS
 BEGIN

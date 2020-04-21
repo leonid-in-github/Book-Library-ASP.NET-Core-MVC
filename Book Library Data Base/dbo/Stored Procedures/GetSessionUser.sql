@@ -1,6 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[GetSessionUser]
-	@SessionId CHAR(24),
+	@SessionId CHAR(36),
 	@AccountId INT OUTPUT,
 	@Login NVARCHAR(32) OUTPUT,
 	@FirstName NVARCHAR(32) OUTPUT,
