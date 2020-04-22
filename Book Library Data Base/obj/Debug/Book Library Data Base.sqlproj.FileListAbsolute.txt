@@ -10,7 +10,6 @@ D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core 
 D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library Data Base\bin\Debug\Book Library Data Base.dacpac
 D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library Data Base\bin\Debug\Book_Library_Data_Base.dll
 D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library Data Base\bin\Debug\Book_Library_Data_Base.pdb
-D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library Data Base\obj\Debug\Book Library Data Base.sqlprojAssemblyReference.cache
 D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library Data Base\obj\Debug\Model.xml
 D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library Data Base\obj\Debug\refactor.xml
 D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library Data Base\obj\Debug\postdeploy.sql

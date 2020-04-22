@@ -13,6 +13,9 @@ using Book_Library_ASP.NET_Core_MVC.Models.Accounts;
 using Book_Library_ASP.NET_Core_MVC.Controllers;
 using System.Security.Principal;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Book_Libary_ASP.NET_Core_MVC.Controllers
 {
@@ -25,10 +28,20 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
             _config = config;
         }
 
+        private async Task Authenticate(string userName, int dbUserId)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
+                new Claim(ClaimTypes.NameIdentifier, dbUserId.ToString())
+            };
+            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+        }
+
         private void SetupSession(int accountId, string accountLogin)
         {
-            HttpContext.Session.SetString("AccountLogin", accountLogin);
-            HttpContext.Session.SetInt32("AccountId", accountId);
+            _ = Authenticate(accountLogin, accountId);
         }
 
         public IActionResult Login()
@@ -84,6 +97,8 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
         {
             try
             {
+                HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
                 dbBookLibraryProxy.Account.Logout(HttpContext.Session.Id);
 
                 HttpContext.Session.Clear();
@@ -149,9 +164,11 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
             if (!IsLoged) return RedirectToAction("Index", "Home");
             try
             {
-                var aId = HttpContext.Session.GetInt32("AccountId");
-                var model = (UserModel)dbBookLibraryProxy.Account.GetUser((int)aId);
-                return View(model);
+                if(Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
+                {
+                    var model = (UserModel)dbBookLibraryProxy.Account.GetUser((int)aId);
+                    return View(model);
+                }
             }
             catch (Exception) { }
 
@@ -171,14 +188,17 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
                 if (!IsLoged) return RedirectToAction("Index", "Home");
                 try
                 {
-                    var aId = HttpContext.Session.GetInt32("AccountId");
-                    var result = dbBookLibraryProxy.Account.ChangeAccountPassword((int)aId, model.Password, model.NewPassword);
-                    if (result)
-                        return RedirectToAction("GetUser", "Account");
-                    else
+                    if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
                     {
-                        ModelState.AddModelError("ChangePasswordMassege", "Change password failed. Incorrect data.");
-                        return View();
+                        var result = dbBookLibraryProxy.Account.ChangeAccountPassword((int)aId, model.Password, model.NewPassword);
+
+                        if (result)
+                            return RedirectToAction("GetUser", "Account");
+                        else
+                        {
+                            ModelState.AddModelError("ChangePasswordMassege", "Change password failed. Incorrect data.");
+                            return View();
+                        }
                     }
                 }
                 catch (Exception) { }
@@ -199,17 +219,19 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
                 if (!IsLoged) return RedirectToAction("Index", "Home");
                 try
                 {
-                    var aId = HttpContext.Session.GetInt32("AccountId");
-                    var result = dbBookLibraryProxy.Account.DeleteAccount((int)aId, model.Password);
-                    if (result)
+                    if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
                     {
-                        LogoutApplication();
-                        return RedirectToAction("Index", "Home");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("DeleteAccountMassege", "Delete account failed. Incorrect password.");
-                        return View();
+                        var result = dbBookLibraryProxy.Account.DeleteAccount((int)aId, model.Password);
+                        if (result)
+                        {
+                            LogoutApplication();
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("DeleteAccountMassege", "Delete account failed. Incorrect password.");
+                            return View();
+                        }
                     }
                 }
                 catch (Exception) { }

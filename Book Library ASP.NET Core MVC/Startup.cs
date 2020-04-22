@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Book_Library_ASP.NET_Core_MVC.Models.AppConfig;
 using Book_Library_EF_Core_Proxy_Class_Library.Context;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -47,10 +48,16 @@ namespace Book_Library_ASP.NET_Core_MVC
 
             services.Configure<SessionConfig>(Configuration.GetSection("sessionConfig"));
 
-            services.AddControllersWithViews().AddRazorRuntimeCompilation();
-
             services.AddDbContext<BookLibraryContext>(options =>
         options.UseSqlServer(Book_Library_EF_Core_Proxy_Class_Library.Constants.LibraryConstants.CONNECTIONSTRING));
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options => //CookieAuthenticationOptions
+                {
+                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                });
+
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,6 +75,7 @@ namespace Book_Library_ASP.NET_Core_MVC
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseSession();

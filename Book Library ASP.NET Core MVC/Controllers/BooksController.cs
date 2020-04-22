@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Book_Library_ASP.NET_Core_MVC.Models.Books;
 using Book_Library_ASP.NET_Core_MVC.Models.Books.Extensions;
@@ -88,10 +89,13 @@ namespace Book_Library_ASP.NET_Core_MVC.Controllers
             {
                 try
                 {
-                    var bookTrackModel = (BookTrackModel)dbBookLibraryProxy.Books.GetBookTrack(
-                        Convert.ToInt32(HttpContext.Session.GetInt32("AccountId")), (int)bookId, Request.Cookies["BookTrackTableSelectedMode"]?.ToString());
+                    if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
+                    {
+                        var bookTrackModel = (BookTrackModel)dbBookLibraryProxy.Books.GetBookTrack(
+                        aId, (int)bookId, Request.Cookies["BookTrackTableSelectedMode"]?.ToString());
 
-                    return View(bookTrackModel);
+                        return View(bookTrackModel);
+                    }
                 }
                 catch (Exception) { }
             }
@@ -106,7 +110,10 @@ namespace Book_Library_ASP.NET_Core_MVC.Controllers
             {
                 try
                 {
-                    dbBookLibraryProxy.Books.TakeBook(Convert.ToInt32(HttpContext.Session.GetInt32("AccountId")), bookId);
+                    if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
+                    {
+                        dbBookLibraryProxy.Books.TakeBook(aId, bookId);
+                    }
                 }
                 catch (Exception) { }
             }
@@ -122,7 +129,10 @@ namespace Book_Library_ASP.NET_Core_MVC.Controllers
             {
                 try
                 {
-                    dbBookLibraryProxy.Books.PutBook(Convert.ToInt32(HttpContext.Session.GetInt32("AccountId")), bookId);
+                    if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
+                    {
+                        dbBookLibraryProxy.Books.PutBook(aId, bookId);
+                    }
                 }
                 catch (Exception) { }
             }
@@ -146,7 +156,10 @@ namespace Book_Library_ASP.NET_Core_MVC.Controllers
                     BooksList = dbBookLibraryProxy.Books.GetAvaliableBooks().ConvertToProxyListDisplayBook();
                     break;
                 case "3":
-                    BooksList = dbBookLibraryProxy.Books.GetBooksByUser(Convert.ToInt32(HttpContext.Session.GetInt32("AccountId"))).ConvertToProxyListDisplayBook();
+                    if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
+                    {
+                        BooksList = dbBookLibraryProxy.Books.GetBooksByUser(aId).ConvertToProxyListDisplayBook();
+                    }
                     break;
             }
 

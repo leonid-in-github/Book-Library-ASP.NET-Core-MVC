@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Book_Library_ASP.NET_Core_MVC.Models;
 using Book_Library_ASP.NET_Core_MVC.Models.Home;
+using System.Security.Claims;
 
 namespace Book_Libary_ASP.NET_Core_MVC.Controllers
 {

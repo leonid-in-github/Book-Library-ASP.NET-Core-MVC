@@ -12,12 +12,7 @@ namespace Book_Library_ASP.NET_Core_MVC.Controllers
         {
             get
             {
-                if(HttpContext.Session.TryGetValue("AccountLogin", out byte[] sLoginBArr))
-                {
-                    if (sLoginBArr == null) return false;
-                    return sLoginBArr.Length > 0;
-                }
-                return false;
+                return User.Identity.IsAuthenticated;
             }
         }
     }

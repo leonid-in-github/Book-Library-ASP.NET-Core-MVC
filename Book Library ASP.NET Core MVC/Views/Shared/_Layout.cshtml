@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    @using Microsoft.AspNetCore.Http
 </head>
 <body>
     <header>
@@ -37,22 +36,22 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav ml-auto">
                         @{
-                            if (String.IsNullOrEmpty(Context.Session.GetString("AccountLogin")?.ToString()))
+                            if (User.Identity.IsAuthenticated)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                                    <a class="nav-link" asp-area="" asp-controller="Account" asp-action="GetUser">
+                                        <span class="text-info">User:</span>&nbsp;
+                                        <span>@User.Identity.Name</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
                                 </li>
                             }
                             else
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Account" asp-action="GetUser">
-                                        <span class="text-info">User:</span>&nbsp;
-                                        <span>@Context.Session.GetString("AccountLogin")</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                                    <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
                                 </li>
                             }
                         }
