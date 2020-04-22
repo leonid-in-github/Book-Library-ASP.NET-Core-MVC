@@ -205,7 +205,6 @@ D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core 
 D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library EF Core Proxy Class Library\bin\Debug\ru\Microsoft.Data.SqlClient.resources.dll
 D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library EF Core Proxy Class Library\bin\Debug\zh-Hans\Microsoft.Data.SqlClient.resources.dll
 D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library EF Core Proxy Class Library\bin\Debug\zh-Hant\Microsoft.Data.SqlClient.resources.dll
-D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library EF Core Proxy Class Library\obj\Debug\Book Library EF Core Proxy Class Library.csprojAssemblyReference.cache
 D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library EF Core Proxy Class Library\obj\Debug\Book Library EF Core Proxy Class Library.csproj.CoreCompileInputs.cache
 D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library EF Core Proxy Class Library\obj\Debug\Book Library EF Core Proxy Class Library.csproj.CopyComplete
 D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library EF Core Proxy Class Library\obj\Debug\Book Library EF Core Proxy Class Library.dll

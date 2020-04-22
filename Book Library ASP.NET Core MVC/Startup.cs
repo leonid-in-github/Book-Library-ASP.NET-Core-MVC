@@ -55,6 +55,7 @@ namespace Book_Library_ASP.NET_Core_MVC
                 .AddCookie(options => //CookieAuthenticationOptions
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(Book_Library_EF_Core_Proxy_Class_Library.Constants.LibraryConstants.SESSIONEXPIRATIONTIMEINMINUTES);
                 });
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();

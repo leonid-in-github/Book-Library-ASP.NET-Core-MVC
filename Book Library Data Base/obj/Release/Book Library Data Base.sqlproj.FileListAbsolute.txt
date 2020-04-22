@@ -7,3 +7,12 @@ D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core 
 D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core MVC EF Core DLL\Book Library Data Base\obj\Release\predeploy.sql
 D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core MVC EF Core DLL\Book Library Data Base\obj\Release\Book_Library_Data_Base.dll
 D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core MVC EF Core DLL\Book Library Data Base\obj\Release\Book_Library_Data_Base.pdb
+D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library Data Base\bin\Release\Book Library Data Base.dacpac
+D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library Data Base\bin\Release\Book_Library_Data_Base.dll
+D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library Data Base\bin\Release\Book_Library_Data_Base.pdb
+D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library Data Base\obj\Release\Model.xml
+D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library Data Base\obj\Release\refactor.xml
+D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library Data Base\obj\Release\postdeploy.sql
+D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library Data Base\obj\Release\predeploy.sql
+D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library Data Base\obj\Release\Book_Library_Data_Base.dll
+D:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library Data Base\obj\Release\Book_Library_Data_Base.pdb
