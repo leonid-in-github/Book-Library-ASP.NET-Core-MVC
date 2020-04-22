@@ -9,6 +9,7 @@
 
         //delete_cookie("TableSelectedMode");
     });
+
 });
 
 
@@ -21,3 +22,4 @@ function ReloadIndexBookTable1() {
     
     $('#library-table').DataTable().ajax.reload();
 }
+
