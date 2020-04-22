@@ -91,8 +91,9 @@ namespace Book_Library_ASP.NET_Core_MVC.Controllers
                 {
                     if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
                     {
+                        var tracksCount = Request.Cookies["BookTrackTableSelectedMode"]?.ToString();
                         var bookTrackModel = (BookTrackModel)dbBookLibraryProxy.Books.GetBookTrack(
-                        aId, (int)bookId, Request.Cookies["BookTrackTableSelectedMode"]?.ToString());
+                        aId, (int)bookId, tracksCount == null ? "10" : tracksCount);
 
                         return View(bookTrackModel);
                     }

@@ -2,6 +2,9 @@
     if (getCookie("BookTrackTableSelectedMode")) {
         $("#SelectedMode")[0].value = getCookie("BookTrackTableSelectedMode");
     }
+    else {
+        document.cookie = "BookTrackTableSelectedMode=10";
+    }
 
     if (document.getElementById("track-table") == null || document.getElementById("track-table").rows.length <= 10) {
         document.getElementById("SelectedMode").style.display = "none";
