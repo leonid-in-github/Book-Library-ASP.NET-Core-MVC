@@ -9,7 +9,5 @@ namespace Book_Library_EF_Core_Proxy_Class_Library.Models.Book.LibraryInterfaceB
     public class AddBookModel : ActionBookModel
     {
         public AddBookModel() { }
-
-        public string AddBookMassege { get; set; }
     }
 }

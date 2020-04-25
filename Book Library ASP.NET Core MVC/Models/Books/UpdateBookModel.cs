@@ -30,7 +30,7 @@ namespace Book_Library_ASP.NET_Core_MVC.Models.Books
 
         public static explicit operator ProxyUpdateBookModel(UpdateBookModel model)
         {
-            return new ProxyUpdateBookModel { Id = model.Id, Name = model.Name, Authors = model.Authors, Year = model.Year, UpdateBookMassege = model.UpdateBookMassege };
+            return new ProxyUpdateBookModel { Id = model.Id, Name = model.Name, Authors = model.Authors, Year = model.Year };
         }
 
     }

@@ -14,7 +14,7 @@ namespace Book_Library_ASP.NET_Core_MVC.Models.Books
 
         public static explicit operator ProxyAddBookModel(AddBookModel model)
         {
-            return new ProxyAddBookModel { Name = model.Name, Authors = model.Authors, Year = model.Year, AddBookMassege = model.AddBookMassege };
+            return new ProxyAddBookModel { Name = model.Name, Authors = model.Authors, Year = model.Year };
         }
     }
 }

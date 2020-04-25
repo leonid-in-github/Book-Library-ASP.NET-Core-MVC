@@ -16,7 +16,6 @@ namespace Book_Library_EF_Core_Proxy_Class_Library.Models.Book.LibraryInterfaceB
             Name = book.Name;
             Authors = book.Authors;
             Year = book.Year;
-            UpdateBookMassege = null;
         }
 
         public int Id { get; set; }
@@ -25,8 +24,6 @@ namespace Book_Library_EF_Core_Proxy_Class_Library.Models.Book.LibraryInterfaceB
         [DataType(DataType.DateTime)]
         [Display(Name = "Year")]
         public override DateTime Year { get; set; }
-
-        public string UpdateBookMassege { get; set; }
 
     }
 }
