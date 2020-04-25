@@ -149,18 +149,18 @@ namespace Book_Library_ASP.NET_Core_MVC.Controllers
             switch (Request.Cookies["TableSelectedMode"]?.ToString())
             {
                 case null:
-                    BooksList = dbBookLibraryProxy.Books.GetBooks().ConvertToProxyListDisplayBook();//.ConvertAll(new Converter<ProxyDisplayBook, DisplayBook>());
+                    BooksList = dbBookLibraryProxy.Books.GetBooks().ConvertToMVCListDisplayBook();//.ConvertAll(new Converter<ProxyDisplayBook, DisplayBook>());
                     break;
                 case "1":
-                    BooksList = dbBookLibraryProxy.Books.GetBooks().ConvertToProxyListDisplayBook();
+                    BooksList = dbBookLibraryProxy.Books.GetBooks().ConvertToMVCListDisplayBook();
                     break;
                 case "2":
-                    BooksList = dbBookLibraryProxy.Books.GetAvaliableBooks().ConvertToProxyListDisplayBook();
+                    BooksList = dbBookLibraryProxy.Books.GetAvaliableBooks().ConvertToMVCListDisplayBook();
                     break;
                 case "3":
                     if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
                     {
-                        BooksList = dbBookLibraryProxy.Books.GetBooksByUser(aId).ConvertToProxyListDisplayBook();
+                        BooksList = dbBookLibraryProxy.Books.GetBooksByUser(aId).ConvertToMVCListDisplayBook();
                     }
                     break;
             }

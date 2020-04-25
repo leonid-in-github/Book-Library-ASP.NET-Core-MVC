@@ -9,7 +9,7 @@ namespace Book_Library_ASP.NET_Core_MVC.Models.Books.Extensions
 {
     public static class ListExtensions
     {
-        public static List<DisplayBook> ConvertToProxyListDisplayBook(this List<ProxyDisplayBook> list)
+        public static List<DisplayBook> ConvertToMVCListDisplayBook(this List<ProxyDisplayBook> list)
         {
             return list.ConvertAll(new Converter<ProxyDisplayBook, DisplayBook>(ProxyDisplayBookToDisplayBook));
         }
