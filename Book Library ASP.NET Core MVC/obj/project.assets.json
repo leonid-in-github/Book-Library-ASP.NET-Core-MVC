@@ -8292,19 +8292,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\user\\.nuget\\packages\\": {}
+    "C:\\Users\\leoni\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\[ROOT]\\[Documents]\\[Projects]\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library ASP.NET Core MVC\\Book Library ASP.NET Core MVC.csproj",
+      "projectUniqueName": "E:\\[ROOT]\\[Documents]\\[Projects]\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library ASP.NET Core MVC\\Book Library ASP.NET Core MVC.csproj",
       "projectName": "Book Library ASP.NET Core MVC",
-      "projectPath": "D:\\[ROOT]\\[Documents]\\[Projects]\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library ASP.NET Core MVC\\Book Library ASP.NET Core MVC.csproj",
-      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "D:\\[ROOT]\\[Documents]\\[Projects]\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library ASP.NET Core MVC\\obj\\",
+      "projectPath": "E:\\[ROOT]\\[Documents]\\[Projects]\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library ASP.NET Core MVC\\Book Library ASP.NET Core MVC.csproj",
+      "packagesPath": "C:\\Users\\leoni\\.nuget\\packages\\",
+      "outputPath": "E:\\[ROOT]\\[Documents]\\[Projects]\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library ASP.NET Core MVC\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\leoni\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
