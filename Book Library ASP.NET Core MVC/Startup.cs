@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Book_Library_ASP.NET_Core_MVC.Models.AppConfig;
+using Book_Library_EF_Core_Proxy_Class_Library.Configuration;
 using Book_Library_EF_Core_Proxy_Class_Library.Context;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -49,7 +50,8 @@ namespace Book_Library_ASP.NET_Core_MVC
             services.Configure<SessionConfig>(Configuration.GetSection("sessionConfig"));
 
             services.AddDbContext<BookLibraryContext>(options =>
-        options.UseSqlServer(Book_Library_EF_Core_Proxy_Class_Library.Constants.LibraryConstants.CONNECTIONSTRING));
+        options.UseSqlServer(BookLibraryProxyConfiguration
+                .GetInstanse().ConnectionString));
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => //CookieAuthenticationOptions
@@ -64,6 +66,9 @@ namespace Book_Library_ASP.NET_Core_MVC
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            BookLibraryProxyConfiguration
+                .GetInstanse()
+                .SetupBookLibraryProxyConfiguration(Configuration["ConnectionStrings:DefaultConnection"].ToString());
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

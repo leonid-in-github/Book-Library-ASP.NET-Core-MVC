@@ -12,19 +12,19 @@ namespace Book_Library_EF_Core_Proxy_Class_Library.Models.Book.LibraryInterfaceB
     {
         public ActionBookModel() { }
 
-        [Required]
-        [DataType(DataType.Text)]
-        [Display(Name = "Name")]
+        //[Required]
+        //[DataType(DataType.Text)]
+        //[Display(Name = "Name")]
         public override string Name { get; set; }
 
-        [Required]
-        [DataType(DataType.Text)]
-        [Display(Name = "Authors (sep-tor \',\')")]
+        //[Required]
+        //[DataType(DataType.Text)]
+        //[Display(Name = "Authors (sep-tor \',\')")]
         public override string Authors { get; set; }
 
-        [Required]
-        [DataType(DataType.Date)]
-        [Display(Name = "Year")]
+        //[Required]
+        //[DataType(DataType.Date)]
+        //[Display(Name = "Year")]
         public override DateTime Year { get; set; }
 
         public static explicit operator ActionBookModel(GetBookModel result)

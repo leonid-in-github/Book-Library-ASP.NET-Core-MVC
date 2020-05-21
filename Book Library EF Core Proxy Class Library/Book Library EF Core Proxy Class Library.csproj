@@ -140,6 +140,7 @@
     <Compile Include="Adapters\Interfaces\IBookAdapter.cs" />
     <Compile Include="Adapters\Interfaces\ISessionAdapter.cs" />
     <Compile Include="Adapters\SessionAdapter.cs" />
+    <Compile Include="Configuration\BookLibraryProxyConfiguration.cs" />
     <Compile Include="Constants\LibraryConstants.cs" />
     <Compile Include="Context\BookLibraryContext.cs" />
     <Compile Include="Exceptions\SessionExpirationConflictException.cs" />
