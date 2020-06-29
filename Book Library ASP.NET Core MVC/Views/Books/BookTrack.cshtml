@@ -1,0 +1,54 @@
+﻿@model Book_Library_ASP.NET_Core_MVC.Models.Books.BookTrackModel
+
+@{
+    ViewData["Title"] = "Book track";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <script src="~/js/BookTrackPage.js"></script>
+
+    <div class="jumbotron">
+        <h1 class="display-4">Book track</h1>
+        <hr class="jumbotron-hr" />
+        <select asp-for="SelectedMode" asp-items="@(new SelectList(Model.TableModes,"Value","Text"))" class="form-control" style="display: inline-block; float: right; color: darkblue; width: 100pt">
+        </select>
+
+        @{
+            if (Model.BookAvailability == true)
+            {
+                <a asp-area="" asp-controller="Books" asp-action="TakeBook" asp-route-bookId="@Model.BookId" class="btn btn-primary">Take Book</a>
+            }
+            else if (Model.BookAvailability == false && Model.CanBePuted == true)
+            {
+                <a asp-area="" asp-controller="Books" asp-action="PutBook" asp-route-bookId="@Model.BookId" class="btn btn-primary">Put Book</a>
+            }
+            <hr class="jumbotron-hr" />
+            if (Model.BookTrackList.Count > 0)
+            {
+                <table id="track-table" class="table table-dark table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="text-info">Login</th>
+                            <th class="text-info">Date</th>
+                            <th class="text-info">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.BookTrackList)
+                        {
+                            <tr>
+                                <td class="text-warning">@item.Login</td>
+                                <td class="text-warning">@item.ActionTime</td>
+                                <td class="text-warning">@item.ActionString</td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            }
+            else
+            {
+                <p>No data</p>
+            }
+        }
+    </div>
