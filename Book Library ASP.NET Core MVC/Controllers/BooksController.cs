@@ -31,7 +31,7 @@ namespace Book_Library_ASP.NET_Core_MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                DataStore.Books.AddBook((BookItem)book);
+                DataStore.Books.AddBook(book);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -60,8 +60,8 @@ namespace Book_Library_ASP.NET_Core_MVC.Controllers
             {
                 try
                 {
-                    var book = (UpdateBookModel)DataStore.Books.GetBook(bookId);
-                    book.Id = bookId;
+                    var book = new UpdateBookModel(DataStore.Books.GetBook(bookId));
+                    book.ID = bookId;
                     return View(book);
                 }
                 catch (Exception) { }
@@ -75,7 +75,7 @@ namespace Book_Library_ASP.NET_Core_MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                DataStore.Books.UpdateBook((BookItem)book);
+                DataStore.Books.UpdateBook(book);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -150,7 +150,7 @@ namespace Book_Library_ASP.NET_Core_MVC.Controllers
             switch (Request.Cookies["TableSelectedMode"]?.ToString())
             {
                 case null:
-                    BooksList = DataStore.Books.GetBooks();//.ConvertAll(new Converter<ProxyDisplayBook, DisplayBook>());
+                    BooksList = DataStore.Books.GetBooks();
                     break;
                 case "1":
                     BooksList = DataStore.Books.GetBooks();

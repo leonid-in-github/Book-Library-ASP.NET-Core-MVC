@@ -1272,3 +1272,12 @@ E:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core 
 E:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library ASP.NET Core MVC\obj\Debug\netcoreapp3.1\Book Library ASP.NET Core MVC.dll
 E:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library ASP.NET Core MVC\obj\Debug\netcoreapp3.1\Book Library ASP.NET Core MVC.pdb
 E:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library ASP.NET Core MVC\obj\Debug\netcoreapp3.1\Book Library ASP.NET Core MVC.genruntimeconfig.cache
+E:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library ASP.NET Core MVC\bin\Debug\netcoreapp3.1\refs\Microsoft.Win32.Registry.dll
+E:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library ASP.NET Core MVC\bin\Debug\netcoreapp3.1\refs\System.Diagnostics.EventLog.dll
+E:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library ASP.NET Core MVC\bin\Debug\netcoreapp3.1\refs\System.IO.Pipelines.dll
+E:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library ASP.NET Core MVC\bin\Debug\netcoreapp3.1\refs\System.Security.AccessControl.dll
+E:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library ASP.NET Core MVC\bin\Debug\netcoreapp3.1\refs\System.Security.Cryptography.Cng.dll
+E:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library ASP.NET Core MVC\bin\Debug\netcoreapp3.1\refs\System.Security.Cryptography.Xml.dll
+E:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library ASP.NET Core MVC\bin\Debug\netcoreapp3.1\refs\System.Security.Permissions.dll
+E:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library ASP.NET Core MVC\bin\Debug\netcoreapp3.1\refs\System.Security.Principal.Windows.dll
+E:\[ROOT]\[Documents]\[Projects]\Book Library Project\Book Library ASP.NET Core Solution\Book Library ASP.NET Core MVC\bin\Debug\netcoreapp3.1\refs\System.Windows.Extensions.dll

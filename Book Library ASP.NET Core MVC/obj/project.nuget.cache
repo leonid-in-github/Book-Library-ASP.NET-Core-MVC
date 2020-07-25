@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "y8QMnMieL3GwgEoLEMm2ZzbAwRIcBjmHWuFUW6+Us4DU0z86l3OemlTrd9uPh8r1dJ5AlnmVysG5HzfBouGc0Q==",
+  "dgSpecHash": "+rHmCuNQFoSlChCmJcodAw7a6PMDLmaIJruzQHQZS/f3nxKV1ECC7n//rYHkeGGXdoy1119BwXXRGJgCaHL/Sw==",
   "success": true,
   "projectFilePath": "E:\\[ROOT]\\[Documents]\\[Projects]\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library ASP.NET Core MVC\\Book Library ASP.NET Core MVC.csproj",
   "expectedPackageFiles": [
@@ -158,8 +158,7 @@
     "C:\\Users\\leoni\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\leoni\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\leoni\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\leoni\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512",
-    "C:\\Users\\leoni\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.2\\microsoft.aspnetcore.app.ref.3.1.2.nupkg.sha512"
+    "C:\\Users\\leoni\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512"
   ],
   "logs": []
 }

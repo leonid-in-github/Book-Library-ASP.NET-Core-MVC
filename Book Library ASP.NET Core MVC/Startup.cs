@@ -35,7 +35,7 @@ namespace Book_Library_ASP.NET_Core_MVC
 
             RepositoryService.Register<BookLibraryRepository>(
                 Configuration["ConnectionStrings:DefaultConnection"].ToString().Replace("%CONTENTROOTPATH%", _contentRootPath)
-                ); ;
+                );
             RepositoryService.SetSessionExpirationTimeInMinutes(20);
 
             services.AddSession(options =>
