@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Book_Library_Repository_EF_Core.Models.Book
 {
@@ -14,7 +12,7 @@ namespace Book_Library_Repository_EF_Core.Models.Book
 
         public BookItem() { }
 
-        public BookItem(BookItem bookItem) 
+        public BookItem(BookItem bookItem)
         {
             ID = bookItem.ID;
             Name = bookItem.Name;

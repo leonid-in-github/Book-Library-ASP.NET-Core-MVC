@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Book_Library_ASP.NET_Core_MVC.Models.JQueryModels
+﻿namespace Book_Library_ASP.NET_Core_MVC.Models.JQueryModels
 {
     /// <summary>
     /// Class that encapsulates most common parameters sent by DataTables plugin

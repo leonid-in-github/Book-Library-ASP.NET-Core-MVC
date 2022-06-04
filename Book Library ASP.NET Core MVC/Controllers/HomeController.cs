@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Book_Library_ASP.NET_Core_MVC.Models;
+using Book_Library_ASP.NET_Core_MVC.Models.Home;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Book_Library_ASP.NET_Core_MVC.Models;
-using Book_Library_ASP.NET_Core_MVC.Models.Home;
-using System.Security.Claims;
+using System.Diagnostics;
 
 namespace Book_Libary_ASP.NET_Core_MVC.Controllers
 {
@@ -27,11 +22,6 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
         }
 
         public IActionResult About()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
         {
             return View();
         }

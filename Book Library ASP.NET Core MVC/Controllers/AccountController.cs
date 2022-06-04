@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Book_Library_ASP.NET_Core_MVC;
-using Book_Library_ASP.NET_Core_MVC.AppConfig;
-using Microsoft.Extensions.Options;
-using Book_Library_ASP.NET_Core_MVC.Models.Accounts;
+﻿using Book_Library_ASP.NET_Core_MVC.AppConfig;
 using Book_Library_ASP.NET_Core_MVC.Controllers;
-using System.Security.Principal;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Book_Library_ASP.NET_Core_MVC.Models.Accounts;
+using Book_Library_Repository_EF_Core.Exceptions;
 using Book_Library_Repository_EF_Core.Repositories;
 using Book_Library_Repository_EF_Core.Servicies;
-using Book_Library_Repository_EF_Core.Exceptions;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Book_Libary_ASP.NET_Core_MVC.Controllers
 {
@@ -56,7 +52,7 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
         public IActionResult Login(LoginModel loginModel)
         {
             if (!ModelState.IsValid) return View(loginModel);
-            
+
             try
             {
                 var accountId =
@@ -121,7 +117,7 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
         {
             return View();
         }
-        
+
         [HttpPost]
         public IActionResult Registration(RegistrationModel registrationModel)
         {
@@ -167,7 +163,7 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
             if (!IsLoged) return RedirectToAction("Index", "Home");
             try
             {
-                if(Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
+                if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
                 {
                     var model = (UserModel)DataStore.Account.GetUser((int)aId);
                     return View(model);

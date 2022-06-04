@@ -8322,11 +8322,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\[ROOT]\\[Documents]\\[Projects]\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library ASP.NET Core MVC\\Book Library ASP.NET Core MVC.csproj",
+      "projectUniqueName": "D:\\ROOT\\Documents\\Projects\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library ASP.NET Core MVC\\Book Library ASP.NET Core MVC.csproj",
       "projectName": "Book Library ASP.NET Core MVC",
-      "projectPath": "E:\\[ROOT]\\[Documents]\\[Projects]\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library ASP.NET Core MVC\\Book Library ASP.NET Core MVC.csproj",
+      "projectPath": "D:\\ROOT\\Documents\\Projects\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library ASP.NET Core MVC\\Book Library ASP.NET Core MVC.csproj",
       "packagesPath": "C:\\Users\\leoni\\.nuget\\packages\\",
-      "outputPath": "E:\\[ROOT]\\[Documents]\\[Projects]\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library ASP.NET Core MVC\\obj\\",
+      "outputPath": "D:\\ROOT\\Documents\\Projects\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library ASP.NET Core MVC\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\leoni\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -8341,9 +8341,10 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "E:\\[ROOT]\\[Documents]\\[Projects]\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library Repository EF Core\\Book Library Repository EF Core.csproj": {
-              "projectPath": "E:\\[ROOT]\\[Documents]\\[Projects]\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library Repository EF Core\\Book Library Repository EF Core.csproj"
+            "D:\\ROOT\\Documents\\Projects\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library Repository EF Core\\Book Library Repository EF Core.csproj": {
+              "projectPath": "D:\\ROOT\\Documents\\Projects\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library Repository EF Core\\Book Library Repository EF Core.csproj"
             }
           }
         }
@@ -8356,6 +8357,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation": {
             "target": "Package",
@@ -8388,7 +8390,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.302\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\[ROOT]\\[Documents]\\[Projects]\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library Repository EF Core\\Book Library Repository EF Core.csproj": {}
+    "D:\\ROOT\\Documents\\Projects\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library Repository EF Core\\Book Library Repository EF Core.csproj": {}
   },
   "projects": {
-    "E:\\[ROOT]\\[Documents]\\[Projects]\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library Repository EF Core\\Book Library Repository EF Core.csproj": {
+    "D:\\ROOT\\Documents\\Projects\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library Repository EF Core\\Book Library Repository EF Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\[ROOT]\\[Documents]\\[Projects]\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library Repository EF Core\\Book Library Repository EF Core.csproj",
+        "projectUniqueName": "D:\\ROOT\\Documents\\Projects\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library Repository EF Core\\Book Library Repository EF Core.csproj",
         "projectName": "Book Library Repository EF Core",
-        "projectPath": "E:\\[ROOT]\\[Documents]\\[Projects]\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library Repository EF Core\\Book Library Repository EF Core.csproj",
+        "projectPath": "D:\\ROOT\\Documents\\Projects\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library Repository EF Core\\Book Library Repository EF Core.csproj",
         "packagesPath": "C:\\Users\\leoni\\.nuget\\packages\\",
-        "outputPath": "E:\\[ROOT]\\[Documents]\\[Projects]\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library Repository EF Core\\obj\\",
+        "outputPath": "D:\\ROOT\\Documents\\Projects\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library Repository EF Core\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\leoni\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -26,6 +26,7 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -37,6 +38,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -62,7 +64,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Book_Library_ASP.NET_Core_MVC.Models.Books;
+﻿using Book_Library_ASP.NET_Core_MVC.Models.Books;
 using Book_Library_ASP.NET_Core_MVC.Models.JQueryModels;
 using Book_Library_Repository_EF_Core.Models.Book;
 using Book_Library_Repository_EF_Core.Repositories;
 using Book_Library_Repository_EF_Core.Servicies;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 
 namespace Book_Library_ASP.NET_Core_MVC.Controllers
@@ -92,7 +90,7 @@ namespace Book_Library_ASP.NET_Core_MVC.Controllers
                 {
                     if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
                     {
-                        var tracksCount = 
+                        var tracksCount =
                             Request.Cookies["BookTrackTableSelectedMode"] == null ? BookTrackTableModes.Default : Request.Cookies["BookTrackTableSelectedMode"].ToString();
                         var bookTrackModel = (BookTrackModel)DataStore.Books.GetBookTrack(
                         aId, (int)bookId, tracksCount);

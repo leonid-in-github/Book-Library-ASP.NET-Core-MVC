@@ -25,11 +25,19 @@ function LoadIndexBookTable() {
             },
             {
                 "sName": "YEAR",
-                "bSortable": true
+                "bSortable": true,
+                "mRender": function (data, type, row) {
+                    return new Date(data).getFullYear();
+                },
+                "width": "10%"
             },
             {
                 "sName": "AVAILABILITY",
-                "bSortable": true
+                "bSortable": true,
+                "mRender": function (data, type, row) {
+                    return data === "True" ? "Available" : "Not available";
+                },
+                "width": "15%"
             },
             {
                 "sName": "ID",
@@ -41,7 +49,8 @@ function LoadIndexBookTable() {
                         '<a href=\"Books/DeleteBook?bookId=' +
                         data +
                         '\" onClick=\"return confirm(\'Are you sure you want to delete this book?\');\">Delete</a>';
-                }
+                },
+                "width": "15%"
             }
 
         ]
