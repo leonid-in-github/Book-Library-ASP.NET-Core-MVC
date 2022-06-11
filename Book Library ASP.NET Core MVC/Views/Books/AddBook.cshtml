@@ -14,7 +14,7 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <span asp-validation-for="AddBookMassege" class="text-danger"></span>
                 @await Html.PartialAsync("~/Views/Books/BookView.cshtml", Model)
-                <div class="form-group">
+                <div class="form-group container">
                     <input type="submit" value="Add" class="btn btn-primary" />
                 </div>
             </form>

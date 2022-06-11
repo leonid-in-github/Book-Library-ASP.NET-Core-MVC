@@ -264,7 +264,7 @@ namespace Book_Library_ASP.NET_Core_MVC.Controllers
 
                             a.Name,
                             a.Authors,
-                            a.Year.ToString(),
+                            a.Year.ToString("MM/dd/yyyy hh:mm tt"),
                             a.Availability.ToString(),
                             a.ID.ToString()
                         };

@@ -16,7 +16,7 @@ function LoadIndexBookTable() {
                 "sName": "NAME",
                 "bSortable": true,
                 "mRender": function (data, type, row) {
-                    return '<a href=\"Books/BookTrack?bookId=' + row[4] + '\">' + data + '</a>';
+                    return '<a href=\"Books/BookTrack?bookId=' + row[4] + '\" title="' + data + '">' + data + '</a>';
                 }
             },
             {
