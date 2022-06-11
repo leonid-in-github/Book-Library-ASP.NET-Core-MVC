@@ -11,7 +11,7 @@ namespace Book_Library_ASP.NET_Core_MVC.Models.Books
 
         [Required]
         [DataType(DataType.Text)]
-        [Display(Name = "Authors (sep-tor \',\')")]
+        [Display(Name = "Authors")]
         public object Authors { get; set; }
 
         [Required]

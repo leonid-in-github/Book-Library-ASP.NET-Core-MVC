@@ -9,25 +9,11 @@
     <h1 class="display-4">@ViewData["Title"] page</h1>
     <hr class="jumbotron-hr" />
     <div class="row">
-        <div class="col-md-4">
+        <div class="w-100">
             <form asp-controller="Books" asp-action="AddBook" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <span asp-validation-for="AddBookMassege" class="text-danger"></span>
-                <div class="form-group">
-                    <label asp-for="Name" class="control-label"></label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Authors" class="control-label"></label>
-                    <input asp-for="Authors" class="form-control" />
-                    <span asp-validation-for="Authors" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Year" class="control-label"></label>
-                    <input asp-for="Year" class="form-control" />
-                    <span asp-validation-for="Year" class="text-danger"></span>
-                </div>
+                @await Html.PartialAsync("~/Views/Books/BookView.cshtml", Model)
                 <div class="form-group">
                     <input type="submit" value="Add" class="btn btn-primary" />
                 </div>

@@ -1,0 +1,81 @@
+﻿@model Book_Library_ASP.NET_Core_MVC.Models.Books.ActionBookModel
+
+<div class="container">
+    <div class="row">
+        <div class="col">                
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>    
+            <div class="form-group">
+                <label asp-for="Year" class="control-label"></label>
+                <input asp-for="Year" class="form-control" />
+                <span asp-validation-for="Year" class="text-danger"></span>
+            </div>                    
+        </div>
+        <div class="col">
+            
+            <label class="control-label">
+                Authors&nbsp;&nbsp;&nbsp;&nbsp;
+            </label>
+            <a onclick="addAuthor()">
+                <img title="Add author" src="../images/add.png" />
+            </a>    
+            
+            <div id="authors"></div>
+            <div class="form-group">
+                <input asp-for="Authors" class="form-control d-none" id="authors-input" />
+                <span asp-validation-for="Authors" class="text-danger"></span>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var authorsString = '@Html.Raw(Model == null ? string.Empty : Model.Authors)';
+        if(authorsString){
+            authors = authorsString.split(',');
+            authors.forEach(function (author){
+                addAuthor(author.trim());
+            });
+        } else {
+            addAuthor();
+        }
+    });
+
+    function deleteAuthor(obj){
+        $(obj).parents( ".row" ).first().remove();
+        updateAuthors();
+    }
+
+    function addAuthor(author){
+        if(!author){
+            author = '';
+        }
+        var authorInput = '<div class="row mb-2">' +
+                            '<div class="col-11">' +
+                                '<input class="form-control author" onkeyup="updateAuthors(this)" value="' + author + '" />' +
+                            '</div>' +
+                            '<div class="col-1">' +
+                                '<a class="align-middle" onclick="deleteAuthor(this)">' +
+                                    '<img title="Delete author" src="../images/delete.png" />' +
+                                '</a>' +
+                            '</div>' +
+                        '</div>';
+        $("#authors").append(authorInput);
+    }
+
+    function updateAuthors(obj){
+        var authors = [];
+        $(".author").each(function() {
+          var author = $(this).val();
+          if(author){
+              authors.push(author);
+          }
+        });
+        $("#authors-input").val(authors.join(','));
+    }
+</script>
