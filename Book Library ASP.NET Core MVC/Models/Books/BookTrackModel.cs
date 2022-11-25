@@ -1,6 +1,5 @@
 ﻿using Book_Library_Repository_EF_Core.Models.Book;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
 using System.Collections.Generic;
 
 namespace Book_Library_ASP.NET_Core_MVC.Models.Books
@@ -23,7 +22,7 @@ namespace Book_Library_ASP.NET_Core_MVC.Models.Books
         }
 
         public int? BookId { get; set; }
-        public String BookName { get; set; }
+        public string BookName { get; set; }
         public bool? BookAvailability { get; set; }
         public bool CanBePuted { get; set; }
         public string SelectedMode { get; set; }
