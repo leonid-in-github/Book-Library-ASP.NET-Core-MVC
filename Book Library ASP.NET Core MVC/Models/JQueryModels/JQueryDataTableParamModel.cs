@@ -1,4 +1,4 @@
-﻿namespace Book_Library_ASP.NET_Core_MVC.Models.JQueryModels
+﻿namespace BookLibrary.WebServer.Models.JQueryModels
 {
     /// <summary>
     /// Class that encapsulates most common parameters sent by DataTables plugin

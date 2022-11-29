@@ -5122,9 +5122,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\ROOT\\Documents\\Projects\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library Repository EF Core\\Book Library Repository EF Core.csproj",
-      "projectName": "Book Library Repository EF Core",
-      "projectPath": "D:\\ROOT\\Documents\\Projects\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library Repository EF Core\\Book Library Repository EF Core.csproj",
+      "projectUniqueName": "D:\\ROOT\\Documents\\Projects\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library Repository EF Core\\BookLibrary.Repository.csproj",
+      "projectName": "BookLibrary.Repository",
+      "projectPath": "D:\\ROOT\\Documents\\Projects\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library Repository EF Core\\BookLibrary.Repository.csproj",
       "packagesPath": "C:\\Users\\leoni\\.nuget\\packages\\",
       "outputPath": "D:\\ROOT\\Documents\\Projects\\Book Library Project\\Book Library ASP.NET Core Solution\\Book Library Repository EF Core\\obj\\",
       "projectStyle": "PackageReference",
@@ -5180,7 +5180,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

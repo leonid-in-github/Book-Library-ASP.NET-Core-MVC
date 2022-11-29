@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Book_Library_ASP.NET_Core_MVC
+namespace BookLibrary.WebServer
 {
     public class Program
     {

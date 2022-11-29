@@ -1,4 +1,4 @@
-namespace Book_Library_ASP.NET_Core_MVC.Models
+namespace BookLibrary.WebServer.Models
 {
     public class ErrorViewModel
     {

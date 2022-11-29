@@ -1,7 +1,7 @@
-﻿using Book_Library_Repository_EF_Core.Models.Book;
+﻿using BookLibrary.Repository.Models.Book;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Book_Library_ASP.NET_Core_MVC.Models.Books
+namespace BookLibrary.WebServer.Models.Books
 {
     [ModelMetadataType(typeof(ActionBookModelMetadata))]
     public class ActionBookModel : BookItem

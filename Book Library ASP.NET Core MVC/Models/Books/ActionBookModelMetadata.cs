@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Book_Library_ASP.NET_Core_MVC.Models.Books
+namespace BookLibrary.WebServer.Models.Books
 {
     public class ActionBookModelMetadata
     {

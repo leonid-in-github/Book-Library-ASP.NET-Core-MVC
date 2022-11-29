@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 
-namespace Book_Library_ASP.NET_Core_MVC.Models.Home
+namespace BookLibrary.WebServer.Models.Home
 {
     public class IndexModel
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Book_Library_ASP.NET_Core_MVC.Controllers
+namespace BookLibrary.WebServer.Controllers
 {
     public class BookLibraryController : Controller
     {

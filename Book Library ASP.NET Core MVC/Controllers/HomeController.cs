@@ -1,5 +1,5 @@
-﻿using Book_Library_ASP.NET_Core_MVC.Models;
-using Book_Library_ASP.NET_Core_MVC.Models.Home;
+﻿using BookLibrary.WebServer.Models;
+using BookLibrary.WebServer.Models.Home;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;

@@ -1,8 +1,8 @@
-﻿using Book_Library_ASP.NET_Core_MVC.Models.Books;
-using Book_Library_ASP.NET_Core_MVC.Models.JQueryModels;
-using Book_Library_Repository_EF_Core.Models.Book;
-using Book_Library_Repository_EF_Core.Repositories;
-using Book_Library_Repository_EF_Core.Servicies;
+﻿using BookLibrary.WebServer.Models.Books;
+using BookLibrary.WebServer.Models.JQueryModels;
+using BookLibrary.Repository.Models.Book;
+using BookLibrary.Repository.Repositories;
+using BookLibrary.Repository.Servicies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using System;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 
-namespace Book_Library_ASP.NET_Core_MVC.Controllers
+namespace BookLibrary.WebServer.Controllers
 {
     public class BooksController : BookLibraryController
     {

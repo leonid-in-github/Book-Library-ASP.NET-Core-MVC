@@ -1,7 +1,7 @@
-using Book_Library_ASP.NET_Core_MVC.AppConfig;
-using Book_Library_Repository_EF_Core.Contexts;
-using Book_Library_Repository_EF_Core.Repositories;
-using Book_Library_Repository_EF_Core.Servicies;
+using BookLibrary.WebServer.AppConfig;
+using BookLibrary.Repository.Contexts;
+using BookLibrary.Repository.Repositories;
+using BookLibrary.Repository.Servicies;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 
-namespace Book_Library_ASP.NET_Core_MVC
+namespace BookLibrary.WebServer
 {
     public class Startup
     {

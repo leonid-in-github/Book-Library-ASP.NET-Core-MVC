@@ -1,11 +1,11 @@
-﻿using Book_Library_Repository_EF_Core.Contexts;
-using Book_Library_Repository_EF_Core.Exceptions;
-using Book_Library_Repository_EF_Core.Models.Account;
+﻿using BookLibrary.Repository.Contexts;
+using BookLibrary.Repository.Exceptions;
+using BookLibrary.Repository.Models.Account;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace Book_Library_Repository_EF_Core.Components
+namespace BookLibrary.Repository.Components
 {
     public class AccountComponent
     {

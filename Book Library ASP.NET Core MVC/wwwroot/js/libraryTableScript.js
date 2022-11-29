@@ -14,14 +14,14 @@ function LoadIndexBookTable() {
         "aoColumns": [
             {
                 "sName": "NAME",
-                "bSortable": true,
+                "bSortable": false,
                 "mRender": function (data, type, row) {
                     return '<a href=\"Books/BookTrack?bookId=' + row[4] + '\" title="' + data + '">' + data + '</a>';
                 }
             },
             {
                 "sName": "AUTHORS",
-                "bSortable": true
+                "bSortable": false
             },
             {
                 "sName": "YEAR",

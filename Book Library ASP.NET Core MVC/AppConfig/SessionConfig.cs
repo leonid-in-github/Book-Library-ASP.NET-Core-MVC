@@ -1,4 +1,4 @@
-﻿namespace Book_Library_ASP.NET_Core_MVC.AppConfig
+﻿namespace BookLibrary.WebServer.AppConfig
 {
     public class SessionConfig
     {

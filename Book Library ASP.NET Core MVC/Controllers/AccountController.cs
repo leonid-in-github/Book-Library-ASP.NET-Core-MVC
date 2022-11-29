@@ -1,9 +1,9 @@
-﻿using Book_Library_ASP.NET_Core_MVC.AppConfig;
-using Book_Library_ASP.NET_Core_MVC.Controllers;
-using Book_Library_ASP.NET_Core_MVC.Models.Accounts;
-using Book_Library_Repository_EF_Core.Exceptions;
-using Book_Library_Repository_EF_Core.Repositories;
-using Book_Library_Repository_EF_Core.Servicies;
+﻿using BookLibrary.WebServer.AppConfig;
+using BookLibrary.WebServer.Controllers;
+using BookLibrary.WebServer.Models.Accounts;
+using BookLibrary.Repository.Exceptions;
+using BookLibrary.Repository.Repositories;
+using BookLibrary.Repository.Servicies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;

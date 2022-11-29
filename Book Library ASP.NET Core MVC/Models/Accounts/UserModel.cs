@@ -1,7 +1,7 @@
-﻿using Book_Library_Repository_EF_Core.Models.Account;
+﻿using BookLibrary.Repository.Models.Account;
 using System.ComponentModel.DataAnnotations;
 
-namespace Book_Library_ASP.NET_Core_MVC.Models.Accounts
+namespace BookLibrary.WebServer.Models.Accounts
 {
     public class UserModel
     {

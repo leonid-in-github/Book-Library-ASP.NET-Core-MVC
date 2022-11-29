@@ -1,6 +1,6 @@
-﻿using Book_Library_Repository_EF_Core.Models.Book;
+﻿using BookLibrary.Repository.Models.Book;
 
-namespace Book_Library_ASP.NET_Core_MVC.Models.Books
+namespace BookLibrary.WebServer.Models.Books
 {
     public class UpdateBookModel : ActionBookModel
     {

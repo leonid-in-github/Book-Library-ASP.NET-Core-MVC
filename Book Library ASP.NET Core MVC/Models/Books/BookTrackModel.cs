@@ -1,8 +1,8 @@
-﻿using Book_Library_Repository_EF_Core.Models.Book;
+﻿using BookLibrary.Repository.Models.Book;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 
-namespace Book_Library_ASP.NET_Core_MVC.Models.Books
+namespace BookLibrary.WebServer.Models.Books
 {
     public class BookTrackModel
     {
@@ -14,7 +14,7 @@ namespace Book_Library_ASP.NET_Core_MVC.Models.Books
 
             TableModes = new List<SelectListItem>()
             {
-                new SelectListItem {Value = BookTrackTableModes.Default, Text = "Default" },
+                new SelectListItem {Value = BookTrackTableModes.Default, Text = "10" },
                 new SelectListItem {Value = BookTrackTableModes._100, Text = "100" },
                 new SelectListItem {Value = BookTrackTableModes.All, Text = "All" }
             };
