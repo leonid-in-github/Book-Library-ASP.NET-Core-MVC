@@ -1,0 +1,10 @@
+D:\ROOT\Documents\Projects\Book Library Project\Book Library ASP.NET Core Solution\BookLibrary.Repository\bin\Debug\netcoreapp3.1\BookLibrary.Repository.deps.json
+D:\ROOT\Documents\Projects\Book Library Project\Book Library ASP.NET Core Solution\BookLibrary.Repository\bin\Debug\netcoreapp3.1\BookLibrary.Repository.dll
+D:\ROOT\Documents\Projects\Book Library Project\Book Library ASP.NET Core Solution\BookLibrary.Repository\bin\Debug\netcoreapp3.1\BookLibrary.Repository.pdb
+D:\ROOT\Documents\Projects\Book Library Project\Book Library ASP.NET Core Solution\BookLibrary.Repository\obj\Debug\netcoreapp3.1\BookLibrary.Repository.csproj.AssemblyReference.cache
+D:\ROOT\Documents\Projects\Book Library Project\Book Library ASP.NET Core Solution\BookLibrary.Repository\obj\Debug\netcoreapp3.1\BookLibrary.Repository.GeneratedMSBuildEditorConfig.editorconfig
+D:\ROOT\Documents\Projects\Book Library Project\Book Library ASP.NET Core Solution\BookLibrary.Repository\obj\Debug\netcoreapp3.1\BookLibrary.Repository.AssemblyInfoInputs.cache
+D:\ROOT\Documents\Projects\Book Library Project\Book Library ASP.NET Core Solution\BookLibrary.Repository\obj\Debug\netcoreapp3.1\BookLibrary.Repository.AssemblyInfo.cs
+D:\ROOT\Documents\Projects\Book Library Project\Book Library ASP.NET Core Solution\BookLibrary.Repository\obj\Debug\netcoreapp3.1\BookLibrary.Repository.csproj.CoreCompileInputs.cache
+D:\ROOT\Documents\Projects\Book Library Project\Book Library ASP.NET Core Solution\BookLibrary.Repository\obj\Debug\netcoreapp3.1\BookLibrary.Repository.dll
+D:\ROOT\Documents\Projects\Book Library Project\Book Library ASP.NET Core Solution\BookLibrary.Repository\obj\Debug\netcoreapp3.1\BookLibrary.Repository.pdb

@@ -1,0 +1,2 @@
+﻿CREATE USER [user] FOR LOGIN [IIS APPPOOL\DefaultAppPool];
+
