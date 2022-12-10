@@ -1,8 +1,7 @@
-﻿using BookLibrary.WebServer.Models.Books;
-using BookLibrary.WebServer.Models.JQueryModels;
-using BookLibrary.Repository.Models.Book;
+﻿using BookLibrary.Repository.Models.Book;
 using BookLibrary.Repository.Repositories;
-using BookLibrary.Repository.Servicies;
+using BookLibrary.WebServer.Models.Books;
+using BookLibrary.WebServer.Models.JQueryModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using System;
@@ -14,13 +13,18 @@ using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 
 namespace BookLibrary.WebServer.Controllers
 {
-    public class BooksController : BookLibraryController
+    public class BooksController : Controller
     {
-        private IDataStore DataStore => RepositoryService.Get<BookLibraryRepository>();
+        private readonly IDataStore dataStore;
+
+        public BooksController(IDataStore dataStore)
+        {
+            this.dataStore = dataStore;
+        }
 
         public IActionResult AddBook()
         {
-            if (!IsLoged) return RedirectToAction("Index", "Home");
+            if (!User.Identity.IsAuthenticated) return RedirectToAction("Index", "Home");
             return View();
         }
 
@@ -29,7 +33,7 @@ namespace BookLibrary.WebServer.Controllers
         {
             if (ModelState.IsValid)
             {
-                DataStore.Books.AddBook(book);
+                dataStore.Books.AddBook(book);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -42,7 +46,7 @@ namespace BookLibrary.WebServer.Controllers
             {
                 try
                 {
-                    DataStore.Books.DeleteBook(bookId);
+                    dataStore.Books.DeleteBook(bookId);
                 }
                 catch (Exception) { }
             }
@@ -52,13 +56,13 @@ namespace BookLibrary.WebServer.Controllers
 
         public IActionResult EditBook(int bookId)
         {
-            if (!IsLoged) return RedirectToAction("Index", "Home");
+            if (!User.Identity.IsAuthenticated) return RedirectToAction("Index", "Home");
 
             if (bookId >= 0)
             {
                 try
                 {
-                    var book = new UpdateBookModel(DataStore.Books.GetBook(bookId));
+                    var book = new UpdateBookModel(dataStore.Books.GetBook(bookId));
                     book.ID = bookId;
                     return View(book);
                 }
@@ -73,7 +77,7 @@ namespace BookLibrary.WebServer.Controllers
         {
             if (ModelState.IsValid)
             {
-                DataStore.Books.UpdateBook(book);
+                dataStore.Books.UpdateBook(book);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -82,7 +86,7 @@ namespace BookLibrary.WebServer.Controllers
 
         public IActionResult BookTrack(int? bookId)
         {
-            if (bookId == null || !IsLoged) return RedirectToAction("Index", "Home");
+            if (bookId == null || !User.Identity.IsAuthenticated) return RedirectToAction("Index", "Home");
 
             if (bookId >= 0)
             {
@@ -92,7 +96,7 @@ namespace BookLibrary.WebServer.Controllers
                     {
                         var tracksCount =
                             Request.Cookies["BookTrackTableSelectedMode"] == null ? BookTrackTableModes.Default : Request.Cookies["BookTrackTableSelectedMode"].ToString();
-                        var bookTrackModel = (BookTrackModel)DataStore.Books.GetBookTrack(
+                        var bookTrackModel = (BookTrackModel)dataStore.Books.GetBookTrack(
                         aId, (int)bookId, tracksCount);
 
                         return View(bookTrackModel);
@@ -105,7 +109,7 @@ namespace BookLibrary.WebServer.Controllers
 
         public IActionResult TakeBook(int? bookId)
         {
-            if (bookId == null || !IsLoged) return RedirectToAction("Index", "Home");
+            if (bookId == null || !User.Identity.IsAuthenticated) return RedirectToAction("Index", "Home");
 
             if (bookId >= 0)
             {
@@ -113,7 +117,7 @@ namespace BookLibrary.WebServer.Controllers
                 {
                     if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
                     {
-                        DataStore.Books.TakeBook(aId, bookId);
+                        dataStore.Books.TakeBook(aId, bookId);
                     }
                 }
                 catch (Exception) { }
@@ -124,7 +128,7 @@ namespace BookLibrary.WebServer.Controllers
 
         public IActionResult PutBook(int? bookId)
         {
-            if (bookId == null || !IsLoged) return RedirectToAction("Index", "Home");
+            if (bookId == null || !User.Identity.IsAuthenticated) return RedirectToAction("Index", "Home");
 
             if (bookId >= 0)
             {
@@ -132,7 +136,7 @@ namespace BookLibrary.WebServer.Controllers
                 {
                     if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
                     {
-                        DataStore.Books.PutBook(aId, bookId);
+                        dataStore.Books.PutBook(aId, bookId);
                     }
                 }
                 catch (Exception) { }
@@ -148,18 +152,18 @@ namespace BookLibrary.WebServer.Controllers
             switch (Request.Cookies["TableSelectedMode"]?.ToString())
             {
                 case null:
-                    BooksList = DataStore.Books.GetBooks();
+                    BooksList = dataStore.Books.GetBooks();
                     break;
                 case "1":
-                    BooksList = DataStore.Books.GetBooks();
+                    BooksList = dataStore.Books.GetBooks();
                     break;
                 case "2":
-                    BooksList = DataStore.Books.GetAvaliableBooks();
+                    BooksList = dataStore.Books.GetAvaliableBooks();
                     break;
                 case "3":
                     if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
                     {
-                        BooksList = DataStore.Books.GetBooksByUser(aId);
+                        BooksList = dataStore.Books.GetBooksByUser(aId);
                     }
                     break;
             }
