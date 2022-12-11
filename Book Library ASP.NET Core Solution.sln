@@ -5,8 +5,6 @@ VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookLibrary.WebServer", "BookLibrary.WebServer\BookLibrary.WebServer.csproj", "{650FB73B-F63C-4007-9833-D2C6E9080BEF}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "BookLibrary.DataBase", "BookLibrary.DataBase\BookLibrary.DataBase.sqlproj", "{FA4850AE-B72A-4A46-AB8D-67E7C3532268}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookLibrary.Repository", "BookLibrary.Repository\BookLibrary.Repository.csproj", "{2C257773-590C-4E01-AEE1-7D9023252D89}"
 EndProject
 Global
@@ -19,12 +17,6 @@ Global
 		{650FB73B-F63C-4007-9833-D2C6E9080BEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{650FB73B-F63C-4007-9833-D2C6E9080BEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{650FB73B-F63C-4007-9833-D2C6E9080BEF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FA4850AE-B72A-4A46-AB8D-67E7C3532268}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA4850AE-B72A-4A46-AB8D-67E7C3532268}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FA4850AE-B72A-4A46-AB8D-67E7C3532268}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{FA4850AE-B72A-4A46-AB8D-67E7C3532268}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FA4850AE-B72A-4A46-AB8D-67E7C3532268}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FA4850AE-B72A-4A46-AB8D-67E7C3532268}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{2C257773-590C-4E01-AEE1-7D9023252D89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2C257773-590C-4E01-AEE1-7D9023252D89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C257773-590C-4E01-AEE1-7D9023252D89}.Release|Any CPU.ActiveCfg = Release|Any CPU
