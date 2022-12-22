@@ -4,13 +4,13 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace BookLibrary.Repository.Components
+namespace BookLibrary.Repository.Repositories
 {
-    public class SessionComponent
+    public class SessionRepository
     {
         private TimeSpan SessionExpirationTimeSpan { get; }
 
-        public SessionComponent()
+        public SessionRepository()
         {
             SessionExpirationTimeSpan =
                 new TimeSpan(TimeSpan.TicksPerMinute * RepositoryService.SESSIONEXPIRATIONTIMEINMINUTES);
@@ -51,7 +51,7 @@ namespace BookLibrary.Repository.Components
                 var sql = "exec OpenSession @AccountId, @OpenDate, @SessionId, @Result OUT";
                 _ = dbContext.Database.ExecuteSqlRaw(sql, inAccountId, inOpenDate, inSessionId, outResult);
 
-                if (Int32.TryParse(outResult.Value.ToString(), out int openSessionResult))
+                if (int.TryParse(outResult.Value.ToString(), out int openSessionResult))
                     if (openSessionResult == 1)
                     {
                         return true;
@@ -88,7 +88,7 @@ namespace BookLibrary.Repository.Components
                 var sql = "exec CloseSession @SessionId, @CloseDate, @Result OUT";
                 _ = dbContext.Database.ExecuteSqlRaw(sql, inSessionId, inCloseDate, outResult);
 
-                if (Int32.TryParse(outResult.Value.ToString(), out int spResult))
+                if (int.TryParse(outResult.Value.ToString(), out int spResult))
                     if (spResult == 1)
                     {
                         return true;
@@ -163,7 +163,7 @@ namespace BookLibrary.Repository.Components
                 var sql = "exec RenewSession @SessionId, @RenewDate, @Result OUT";
                 _ = dbContext.Database.ExecuteSqlRaw(sql, inSessionId, inRenewDate, outResult);
 
-                if (Int32.TryParse(outResult.Value.ToString(), out int spResult))
+                if (int.TryParse(outResult.Value.ToString(), out int spResult))
                     if (spResult == 1)
                     {
                         return true;

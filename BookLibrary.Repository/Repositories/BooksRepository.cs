@@ -6,9 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BookLibrary.Repository.Components
+namespace BookLibrary.Repository.Repositories
 {
-    public class BooksComponent
+    public class BooksRepository
     {
         public BookItem GetBook(int bookId)
         {
@@ -26,11 +26,11 @@ namespace BookLibrary.Repository.Components
                 List<BookItem> booksResult;
                 if (pArr == null)
                 {
-                    booksResult = dbContext.GetBook.FromSqlRaw(String.Format("EXECUTE {0}", spName)).ToListAsync().Result;
+                    booksResult = dbContext.GetBook.FromSqlRaw(string.Format("EXECUTE {0}", spName)).ToListAsync().Result;
                 }
                 else
                 {
-                    booksResult = dbContext.GetBook.FromSqlRaw(String.Format("EXECUTE {0}", spName), pArr).ToListAsync().Result;
+                    booksResult = dbContext.GetBook.FromSqlRaw(string.Format("EXECUTE {0}", spName), pArr).ToListAsync().Result;
                 }
                 var booksList = new List<BookItem>();
 
@@ -194,7 +194,7 @@ namespace BookLibrary.Repository.Components
                 var sql = "exec CanPutBook @AccountId, @BookId, @Result OUT";
                 _ = dbContext.Database.ExecuteSqlRaw(sql, inAccountId, inBookId, outResult);
 
-                if (!Boolean.TryParse(outResult.Value.ToString(), out bool canBePuted)) return result;
+                if (!bool.TryParse(outResult.Value.ToString(), out bool canBePuted)) return result;
                 result.CanBePuted = canBePuted;
 
                 inBookId = new SqlParameter
@@ -233,7 +233,7 @@ namespace BookLibrary.Repository.Components
                 DbType = System.Data.DbType.Int32,
                 Direction = System.Data.ParameterDirection.Input
             };
-            var sql = String.Format("exec {0} @AccountId, @BookId", action);
+            var sql = string.Format("exec {0} @AccountId, @BookId", action);
             using (var dbContext = new BookLibraryContext())
             {
                 _ = dbContext.Database.ExecuteSqlRaw(sql, inAccountId, inBookId);

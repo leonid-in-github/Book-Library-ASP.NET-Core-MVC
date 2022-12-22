@@ -5,9 +5,9 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace BookLibrary.Repository.Components
+namespace BookLibrary.Repository.Repositories
 {
-    public class AccountComponent
+    public class AccountRepository
     {
         public int Login(string sessionId, string login, string password)
         {
@@ -37,10 +37,10 @@ namespace BookLibrary.Repository.Components
             {
                 _ = dbContext.Database.ExecuteSqlRaw(sql, inLogin, inPassword, outResult);
             }
-            if (Int32.TryParse(outResult.Value.ToString(), out int accountId))
+            if (int.TryParse(outResult.Value.ToString(), out int accountId))
                 if (accountId > 0)
                 {
-                    var sessionConnector = new SessionComponent();
+                    var sessionConnector = new SessionRepository();
                     switch (sessionConnector.CheckSessionExpiration(sessionId))
                     {
                         case null:
@@ -82,7 +82,7 @@ namespace BookLibrary.Repository.Components
             {
                 _ = dbContext.Database.ExecuteSqlRaw(sql, inSessionId, inCloseDate, outResult);
             }
-            if (Int32.TryParse(outResult.Value.ToString(), out int result))
+            if (int.TryParse(outResult.Value.ToString(), out int result))
                 if (result > 0)
                 {
                     return true;
@@ -139,9 +139,9 @@ namespace BookLibrary.Repository.Components
             {
                 _ = dbContext.Database.ExecuteSqlRaw(sql, inLogin, inPassword, inFirstName, inLastName, inEmail, outResult);
             }
-            if (Int32.TryParse(outResult.Value.ToString(), out int accountId))
+            if (int.TryParse(outResult.Value.ToString(), out int accountId))
                 if (accountId == -1) return accountId;
-            var sessionConnector = new SessionComponent();
+            var sessionConnector = new SessionRepository();
             switch (sessionConnector.CheckSessionExpiration(sessionId))
             {
                 case null:
@@ -244,7 +244,7 @@ namespace BookLibrary.Repository.Components
             {
                 _ = dbContext.Database.ExecuteSqlRaw(sql, inAccountId, inPassword, inNewPassword, outResult);
             }
-            Boolean.TryParse(outResult.Value.ToString(), out bool result);
+            bool.TryParse(outResult.Value.ToString(), out bool result);
 
             return result;
         }
@@ -276,7 +276,7 @@ namespace BookLibrary.Repository.Components
             {
                 _ = dbContext.Database.ExecuteSqlRaw(sql, inAccountId, inPassword, outResult);
             }
-            Boolean.TryParse(outResult.Value.ToString(), out bool result);
+            bool.TryParse(outResult.Value.ToString(), out bool result);
 
             return result;
 
