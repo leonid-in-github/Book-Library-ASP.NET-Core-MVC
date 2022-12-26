@@ -1,1 +1,1 @@
-Run solution in visual studio or rider.
+Run solution in Visual Studio or Rider.
