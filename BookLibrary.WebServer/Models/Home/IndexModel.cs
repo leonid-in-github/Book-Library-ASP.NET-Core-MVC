@@ -11,7 +11,7 @@ namespace BookLibrary.WebServer.Models.Home
             {
                 new SelectListItem {Value = "1", Text = "All" },
                 new SelectListItem {Value = "2", Text = "Avaliable" },
-                new SelectListItem {Value = "3", Text = "Taked by user" }
+                new SelectListItem {Value = "3", Text = "Taken by user" }
             };
 
         }
