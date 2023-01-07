@@ -147,63 +147,7 @@ namespace BookLibrary.WebServer.Controllers
 
         public IActionResult MainBooksTableAjaxHandler(JQueryDataTableParamModel param)
         {
-            List<BookItem> BooksList = null;
-
-            switch (Request.Cookies["TableSelectedMode"]?.ToString())
-            {
-                case null:
-                    BooksList = dataStore.Books.GetBooks();
-                    break;
-                case "1":
-                    BooksList = dataStore.Books.GetBooks();
-                    break;
-                case "2":
-                    BooksList = dataStore.Books.GetAvaliableBooks();
-                    break;
-                case "3":
-                    if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
-                    {
-                        BooksList = dataStore.Books.GetBooksByUser(aId);
-                    }
-                    break;
-            }
-
-            IEnumerable<BookItem> filteredBooks;
-            //Check whether the companies should be filtered by keyword
-            if (!string.IsNullOrEmpty(param.sSearch))
-            {
-                //Used if particulare columns are filtered 
-
-                var nameFilter = Convert.ToString(Request.Query["sSearch_0"]);
-                var authorsFilter = Convert.ToString(Request.Query["sSearch_1"]);
-                var yearFilter = Convert.ToString(Request.Query["sSearch_2"]);
-                var availabilityFilter = Convert.ToString(Request.Query["sSearch_3"]);
-                var idFilter = Convert.ToString(Request.Query["sSearch_4"]);
-
-                //Optionally check whether the columns are searchable at all 
-
-                var isNameSearchable = Convert.ToBoolean(Request.Query["bSearchable_0"]);
-                var isAuthorsSearchable = Convert.ToBoolean(Request.Query["bSearchable_1"]);
-                var isYearSearchable = Convert.ToBoolean(Request.Query["bSearchable_2"]);
-                var isAvailabilitySearchable = Convert.ToBoolean(Request.Query["bSearchable_3"]);
-                var isIdSearchable = Convert.ToBoolean(Request.Query["bSearchable_4"]);
-
-                filteredBooks = BooksList.Where(a =>
-                                   isIdSearchable && a.ID.ToString().ToLower().Contains(param.sSearch.ToLower())
-                                   ||
-                                   isNameSearchable && a.Name.ToLower().Contains(param.sSearch.ToLower())
-                                   ||
-                                   isAuthorsSearchable && a.Authors.ToLower().Contains(param.sSearch.ToLower())
-                                   ||
-                                   isYearSearchable && a.Year.ToString().ToLower().Contains(param.sSearch.ToLower())
-                                   ||
-                                   isAvailabilitySearchable && a.Availability.ToString().ToLower().Contains(param.sSearch.ToLower()));
-            }
-            else
-            {
-                filteredBooks = BooksList;
-            }
-
+            var booksList = GetBooksList(param.sSearch);
 
             var isNameSortable = Convert.ToBoolean(Request.Query["bSortable_0"]);
             var isAuthorsSortable = Convert.ToBoolean(Request.Query["bSortable_1"]);
@@ -221,48 +165,48 @@ namespace BookLibrary.WebServer.Controllers
                 orderingFunction = (a => a.Name);
 
                 if (sortDirection == "asc")
-                    filteredBooks = filteredBooks.OrderBy(orderingFunction, StringComparer.Ordinal);
+                    booksList = booksList.OrderBy(orderingFunction, StringComparer.Ordinal);
                 else
-                    filteredBooks = filteredBooks.OrderByDescending(orderingFunction, StringComparer.Ordinal);
+                    booksList = booksList.OrderByDescending(orderingFunction, StringComparer.Ordinal);
             }
             else if (sortColumnIndex == 1 && isAuthorsSortable)
             {
                 Func<BookItem, string> orderingFunction;
                 orderingFunction = (a => a.Authors);
                 if (sortDirection == "asc")
-                    filteredBooks = filteredBooks.OrderBy(orderingFunction, StringComparer.Ordinal);
+                    booksList = booksList.OrderBy(orderingFunction, StringComparer.Ordinal);
                 else
-                    filteredBooks = filteredBooks.OrderByDescending(orderingFunction, StringComparer.Ordinal);
+                    booksList = booksList.OrderByDescending(orderingFunction, StringComparer.Ordinal);
             }
             else if (sortColumnIndex == 2 && isYearSortable)
             {
                 Func<BookItem, DateTime> orderingFunction;
                 orderingFunction = (a => a.Year);
                 if (sortDirection == "asc")
-                    filteredBooks = filteredBooks.OrderBy(orderingFunction);
+                    booksList = booksList.OrderBy(orderingFunction);
                 else
-                    filteredBooks = filteredBooks.OrderByDescending(orderingFunction);
+                    booksList = booksList.OrderByDescending(orderingFunction);
             }
             else if (sortColumnIndex == 3 && isAvailabilitySortable)
             {
                 Func<BookItem, bool?> orderingFunction;
                 orderingFunction = (a => a.Availability);
                 if (sortDirection == "asc")
-                    filteredBooks = filteredBooks.OrderBy(orderingFunction);
+                    booksList = booksList.OrderBy(orderingFunction);
                 else
-                    filteredBooks = filteredBooks.OrderByDescending(orderingFunction);
+                    booksList = booksList.OrderByDescending(orderingFunction);
             }
             else if (sortColumnIndex == 4 && isIdSortable)
             {
                 Func<BookItem, int?> orderingFunction;
                 orderingFunction = (a => a.ID);
                 if (sortDirection == "asc")
-                    filteredBooks = filteredBooks.OrderBy(orderingFunction);
+                    booksList = booksList.OrderBy(orderingFunction);
                 else
-                    filteredBooks = filteredBooks.OrderByDescending(orderingFunction);
+                    booksList = booksList.OrderByDescending(orderingFunction);
             }
 
-            var displayedBooks = filteredBooks.Skip(param.iDisplayStart).Take(param.iDisplayLength);
+            var displayedBooks = booksList.Skip(param.iDisplayStart).Take(param.iDisplayLength);
             var result = from a in displayedBooks
                          select new ArrayList {
 
@@ -276,10 +220,22 @@ namespace BookLibrary.WebServer.Controllers
             return Json(new
             {
                 sEcho = param.sEcho,
-                iTotalRecords = BooksList.Count(),
-                iTotalDisplayRecords = filteredBooks.Count(),
+                iTotalRecords = booksList.Count(),
+                iTotalDisplayRecords = booksList.Count(),
                 aaData = result
             });
+        }
+
+        private IEnumerable<BookItem> GetBooksList(string searchString)
+        {
+            Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId);
+            return Request.Cookies["TableSelectedMode"]?.ToString() switch
+            {
+                "all" => dataStore.Books.GetBooks(searchString),
+                "avaliable" => dataStore.Books.GetAvaliableBooks(searchString),
+                "takenByUser" => dataStore.Books.GetBooksByUser(aId, searchString),
+                _ => dataStore.Books.GetBooks(searchString)
+            };
         }
     }
 }

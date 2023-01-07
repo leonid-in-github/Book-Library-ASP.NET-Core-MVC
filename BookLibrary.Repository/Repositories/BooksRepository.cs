@@ -13,7 +13,7 @@ namespace BookLibrary.Repository.Repositories
         {
             using (var dbContext = new BookLibraryContext())
             {
-                var book = dbContext.GetBook.FromSqlRaw("EXECUTE GetBook {0}", bookId).ToListAsync().Result.FirstOrDefault();
+                var book = dbContext.GetBook.FromSqlRaw("EXECUTE GetBook {0}", bookId).ToList().FirstOrDefault();
                 return book;
             }
         }
@@ -25,11 +25,11 @@ namespace BookLibrary.Repository.Repositories
                 List<BookItem> booksResult;
                 if (pArr == null)
                 {
-                    booksResult = dbContext.GetBook.FromSqlRaw(string.Format("EXECUTE {0}", spName)).ToListAsync().Result;
+                    booksResult = dbContext.GetBook.FromSqlRaw(string.Format("EXECUTE {0}", spName)).ToList();
                 }
                 else
                 {
-                    booksResult = dbContext.GetBook.FromSqlRaw(string.Format("EXECUTE {0}", spName), pArr).ToListAsync().Result;
+                    booksResult = dbContext.GetBook.FromSqlRaw(string.Format("EXECUTE {0}", spName), pArr).ToList();
                 }
                 var booksList = new List<BookItem>();
 
@@ -42,17 +42,33 @@ namespace BookLibrary.Repository.Repositories
             }
         }
 
-        public List<BookItem> GetBooks()
+        public List<BookItem> GetBooks(string searchString = "")
         {
-            return GetBooks("GetBooks", null);
+            var searchStringParameter = new SqlParameter
+            {
+                ParameterName = "SearchString",
+                Value = searchString ?? string.Empty,
+                DbType = System.Data.DbType.String,
+                Direction = System.Data.ParameterDirection.Input
+            };
+
+            return GetBooks("GetBooks @SearchString", new SqlParameter[] { searchStringParameter });
         }
 
-        public List<BookItem> GetAvaliableBooks()
+        public List<BookItem> GetAvaliableBooks(string searchString = "")
         {
-            return GetBooks("GetBooksAvaliable", null);
+            var searchStringParameter = new SqlParameter
+            {
+                ParameterName = "SearchString",
+                Value = searchString ?? string.Empty,
+                DbType = System.Data.DbType.String,
+                Direction = System.Data.ParameterDirection.Input
+            };
+
+            return GetBooks("GetBooksAvaliable @SearchString", new SqlParameter[] { searchStringParameter });
         }
 
-        public List<BookItem> GetBooksByUser(int userId)
+        public List<BookItem> GetBooksByUser(int userId, string searchString = "")
         {
             var inID = new SqlParameter
             {
@@ -61,8 +77,15 @@ namespace BookLibrary.Repository.Repositories
                 DbType = System.Data.DbType.Int32,
                 Direction = System.Data.ParameterDirection.Input
             };
+            var searchStringParameter = new SqlParameter
+            {
+                ParameterName = "SearchString",
+                Value = searchString ?? string.Empty,
+                DbType = System.Data.DbType.String,
+                Direction = System.Data.ParameterDirection.Input
+            };
 
-            return GetBooks("GetBooksByAccount @ID", new SqlParameter[] { inID });
+            return GetBooks("GetBooksByAccount @ID, @SearchString", new SqlParameter[] { inID, searchStringParameter });
         }
 
         public void DeleteBook(int bookId)

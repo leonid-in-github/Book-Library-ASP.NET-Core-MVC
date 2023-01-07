@@ -9,9 +9,9 @@ namespace BookLibrary.WebServer.Models.Home
         {
             TableModes = new List<SelectListItem>()
             {
-                new SelectListItem {Value = "1", Text = "All" },
-                new SelectListItem {Value = "2", Text = "Avaliable" },
-                new SelectListItem {Value = "3", Text = "Taken by user" }
+                new SelectListItem {Value = "all", Text = "All" },
+                new SelectListItem {Value = "avaliable", Text = "Avaliable" },
+                new SelectListItem {Value = "takenByUser", Text = "Taken by user" }
             };
 
         }
