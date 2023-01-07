@@ -147,7 +147,7 @@ namespace BookLibrary.WebServer.Controllers
 
         public IActionResult MainBooksTableAjaxHandler(JQueryDataTableParamModel param)
         {
-            var booksList = GetBooksList(param.sSearch);
+            var booksList = GetBooksList(param.sSearch, param.iDisplayStart, param.iDisplayLength);
 
             var isNameSortable = Convert.ToBoolean(Request.Query["bSortable_0"]);
             var isAuthorsSortable = Convert.ToBoolean(Request.Query["bSortable_1"]);
@@ -206,8 +206,7 @@ namespace BookLibrary.WebServer.Controllers
                     booksList = booksList.OrderByDescending(orderingFunction);
             }
 
-            var displayedBooks = booksList.Skip(param.iDisplayStart).Take(param.iDisplayLength);
-            var result = from a in displayedBooks
+            var result = from a in booksList
                          select new ArrayList {
 
                             a.Name,
@@ -226,15 +225,15 @@ namespace BookLibrary.WebServer.Controllers
             });
         }
 
-        private IEnumerable<BookItem> GetBooksList(string searchString)
+        private IEnumerable<BookItem> GetBooksList(string searchString, int from, int count)
         {
             Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId);
             return Request.Cookies["TableSelectedMode"]?.ToString() switch
             {
-                "all" => dataStore.Books.GetBooks(searchString),
-                "avaliable" => dataStore.Books.GetAvaliableBooks(searchString),
-                "takenByUser" => dataStore.Books.GetBooksByUser(aId, searchString),
-                _ => dataStore.Books.GetBooks(searchString)
+                "all" => dataStore.Books.GetBooks(searchString, from, count),
+                "avaliable" => dataStore.Books.GetAvaliableBooks(searchString, from, count),
+                "takenByUser" => dataStore.Books.GetBooksByUser(aId, searchString, from, count),
+                _ => dataStore.Books.GetBooks(searchString, from, count)
             };
         }
     }
