@@ -147,7 +147,9 @@ namespace BookLibrary.WebServer.Controllers
 
         public IActionResult MainBooksTableAjaxHandler(JQueryDataTableParamModel param)
         {
-            var booksList = GetBooksList(param.sSearch, param.iDisplayStart, param.iDisplayLength);
+            Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId);
+            var booksList = GetBooksList(userId, param.sSearch, param.iDisplayStart, param.iDisplayLength);
+            var booksTotalCount = GetBooksTotalCount(userId, param.sSearch);
 
             var isNameSortable = Convert.ToBoolean(Request.Query["bSortable_0"]);
             var isAuthorsSortable = Convert.ToBoolean(Request.Query["bSortable_1"]);
@@ -219,21 +221,31 @@ namespace BookLibrary.WebServer.Controllers
             return Json(new
             {
                 sEcho = param.sEcho,
-                iTotalRecords = booksList.Count(),
-                iTotalDisplayRecords = booksList.Count(),
+                iTotalRecords = booksTotalCount,
+                iTotalDisplayRecords = booksTotalCount,
                 aaData = result
             });
         }
 
-        private IEnumerable<BookItem> GetBooksList(string searchString, int from, int count)
+        private IEnumerable<BookItem> GetBooksList(int userId, string searchString, int from, int count)
         {
-            Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId);
             return Request.Cookies["TableSelectedMode"]?.ToString() switch
             {
                 "all" => dataStore.Books.GetBooks(searchString, from, count),
                 "avaliable" => dataStore.Books.GetAvaliableBooks(searchString, from, count),
-                "takenByUser" => dataStore.Books.GetBooksByUser(aId, searchString, from, count),
+                "takenByUser" => dataStore.Books.GetBooksByUser(userId, searchString, from, count),
                 _ => dataStore.Books.GetBooks(searchString, from, count)
+            };
+        }
+
+        private int GetBooksTotalCount(int userId, string searchString)
+        {
+            return Request.Cookies["TableSelectedMode"]?.ToString() switch
+            {
+                "all" => dataStore.Books.GetBooksTotalCount(searchString),
+                "avaliable" => dataStore.Books.GetAvaliableBooksTotalCount(searchString),
+                "takenByUser" => dataStore.Books.GetBooksByUserTotalCount(userId, searchString),
+                _ => dataStore.Books.GetBooksTotalCount(searchString)
             };
         }
     }

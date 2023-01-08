@@ -130,6 +130,68 @@ namespace BookLibrary.Repository.Repositories
             return GetBooks("GetBooksByAccount @ID, @SearchString, @From, @Count", new SqlParameter[] { inID, searchStringParameter, fromParameter, countParameter });
         }
 
+        public int GetBooksTotalCount(string searchString = "")
+        {
+            var searchStringParameter = new SqlParameter
+            {
+                ParameterName = "SearchString",
+                Value = searchString ?? string.Empty,
+                DbType = System.Data.DbType.String,
+                Direction = System.Data.ParameterDirection.Input
+            };
+            var sqlParameters = new SqlParameter[] { searchStringParameter };
+            var sqlString = "EXECUTE GetBooksTotalCount @SearchString";
+            using (var dbContext = new BookLibraryContext())
+            {
+                var result = dbContext.Database.SqlQueryRaw<int>(sqlString, sqlParameters).AsEnumerable<int>().FirstOrDefault();
+                return result;
+            }
+        }
+
+        public int GetBooksByUserTotalCount(int userId, string searchString = "")
+        {
+            var inID = new SqlParameter
+            {
+                ParameterName = "AccountId",
+                Value = userId,
+                DbType = System.Data.DbType.Int32,
+                Direction = System.Data.ParameterDirection.Input
+            };
+            var searchStringParameter = new SqlParameter
+            {
+                ParameterName = "SearchString",
+                Value = searchString ?? string.Empty,
+                DbType = System.Data.DbType.String,
+                Direction = System.Data.ParameterDirection.Input
+            };
+            var sqlParameters = new SqlParameter[] { inID, searchStringParameter };
+            var sqlString = "EXECUTE GetBooksByAccountTotalCount @AccountId, @SearchString";
+            using (var dbContext = new BookLibraryContext())
+            {
+                var result = dbContext.Database.SqlQueryRaw<int>(sqlString, sqlParameters).AsEnumerable<int>().FirstOrDefault();
+                return result;
+            }
+        }
+
+        public int GetAvaliableBooksTotalCount(string searchString = "")
+        {
+            var searchStringParameter = new SqlParameter
+            {
+                ParameterName = "SearchString",
+                Value = searchString ?? string.Empty,
+                DbType = System.Data.DbType.String,
+                Direction = System.Data.ParameterDirection.Input
+            };
+            var sqlParameters = new SqlParameter[] { searchStringParameter };
+            var sqlString = "EXECUTE GetBooksAvaliableTotalCount @SearchString";
+            using (var dbContext = new BookLibraryContext())
+            {
+                var result = dbContext.Database.SqlQueryRaw<int>(sqlString, sqlParameters).AsEnumerable<int>().FirstOrDefault();
+                return result;
+            }
+        }
+
+
         public void DeleteBook(int bookId)
         {
             var inID = new SqlParameter
