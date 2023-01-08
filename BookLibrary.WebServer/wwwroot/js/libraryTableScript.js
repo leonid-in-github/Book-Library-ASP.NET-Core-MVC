@@ -45,7 +45,7 @@ function LoadIndexBookTable() {
                 "bSortable": false,
                 "mRender": function (data, type, row) {
                     return '<a href=\"Books/EditBook?bookId=' +
-                        data + '\">Edit</a> |' +
+                        data + '\">Edit</a> | ' +
                         '<a href=\"Books/DeleteBook?bookId=' +
                         data +
                         '\" onClick=\"return confirm(\'Are you sure you want to delete this book?\');\">Delete</a>';
