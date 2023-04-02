@@ -2,12 +2,12 @@
 
 namespace BookLibrary.WebServer.Models.Books
 {
-    public class UpdateBookModel : ActionBookModel
+    public class EditBookModel : ActionBookModel
     {
         public string UpdateBookMassege { get; set; }
 
-        public UpdateBookModel() { }
+        public EditBookModel() { }
 
-        public UpdateBookModel(BookItem bookItem) : base(bookItem) { }
+        public EditBookModel(BookItem bookItem) : base(bookItem) { }
     }
 }

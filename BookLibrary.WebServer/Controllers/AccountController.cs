@@ -4,6 +4,7 @@ using BookLibrary.WebServer.AppConfig;
 using BookLibrary.WebServer.Models.Accounts;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -78,10 +79,6 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
                 }
                 ModelState.AddModelError("LoginMassege", "Retry.");
             }
-            catch (Exception)
-            {
-
-            }
             return View(loginModel);
         }
 
@@ -94,23 +91,18 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
 
         public void LogoutApplication()
         {
-            try
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            dataStore.Account.Logout(HttpContext.Session.Id);
+
+            HttpContext.Session.Clear();
+            if (Request.Cookies[_config.Value.SessionCookieName] != null)
             {
-                HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-                dataStore.Account.Logout(HttpContext.Session.Id);
-
-                HttpContext.Session.Clear();
-                if (Request.Cookies[_config.Value.SessionCookieName] != null)
+                Response.Cookies.Append(_config.Value.SessionCookieName, "", new CookieOptions()
                 {
-                    Response.Cookies.Append(_config.Value.SessionCookieName, "", new CookieOptions()
-                    {
-                        Expires = DateTime.Now.AddDays(-1)
-                    });
-                }
+                    Expires = DateTime.Now.AddDays(-1)
+                });
             }
-            catch (Exception) { }
-            return;
         }
 
         public IActionResult Registration()
@@ -150,26 +142,18 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
                     }
                     ModelState.AddModelError("RegistrationMassege", "Retry.");
                 }
-                catch (Exception)
-                {
-
-                }
             }
             return View();
         }
 
+        [Authorize]
         public IActionResult GetUser()
         {
-            if (!User.Identity.IsAuthenticated) return RedirectToAction("Index", "Home");
-            try
+            if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
             {
-                if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
-                {
-                    var model = (UserModel)dataStore.Account.GetUser((int)aId);
-                    return View(model);
-                }
+                var model = (UserModel)dataStore.Account.GetUser((int)aId);
+                return View(model);
             }
-            catch (Exception) { }
 
             return new EmptyResult();
         }
@@ -180,27 +164,23 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult ChangePassword(ChangePasswordModel model)
         {
             if (ModelState.IsValid)
             {
-                if (!User.Identity.IsAuthenticated) return RedirectToAction("Index", "Home");
-                try
+                if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
                 {
-                    if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
-                    {
-                        var result = dataStore.Account.ChangeAccountPassword((int)aId, model.Password, model.NewPassword);
+                    var result = dataStore.Account.ChangeAccountPassword((int)aId, model.Password, model.NewPassword);
 
-                        if (result)
-                            return RedirectToAction("GetUser", "Account");
-                        else
-                        {
-                            ModelState.AddModelError("ChangePasswordMassege", "Change password failed. Incorrect data.");
-                            return View();
-                        }
+                    if (result)
+                        return RedirectToAction("GetUser", "Account");
+                    else
+                    {
+                        ModelState.AddModelError("ChangePasswordMassege", "Change password failed. Incorrect data.");
+                        return View();
                     }
                 }
-                catch (Exception) { }
             }
             return View(model);
         }
@@ -211,29 +191,25 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult DeleteAccount(DeleteAccountModel model)
         {
             if (ModelState.IsValid)
             {
-                if (!User.Identity.IsAuthenticated) return RedirectToAction("Index", "Home");
-                try
+                if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
                 {
-                    if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
+                    var result = dataStore.Account.DeleteAccount((int)aId, model.Password);
+                    if (result)
                     {
-                        var result = dataStore.Account.DeleteAccount((int)aId, model.Password);
-                        if (result)
-                        {
-                            LogoutApplication();
-                            return RedirectToAction("Index", "Home");
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("DeleteAccountMassege", "Delete account failed. Incorrect password.");
-                            return View();
-                        }
+                        LogoutApplication();
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("DeleteAccountMassege", "Delete account failed. Incorrect password.");
+                        return View();
                     }
                 }
-                catch (Exception) { }
             }
             return View();
         }
