@@ -1,5 +1,5 @@
-﻿using BookLibrary.Repository.Exceptions;
-using BookLibrary.Repository.Repositories;
+﻿using BookLibrary.Storage.Exceptions;
+using BookLibrary.Storage.Repositories;
 using BookLibrary.WebServer.AppConfig;
 using BookLibrary.WebServer.Models.Accounts;
 using Microsoft.AspNetCore.Authentication;
@@ -17,11 +17,11 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IDataStore dataStore;
+        private readonly IDataStorage dataStore;
 
         private readonly IOptions<SessionConfig> _config;
 
-        public AccountController(IOptions<SessionConfig> config, IDataStore dataStore)
+        public AccountController(IOptions<SessionConfig> config, IDataStorage dataStore)
         {
             _config = config;
             this.dataStore = dataStore;
@@ -68,7 +68,7 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
 
                 return RedirectToAction("Index", "Home");
             }
-            catch (SessionExpirationConflictException)
+            catch (SessionExpirationException)
             {
                 if (Request.Cookies[_config.Value.SessionCookieName] != null)
                 {
@@ -131,7 +131,7 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
-                catch (SessionExpirationConflictException)
+                catch (SessionExpirationException)
                 {
                     if (Request.Cookies[_config.Value.SessionCookieName] != null)
                     {

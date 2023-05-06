@@ -1,4 +1,4 @@
-﻿using BookLibrary.Repository.Models.Account;
+﻿using BookLibrary.Storage.Models.Account;
 using System.ComponentModel.DataAnnotations;
 
 namespace BookLibrary.WebServer.Models.Accounts

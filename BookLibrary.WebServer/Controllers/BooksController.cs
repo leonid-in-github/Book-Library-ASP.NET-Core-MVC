@@ -1,5 +1,5 @@
-﻿using BookLibrary.Repository.Models.Book;
-using BookLibrary.Repository.Repositories;
+﻿using BookLibrary.Storage.Models.Book;
+using BookLibrary.Storage.Repositories;
 using BookLibrary.WebServer.Models.Books;
 using BookLibrary.WebServer.Models.JQueryModels;
 using Microsoft.AspNetCore.Authorization;
@@ -16,9 +16,9 @@ namespace BookLibrary.WebServer.Controllers
     [Authorize]
     public class BooksController : Controller
     {
-        private readonly IDataStore dataStore;
+        private readonly IDataStorage dataStore;
 
-        public BooksController(IDataStore dataStore)
+        public BooksController(IDataStorage dataStore)
         {
             this.dataStore = dataStore;
         }

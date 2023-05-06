@@ -1,4 +1,4 @@
-﻿using BookLibrary.Repository.Models.Book;
+﻿using BookLibrary.Storage.Models.Book;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 

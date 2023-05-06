@@ -1,4 +1,4 @@
-﻿using BookLibrary.Repository.Models.Book;
+﻿using BookLibrary.Storage.Models.Book;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookLibrary.WebServer.Models.Books

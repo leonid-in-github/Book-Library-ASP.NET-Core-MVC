@@ -1,6 +1,6 @@
-using BookLibrary.Repository.Contexts;
-using BookLibrary.Repository.Repositories;
-using BookLibrary.Repository.Servicies;
+using BookLibrary.Storage.Contexts;
+using BookLibrary.Storage.Repositories;
+using BookLibrary.Storage.Servicies;
 using BookLibrary.WebServer.AppConfig;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -29,7 +29,7 @@ namespace BookLibrary.WebServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IDataStore, BookLibraryRepository>();
+            services.AddScoped<IDataStorage, BookLibraryRepository>();
 
             services.AddControllersWithViews();
 
