@@ -1,4 +1,4 @@
-﻿using BookLibrary.Repository.Repositories;
+﻿using BookLibrary.Storage;
 using BookLibrary.Storage.Models.Book;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,7 +21,7 @@ namespace BookLibrary.Storage.Contexts
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(RepositoryParameters.ConnectionString);
+            optionsBuilder.UseSqlServer(StorageParameters.ConnectionString);
         }
     }
 }

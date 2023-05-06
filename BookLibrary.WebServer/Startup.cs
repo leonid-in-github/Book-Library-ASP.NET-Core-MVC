@@ -1,4 +1,4 @@
-using BookLibrary.Repository.Repositories;
+using BookLibrary.Storage;
 using BookLibrary.Storage.Contexts;
 using BookLibrary.Storage.Repositories;
 using BookLibrary.WebServer.AppConfig;
@@ -38,14 +38,14 @@ namespace BookLibrary.WebServer
 
             services.AddDistributedMemoryCache();
 
-            RepositoryParameters.ConnectionString =
+            StorageParameters.ConnectionString =
                 Configuration["ConnectionStrings:DefaultConnection"].ToString().Replace("%CONTENTROOTPATH%", _contentRootPath);
-            RepositoryParameters.SESSIONEXPIRATIONTIMEINMINUTES = 20;
+            StorageParameters.SESSIONEXPIRATIONTIMEINMINUTES = 20;
 
             services.AddSession(options =>
             {
                 options.Cookie.Name = Configuration.GetSection("sessionConfig")["SessionCookieName"].ToString();
-                options.IdleTimeout = TimeSpan.FromMinutes(RepositoryParameters.SESSIONEXPIRATIONTIMEINMINUTES);
+                options.IdleTimeout = TimeSpan.FromMinutes(StorageParameters.SESSIONEXPIRATIONTIMEINMINUTES);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
@@ -59,13 +59,13 @@ namespace BookLibrary.WebServer
 
             services.Configure<SessionConfig>(Configuration.GetSection("sessionConfig"));
             services.AddDbContext<BookLibraryContext>(options =>
-                options.UseSqlServer(RepositoryParameters.ConnectionString));
+                options.UseSqlServer(StorageParameters.ConnectionString));
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => //CookieAuthenticationOptions
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(RepositoryParameters.SESSIONEXPIRATIONTIMEINMINUTES);
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(StorageParameters.SESSIONEXPIRATIONTIMEINMINUTES);
                 });
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();

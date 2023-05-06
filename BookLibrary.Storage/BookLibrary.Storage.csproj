@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <RootNamespace>BookLibrary.Repository</RootNamespace>
+    <RootNamespace>BookLibrary.Storage</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
