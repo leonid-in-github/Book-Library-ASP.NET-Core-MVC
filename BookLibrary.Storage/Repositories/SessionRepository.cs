@@ -1,5 +1,5 @@
-﻿using BookLibrary.Storage.Contexts;
-using BookLibrary.Storage.Servicies;
+﻿using BookLibrary.Repository.Repositories;
+using BookLibrary.Storage.Contexts;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,7 +13,7 @@ namespace BookLibrary.Storage.Repositories
         public SessionRepository()
         {
             SessionExpirationTimeSpan =
-                new TimeSpan(TimeSpan.TicksPerMinute * RepositoryService.SESSIONEXPIRATIONTIMEINMINUTES);
+                new TimeSpan(TimeSpan.TicksPerMinute * RepositoryParameters.SESSIONEXPIRATIONTIMEINMINUTES);
         }
 
         public bool RegisterSession(int accountId, string sessionId)

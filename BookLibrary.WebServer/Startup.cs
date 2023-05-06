@@ -1,6 +1,6 @@
+using BookLibrary.Repository.Repositories;
 using BookLibrary.Storage.Contexts;
 using BookLibrary.Storage.Repositories;
-using BookLibrary.Storage.Servicies;
 using BookLibrary.WebServer.AppConfig;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -30,20 +30,22 @@ namespace BookLibrary.WebServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IDataStorage, BookLibraryRepository>();
+            services.AddScoped<AccountRepository, AccountRepository>();
+            services.AddScoped<SessionRepository, SessionRepository>(); 
+            services.AddScoped<BooksRepository, BooksRepository>();
 
             services.AddControllersWithViews();
 
             services.AddDistributedMemoryCache();
 
-            RepositoryService.Register<BookLibraryRepository>(
-                Configuration["ConnectionStrings:DefaultConnection"].ToString().Replace("%CONTENTROOTPATH%", _contentRootPath)
-                );
-            RepositoryService.SetSessionExpirationTimeInMinutes(20);
+            RepositoryParameters.ConnectionString =
+                Configuration["ConnectionStrings:DefaultConnection"].ToString().Replace("%CONTENTROOTPATH%", _contentRootPath);
+            RepositoryParameters.SESSIONEXPIRATIONTIMEINMINUTES = 20;
 
             services.AddSession(options =>
             {
                 options.Cookie.Name = Configuration.GetSection("sessionConfig")["SessionCookieName"].ToString();
-                options.IdleTimeout = TimeSpan.FromMinutes(RepositoryService.SESSIONEXPIRATIONTIMEINMINUTES);
+                options.IdleTimeout = TimeSpan.FromMinutes(RepositoryParameters.SESSIONEXPIRATIONTIMEINMINUTES);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
@@ -57,13 +59,13 @@ namespace BookLibrary.WebServer
 
             services.Configure<SessionConfig>(Configuration.GetSection("sessionConfig"));
             services.AddDbContext<BookLibraryContext>(options =>
-                options.UseSqlServer(RepositoryService.ConnectionString<BookLibraryRepository>()));
+                options.UseSqlServer(RepositoryParameters.ConnectionString));
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => //CookieAuthenticationOptions
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(RepositoryService.SESSIONEXPIRATIONTIMEINMINUTES);
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(RepositoryParameters.SESSIONEXPIRATIONTIMEINMINUTES);
                 });
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();

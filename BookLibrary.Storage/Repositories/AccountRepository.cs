@@ -9,6 +9,13 @@ namespace BookLibrary.Storage.Repositories
 {
     public class AccountRepository
     {
+        private readonly SessionRepository sessionRepository;
+
+        public AccountRepository(SessionRepository sessionRepository)
+        {
+            this.sessionRepository = sessionRepository;
+        }
+
         public int Login(string sessionId, string login, string password)
         {
             var inLogin = new SqlParameter
@@ -40,11 +47,10 @@ namespace BookLibrary.Storage.Repositories
             if (int.TryParse(outResult.Value.ToString(), out int accountId))
                 if (accountId > 0)
                 {
-                    var sessionConnector = new SessionRepository();
-                    switch (sessionConnector.CheckSessionExpiration(sessionId))
+                    switch (sessionRepository.CheckSessionExpiration(sessionId))
                     {
                         case null:
-                            if (!sessionConnector.RegisterSession(accountId, sessionId))
+                            if (!sessionRepository.RegisterSession(accountId, sessionId))
                                 return 0;
                             break;
                         case true:
@@ -141,11 +147,10 @@ namespace BookLibrary.Storage.Repositories
             }
             if (int.TryParse(outResult.Value.ToString(), out int accountId))
                 if (accountId == -1) return accountId;
-            var sessionConnector = new SessionRepository();
-            switch (sessionConnector.CheckSessionExpiration(sessionId))
+            switch (sessionRepository.CheckSessionExpiration(sessionId))
             {
                 case null:
-                    if (!sessionConnector.RegisterSession(accountId, sessionId))
+                    if (!sessionRepository.RegisterSession(accountId, sessionId))
                         return 0;
                     break;
                 case true:

@@ -5,10 +5,10 @@ namespace BookLibrary.Storage.Repositories
 {
     public class BookLibraryRepository : IDataStorage, IDataStorageCreatable
     {
-        public BookLibraryRepository()
+        public BookLibraryRepository(AccountRepository accountRepository, BooksRepository booksRepository)
         {
-            Account = new AccountRepository();
-            Books = new BooksRepository();
+            Account = accountRepository;
+            Books = booksRepository;
         }
         public AccountRepository Account { get; private set; }
 
