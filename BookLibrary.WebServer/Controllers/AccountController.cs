@@ -17,11 +17,11 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IDataStorage dataStore;
+        private readonly IBookLibraryRepository dataStore;
 
         private readonly IOptions<SessionConfig> _config;
 
-        public AccountController(IOptions<SessionConfig> config, IDataStorage dataStore)
+        public AccountController(IOptions<SessionConfig> config, IBookLibraryRepository dataStore)
         {
             _config = config;
             this.dataStore = dataStore;

@@ -1,5 +1,4 @@
-﻿using BookLibrary.Storage;
-using BookLibrary.Storage.Models.Book;
+﻿using BookLibrary.Storage.Models.Book;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookLibrary.Storage.Contexts

@@ -16,9 +16,9 @@ namespace BookLibrary.WebServer.Controllers
     [Authorize]
     public class BooksController : Controller
     {
-        private readonly IDataStorage dataStore;
+        private readonly IBookLibraryRepository dataStore;
 
-        public BooksController(IDataStorage dataStore)
+        public BooksController(IBookLibraryRepository dataStore)
         {
             this.dataStore = dataStore;
         }
