@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using System;
 
 namespace BookLibrary.WebServer
@@ -40,7 +41,7 @@ namespace BookLibrary.WebServer
 
             StorageParameters.ConnectionString =
                 Configuration["ConnectionStrings:DefaultConnection"].ToString().Replace("%CONTENTROOTPATH%", _contentRootPath);
-            StorageParameters.SessionTimeoutInMinutes = 20;
+            StorageParameters.SessionTimeoutInMinutes = 15;
 
             services.AddSession(options =>
             {
@@ -66,6 +67,8 @@ namespace BookLibrary.WebServer
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(StorageParameters.SessionTimeoutInMinutes);
+                    options.LogoutPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                    options.Cookie.Name = Configuration["sessionConfig:SessionCookieName"].ToString();
                 });
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();

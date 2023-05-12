@@ -35,8 +35,8 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
                 new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
                 new Claim(ClaimTypes.NameIdentifier, dbUserId.ToString())
             };
-            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
         }
 
         private void SetupSession(int accountId, string accountLogin)
