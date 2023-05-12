@@ -41,7 +41,7 @@ namespace BookLibrary.WebServer
 
             StorageParameters.ConnectionString =
                 Configuration["ConnectionStrings:DefaultConnection"].ToString().Replace("%CONTENTROOTPATH%", _contentRootPath);
-            StorageParameters.SessionTimeoutInMinutes = 15;
+            StorageParameters.SessionTimeoutInMinutes = int.Parse(Configuration["sessionConfig:SessionTimeoutInMinutes"]);
 
             services.AddSession(options =>
             {
