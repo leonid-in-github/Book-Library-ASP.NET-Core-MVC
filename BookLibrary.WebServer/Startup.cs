@@ -40,12 +40,12 @@ namespace BookLibrary.WebServer
 
             StorageParameters.ConnectionString =
                 Configuration["ConnectionStrings:DefaultConnection"].ToString().Replace("%CONTENTROOTPATH%", _contentRootPath);
-            StorageParameters.SESSIONEXPIRATIONTIMEINMINUTES = 20;
+            StorageParameters.SessionTimeoutInMinutes = 20;
 
             services.AddSession(options =>
             {
                 options.Cookie.Name = Configuration.GetSection("sessionConfig")["SessionCookieName"].ToString();
-                options.IdleTimeout = TimeSpan.FromMinutes(StorageParameters.SESSIONEXPIRATIONTIMEINMINUTES);
+                options.IdleTimeout = TimeSpan.FromMinutes(StorageParameters.SessionTimeoutInMinutes);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
@@ -65,7 +65,7 @@ namespace BookLibrary.WebServer
                 .AddCookie(options => //CookieAuthenticationOptions
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(StorageParameters.SESSIONEXPIRATIONTIMEINMINUTES);
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(StorageParameters.SessionTimeoutInMinutes);
                 });
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();

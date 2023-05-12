@@ -4,6 +4,6 @@
     {
         public static string ConnectionString { get; set; }
 
-        public static int SESSIONEXPIRATIONTIMEINMINUTES { get; set; }
+        public static int SessionTimeoutInMinutes { get; set; }
     }
 }

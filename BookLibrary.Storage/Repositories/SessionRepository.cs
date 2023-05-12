@@ -12,7 +12,7 @@ namespace BookLibrary.Storage.Repositories
         public SessionRepository()
         {
             SessionExpirationTimeSpan =
-                new TimeSpan(TimeSpan.TicksPerMinute * StorageParameters.SESSIONEXPIRATIONTIMEINMINUTES);
+                new TimeSpan(TimeSpan.TicksPerMinute * StorageParameters.SessionTimeoutInMinutes);
         }
 
         public bool RegisterSession(int accountId, string sessionId)
