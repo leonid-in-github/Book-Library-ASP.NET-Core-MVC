@@ -143,7 +143,7 @@ namespace BookLibrary.WebServer.Controllers
             var sortDirection = Request.Query["sSortDir_0"]; // asc or desc
             if (sortColumnIndex == 0 && isNameSortable)
             {
-                Func<BookItem, string> orderingFunction;
+                Func<Book, string> orderingFunction;
                 orderingFunction = (a => a.Name);
 
                 if (sortDirection == "asc")
@@ -153,7 +153,7 @@ namespace BookLibrary.WebServer.Controllers
             }
             else if (sortColumnIndex == 1 && isAuthorsSortable)
             {
-                Func<BookItem, string> orderingFunction;
+                Func<Book, string> orderingFunction;
                 orderingFunction = (a => a.Authors);
                 if (sortDirection == "asc")
                     booksList = booksList.OrderBy(orderingFunction, StringComparer.Ordinal);
@@ -162,7 +162,7 @@ namespace BookLibrary.WebServer.Controllers
             }
             else if (sortColumnIndex == 2 && isYearSortable)
             {
-                Func<BookItem, DateTime> orderingFunction;
+                Func<Book, DateTime> orderingFunction;
                 orderingFunction = (a => a.Year);
                 if (sortDirection == "asc")
                     booksList = booksList.OrderBy(orderingFunction);
@@ -171,7 +171,7 @@ namespace BookLibrary.WebServer.Controllers
             }
             else if (sortColumnIndex == 3 && isAvailabilitySortable)
             {
-                Func<BookItem, bool?> orderingFunction;
+                Func<Book, bool?> orderingFunction;
                 orderingFunction = (a => a.Availability);
                 if (sortDirection == "asc")
                     booksList = booksList.OrderBy(orderingFunction);
@@ -180,7 +180,7 @@ namespace BookLibrary.WebServer.Controllers
             }
             else if (sortColumnIndex == 4 && isIdSortable)
             {
-                Func<BookItem, int?> orderingFunction;
+                Func<Book, int?> orderingFunction;
                 orderingFunction = (a => a.ID);
                 if (sortDirection == "asc")
                     booksList = booksList.OrderBy(orderingFunction);
@@ -207,7 +207,7 @@ namespace BookLibrary.WebServer.Controllers
             });
         }
 
-        private IEnumerable<BookItem> GetBooksList(int userId, string searchString, int from, int count)
+        private IEnumerable<Book> GetBooksList(int userId, string searchString, int from, int count)
         {
             return Request.Cookies["TableSelectedMode"]?.ToString() switch
             {

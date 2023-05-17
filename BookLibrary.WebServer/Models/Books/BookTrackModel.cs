@@ -8,7 +8,7 @@ namespace BookLibrary.WebServer.Models.Books
     {
         public BookTrackModel()
         {
-            BookTrackList = new List<BookTrackItem>();
+            BookTrackList = new List<BookTrack>();
 
             SelectedMode = BookTrackTableModes.Default;
 
@@ -26,7 +26,7 @@ namespace BookLibrary.WebServer.Models.Books
         public bool? BookAvailability { get; set; }
         public bool CanBePuted { get; set; }
         public string SelectedMode { get; set; }
-        public List<BookTrackItem> BookTrackList { get; set; }
+        public List<BookTrack> BookTrackList { get; set; }
 
         public List<SelectListItem> TableModes { set; get; }
 

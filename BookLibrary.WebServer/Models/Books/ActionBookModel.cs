@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookLibrary.WebServer.Models.Books
 {
     [ModelMetadataType(typeof(ActionBookModelMetadata))]
-    public class ActionBookModel : BookItem
+    public class ActionBookModel : Book
     {
         public ActionBookModel() { }
 
-        public ActionBookModel(BookItem bookItem) : base(bookItem) { }
+        public ActionBookModel(Book bookItem) : base(bookItem) { }
     }
 }

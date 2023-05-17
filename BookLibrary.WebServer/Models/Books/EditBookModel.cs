@@ -8,6 +8,6 @@ namespace BookLibrary.WebServer.Models.Books
 
         public EditBookModel() { }
 
-        public EditBookModel(BookItem bookItem) : base(bookItem) { }
+        public EditBookModel(Book bookItem) : base(bookItem) { }
     }
 }
