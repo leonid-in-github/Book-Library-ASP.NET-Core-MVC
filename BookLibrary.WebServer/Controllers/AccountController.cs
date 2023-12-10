@@ -17,31 +17,15 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IBookLibraryRepository dataStore;
+        private readonly IBookLibraryRepository repository;
 
         private readonly IOptions<SessionConfig> _config;
 
-        public AccountController(IOptions<SessionConfig> config, IBookLibraryRepository dataStore)
+        public AccountController(IOptions<SessionConfig> config, IBookLibraryRepository repository)
         {
             _config = config;
-            this.dataStore = dataStore;
+            this.repository = repository;
 
-        }
-
-        private async Task Authenticate(string userName, int dbUserId)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
-                new Claim(ClaimTypes.NameIdentifier, dbUserId.ToString())
-            };
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-        }
-
-        private void SetupSession(int accountId, string accountLogin)
-        {
-            _ = Authenticate(accountLogin, accountId);
         }
 
         public IActionResult Login()
@@ -57,7 +41,7 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
             try
             {
                 var accountId =
-                    dataStore.Account.Login(HttpContext.Session.Id, loginModel.Login, loginModel.Password);
+                    repository.Account.Login(HttpContext.Session.Id, loginModel.Login, loginModel.Password);
                 if (accountId == 0)
                 {
                     ModelState.AddModelError("LoginMassege", "Login failed. Incorrect login or password.");
@@ -93,7 +77,7 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            dataStore.Account.Logout(HttpContext.Session.Id);
+            repository.Account.Logout(HttpContext.Session.Id);
 
             HttpContext.Session.Clear();
             if (Request.Cookies[_config.Value.SessionCookieName] != null)
@@ -118,7 +102,7 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
                 try
                 {
                     var accountId =
-                        dataStore.Account.Register(HttpContext.Session.Id, registrationModel.Login, registrationModel.Password,
+                        repository.Account.Register(HttpContext.Session.Id, registrationModel.Login, registrationModel.Password,
                         registrationModel.FirstName, registrationModel.LastName, registrationModel.Email);
 
                     if (accountId == -1)
@@ -151,7 +135,7 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
         {
             if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
             {
-                var model = (UserModel)dataStore.Account.GetUser((int)aId);
+                var model = (UserModel)repository.Account.GetUser((int)aId);
                 return View(model);
             }
 
@@ -171,7 +155,7 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
             {
                 if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
                 {
-                    var result = dataStore.Account.ChangeAccountPassword((int)aId, model.Password, model.NewPassword);
+                    var result = repository.Account.ChangeAccountPassword((int)aId, model.Password, model.NewPassword);
 
                     if (result)
                         return RedirectToAction("GetUser", "Account");
@@ -198,7 +182,7 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
             {
                 if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
                 {
-                    var result = dataStore.Account.DeleteAccount((int)aId, model.Password);
+                    var result = repository.Account.DeleteAccount((int)aId, model.Password);
                     if (result)
                     {
                         LogoutApplication();
@@ -213,5 +197,25 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
             }
             return View();
         }
+
+        #region Private
+
+        private async Task Authenticate(string userName, int dbUserId)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
+                new Claim(ClaimTypes.NameIdentifier, dbUserId.ToString())
+            };
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+        }
+
+        private void SetupSession(int accountId, string accountLogin)
+        {
+            _ = Authenticate(accountLogin, accountId);
+        }
+
+        #endregion
     }
 }

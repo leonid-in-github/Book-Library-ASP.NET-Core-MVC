@@ -16,11 +16,11 @@ namespace BookLibrary.WebServer.Controllers
     [Authorize]
     public class BooksController : Controller
     {
-        private readonly IBookLibraryRepository dataStore;
+        private readonly IBookLibraryRepository repository;
 
-        public BooksController(IBookLibraryRepository dataStore)
+        public BooksController(IBookLibraryRepository repository)
         {
-            this.dataStore = dataStore;
+            this.repository = repository;
         }
 
         public IActionResult AddBook()
@@ -33,7 +33,7 @@ namespace BookLibrary.WebServer.Controllers
         {
             if (ModelState.IsValid)
             {
-                dataStore.Books.AddBook(book);
+                repository.Books.AddBook(book);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -47,7 +47,7 @@ namespace BookLibrary.WebServer.Controllers
                 return BadRequest();
             }
 
-            dataStore.Books.DeleteBook(bookId);
+            repository.Books.DeleteBook(bookId);
 
             return RedirectToAction("Index", "Home");
         }
@@ -59,7 +59,7 @@ namespace BookLibrary.WebServer.Controllers
                 return BadRequest();
             }
 
-            var book = new EditBookModel(dataStore.Books.GetBook(bookId));
+            var book = new EditBookModel(repository.Books.GetBook(bookId));
             book.ID = bookId;
             return View(book);
 
@@ -70,7 +70,7 @@ namespace BookLibrary.WebServer.Controllers
         {
             if (ModelState.IsValid)
             {
-                dataStore.Books.UpdateBook(book);
+                repository.Books.UpdateBook(book);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -88,7 +88,7 @@ namespace BookLibrary.WebServer.Controllers
             {
                 var tracksCount =
                     Request.Cookies["BookTrackTableSelectedMode"] == null ? BookTrackTableModes.Default : Request.Cookies["BookTrackTableSelectedMode"].ToString();
-                var bookTrackModel = (BookTrackModel)dataStore.Books.GetBookTrack(userId, (int)bookId, tracksCount);
+                var bookTrackModel = (BookTrackModel)repository.Books.GetBookTrack(userId, (int)bookId, tracksCount);
 
                 return View(bookTrackModel);
             }
@@ -104,7 +104,7 @@ namespace BookLibrary.WebServer.Controllers
 
             if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId))
             {
-                dataStore.Books.TakeBook(userId, bookId);
+                repository.Books.TakeBook(userId, bookId);
             }
 
             return RedirectToAction("BookTrack", "Books", new RouteValueDictionary(new { bookId = bookId }));
@@ -119,7 +119,7 @@ namespace BookLibrary.WebServer.Controllers
 
             if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId))
             {
-                dataStore.Books.PutBook(userId, bookId);
+                repository.Books.PutBook(userId, bookId);
             }
 
             return RedirectToAction("BookTrack", "Books", new RouteValueDictionary(new { bookId }));
@@ -207,14 +207,16 @@ namespace BookLibrary.WebServer.Controllers
             });
         }
 
+        #region Private
+
         private IEnumerable<Book> GetBooksList(int userId, string searchString, int from, int count)
         {
             return Request.Cookies["TableSelectedMode"]?.ToString() switch
             {
-                "all" => dataStore.Books.GetBooks(searchString, from, count),
-                "avaliable" => dataStore.Books.GetAvaliableBooks(searchString, from, count),
-                "takenByUser" => dataStore.Books.GetBooksByUser(userId, searchString, from, count),
-                _ => dataStore.Books.GetBooks(searchString, from, count)
+                "all" => repository.Books.GetBooks(searchString, from, count),
+                "avaliable" => repository.Books.GetAvaliableBooks(searchString, from, count),
+                "takenByUser" => repository.Books.GetBooksByUser(userId, searchString, from, count),
+                _ => repository.Books.GetBooks(searchString, from, count)
             };
         }
 
@@ -222,11 +224,13 @@ namespace BookLibrary.WebServer.Controllers
         {
             return Request.Cookies["TableSelectedMode"]?.ToString() switch
             {
-                "all" => dataStore.Books.GetBooksTotalCount(searchString),
-                "avaliable" => dataStore.Books.GetAvaliableBooksTotalCount(searchString),
-                "takenByUser" => dataStore.Books.GetBooksByUserTotalCount(userId, searchString),
-                _ => dataStore.Books.GetBooksTotalCount(searchString)
+                "all" => repository.Books.GetBooksTotalCount(searchString),
+                "avaliable" => repository.Books.GetAvaliableBooksTotalCount(searchString),
+                "takenByUser" => repository.Books.GetBooksByUserTotalCount(userId, searchString),
+                _ => repository.Books.GetBooksTotalCount(searchString)
             };
         }
+
+        #endregion
     }
 }

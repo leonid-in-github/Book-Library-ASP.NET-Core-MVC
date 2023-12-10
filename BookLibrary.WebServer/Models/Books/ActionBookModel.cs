@@ -8,6 +8,6 @@ namespace BookLibrary.WebServer.Models.Books
     {
         public ActionBookModel() { }
 
-        public ActionBookModel(Book bookItem) : base(bookItem) { }
+        public ActionBookModel(Book book) : base(book) { }
     }
 }

@@ -12,13 +12,13 @@ namespace BookLibrary.Storage.Models.Book
 
         public Book() { }
 
-        public Book(Book bookItem)
+        public Book(Book book)
         {
-            ID = bookItem.ID;
-            Name = bookItem.Name;
-            Authors = bookItem.Authors;
-            Year = bookItem.Year;
-            Availability = bookItem.Availability;
+            ID = book.ID;
+            Name = book.Name;
+            Authors = book.Authors;
+            Year = book.Year;
+            Availability = book.Availability;
         }
     }
 }

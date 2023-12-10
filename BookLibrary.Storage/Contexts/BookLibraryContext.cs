@@ -5,13 +5,9 @@ namespace BookLibrary.Storage.Contexts
 {
     public class BookLibraryContext : DbContext
     {
-        public BookLibraryContext()
-        : base()
-        { }
+        public BookLibraryContext() : base() { }
 
-        public BookLibraryContext(DbContextOptions<BookLibraryContext> options)
-        : base(options)
-        { }
+        public BookLibraryContext(DbContextOptions<BookLibraryContext> options) : base(options) { }
 
         public virtual DbSet<Book> GetBook { get; set; }
         public virtual DbSet<Book> GetBooksAvaliableDistinct { get; set; }
