@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookLibrary.WebServer.Models.Books
 {
     [ModelMetadataType(typeof(ActionBookModelMetadata))]
-    public class ActionBookModel : Book
+    public class ActionBookModel : BookDto
     {
         public ActionBookModel() { }
 

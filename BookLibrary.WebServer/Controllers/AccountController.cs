@@ -17,14 +17,13 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IBookLibraryRepository repository;
-
+        private readonly IAccountRepository accountRepository;
         private readonly IOptions<SessionConfig> _config;
 
-        public AccountController(IOptions<SessionConfig> config, IBookLibraryRepository repository)
+        public AccountController(IOptions<SessionConfig> config, IAccountRepository accountRepository)
         {
             _config = config;
-            this.repository = repository;
+            this.accountRepository = accountRepository;
 
         }
 
@@ -34,14 +33,16 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginModel loginModel)
+        public async Task<IActionResult> Login(LoginModel loginModel)
         {
             if (!ModelState.IsValid) return View(loginModel);
 
             try
             {
+                var sessionId = Guid.NewGuid().ToString();
+                Response.Cookies.Append("sessionId", sessionId);
                 var accountId =
-                    repository.Account.Login(HttpContext.Session.Id, loginModel.Login, loginModel.Password);
+                    await accountRepository.Login(sessionId, loginModel.Login, loginModel.Password);
                 if (accountId == 0)
                 {
                     ModelState.AddModelError("LoginMassege", "Login failed. Incorrect login or password.");
@@ -58,7 +59,7 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
                 {
                     Response.Cookies.Append(_config.Value.SessionCookieName, "", new CookieOptions()
                     {
-                        Expires = DateTime.Now.AddDays(-1)
+                        Expires = DateTime.UtcNow.AddDays(-1)
                     });
                 }
                 ModelState.AddModelError("LoginMassege", "Retry.");
@@ -66,25 +67,26 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
             return View(loginModel);
         }
 
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            LogoutApplication();
+            await LogoutApplication();
 
             return RedirectToAction("Index", "Home");
         }
 
-        public void LogoutApplication()
+        public async Task LogoutApplication()
         {
-            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            repository.Account.Logout(HttpContext.Session.Id);
+            var sessionId = Request.Cookies["sessionId"];
+            await accountRepository.Logout(sessionId);
 
             HttpContext.Session.Clear();
             if (Request.Cookies[_config.Value.SessionCookieName] != null)
             {
                 Response.Cookies.Append(_config.Value.SessionCookieName, "", new CookieOptions()
                 {
-                    Expires = DateTime.Now.AddDays(-1)
+                    Expires = DateTime.UtcNow.AddDays(-1)
                 });
             }
         }
@@ -95,14 +97,16 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Registration(RegistrationModel registrationModel)
+        public async Task<IActionResult> Registration(RegistrationModel registrationModel)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var sessionId = Guid.NewGuid().ToString();
+                    Response.Cookies.Append("sessionId", sessionId);
                     var accountId =
-                        repository.Account.Register(HttpContext.Session.Id, registrationModel.Login, registrationModel.Password,
+                        await accountRepository.Register(sessionId, registrationModel.Login, registrationModel.Password,
                         registrationModel.FirstName, registrationModel.LastName, registrationModel.Email);
 
                     if (accountId == -1)
@@ -121,7 +125,7 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
                     {
                         Response.Cookies.Append(_config.Value.SessionCookieName, "", new CookieOptions()
                         {
-                            Expires = DateTime.Now.AddDays(-1)
+                            Expires = DateTime.UtcNow.AddDays(-1)
                         });
                     }
                     ModelState.AddModelError("RegistrationMassege", "Retry.");
@@ -131,11 +135,11 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
         }
 
         [Authorize]
-        public IActionResult GetUser()
+        public async Task<IActionResult> GetUser()
         {
-            if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
+            if (int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
             {
-                var model = (UserModel)repository.Account.GetUser((int)aId);
+                var model = (UserModel)await accountRepository.GetUser((int)aId);
                 return View(model);
             }
 
@@ -149,13 +153,13 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult ChangePassword(ChangePasswordModel model)
+        public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
         {
             if (ModelState.IsValid)
             {
-                if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
+                if (int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
                 {
-                    var result = repository.Account.ChangeAccountPassword((int)aId, model.Password, model.NewPassword);
+                    var result = await accountRepository.ChangeAccountPassword((int)aId, model.Password, model.NewPassword);
 
                     if (result)
                         return RedirectToAction("GetUser", "Account");
@@ -176,16 +180,16 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult DeleteAccount(DeleteAccountModel model)
+        public async Task<IActionResult> DeleteAccount(DeleteAccountModel model)
         {
             if (ModelState.IsValid)
             {
-                if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
+                if (int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
                 {
-                    var result = repository.Account.DeleteAccount((int)aId, model.Password);
+                    var result = await accountRepository.DeleteAccount((int)aId, model.Password);
                     if (result)
                     {
-                        LogoutApplication();
+                        await LogoutApplication();
                         return RedirectToAction("Index", "Home");
                     }
                     else

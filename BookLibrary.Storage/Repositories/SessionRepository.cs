@@ -1,11 +1,11 @@
 ﻿using BookLibrary.Storage.Contexts;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BookLibrary.Storage.Repositories
 {
-    public class SessionRepository
+    public class SessionRepository : ISessionRepository
     {
         private TimeSpan SessionExpirationTimeSpan { get; }
 
@@ -15,160 +15,77 @@ namespace BookLibrary.Storage.Repositories
                 new TimeSpan(TimeSpan.TicksPerMinute * StorageParameters.SessionTimeoutInMinutes);
         }
 
-        public bool RegisterSession(int accountId, string sessionId)
+        public Task<bool> RegisterSession(int accountId, string sessionId)
         {
-            using (var dbContext = new BookLibraryContext())
+            using var dbContext = new BookLibraryContext();
+
+            var sessionRecord = dbContext.Sessions.FirstOrDefault(record => record.SessionId == sessionId);
+            if (sessionRecord == null)
             {
-                var inAccountId = new SqlParameter
+                sessionRecord = new Models.Records.Account.SessionRecord
                 {
-                    ParameterName = "AccountId",
-                    Value = accountId,
-                    DbType = System.Data.DbType.Int32,
-                    Direction = System.Data.ParameterDirection.Input
+                    AccountId = accountId,
+                    SessionId = sessionId,
+                    OpenDate = DateTime.UtcNow
                 };
-                var inOpenDate = new SqlParameter
-                {
-                    ParameterName = "OpenDate",
-                    Value = DateTime.Now,
-                    DbType = System.Data.DbType.DateTime,
-                    Direction = System.Data.ParameterDirection.Input
-                };
-                var inSessionId = new SqlParameter
-                {
-                    ParameterName = "SessionId",
-                    Value = sessionId,
-                    DbType = System.Data.DbType.String,
-                    Direction = System.Data.ParameterDirection.Input
-                };
-                var outResult = new SqlParameter
-                {
-                    ParameterName = "Result",
-                    DbType = System.Data.DbType.Int32,
-                    Direction = System.Data.ParameterDirection.Output
-                };
-
-                var sql = "exec OpenSession @AccountId, @OpenDate, @SessionId, @Result OUT";
-                _ = dbContext.Database.ExecuteSqlRaw(sql, inAccountId, inOpenDate, inSessionId, outResult);
-
-                if (int.TryParse(outResult.Value.ToString(), out int openSessionResult))
-                    if (openSessionResult == 1)
-                    {
-                        return true;
-                    }
+                dbContext.Sessions.Add(sessionRecord);
+                dbContext.SaveChanges();
+                return Task.FromResult(true);
             }
-            return false;
+
+            return Task.FromResult(false);
         }
 
-        public bool CloseSession(string sessionId)
+        public Task<bool> CloseSession(string sessionId)
         {
-            using (var dbContext = new BookLibraryContext())
+            using var dbContext = new BookLibraryContext();
+
+            var sessionRecord = dbContext.Sessions.FirstOrDefault(record => record.SessionId == sessionId);
+            if (sessionRecord != null)
             {
-                var inSessionId = new SqlParameter
-                {
-                    ParameterName = "SessionId",
-                    Value = sessionId,
-                    DbType = System.Data.DbType.String,
-                    Direction = System.Data.ParameterDirection.Input
-                };
-                var inCloseDate = new SqlParameter
-                {
-                    ParameterName = "CloseDate",
-                    Value = DateTime.Now,
-                    DbType = System.Data.DbType.DateTime,
-                    Direction = System.Data.ParameterDirection.Input
-                };
-                var outResult = new SqlParameter
-                {
-                    ParameterName = "Result",
-                    DbType = System.Data.DbType.Int32,
-                    Direction = System.Data.ParameterDirection.Output
-                };
-
-                var sql = "exec CloseSession @SessionId, @CloseDate, @Result OUT";
-                _ = dbContext.Database.ExecuteSqlRaw(sql, inSessionId, inCloseDate, outResult);
-
-                if (int.TryParse(outResult.Value.ToString(), out int spResult))
-                    if (spResult == 1)
-                    {
-                        return true;
-                    }
+                sessionRecord.CloseDate = DateTime.UtcNow;
+                dbContext.SaveChanges();
+                return Task.FromResult(true);
             }
-            return false;
+
+            return Task.FromResult(false);
         }
 
-        public bool? CheckSessionExpiration(string sessionId)
+        public Task<bool?> CheckSessionExpiration(string sessionId)
         {
-            using (var dbContext = new BookLibraryContext())
+            using var dbContext = new BookLibraryContext();
+
+            var sessionRecord = dbContext.Sessions.FirstOrDefault(record => record.SessionId == sessionId);
+            if (sessionRecord != null)
             {
-                var inSessionId = new SqlParameter
+                DateTime sessionLastRenewalDate = sessionRecord.CloseDate == null ? sessionRecord.LastRenewalDate ?? sessionRecord.OpenDate : DateTime.MinValue;
+                if (DateTime.UtcNow - sessionLastRenewalDate > SessionExpirationTimeSpan)
                 {
-                    ParameterName = "SessionId",
-                    Value = sessionId,
-                    DbType = System.Data.DbType.String,
-                    Direction = System.Data.ParameterDirection.Input
-                };
-                var outResult = new SqlParameter
-                {
-                    ParameterName = "Result",
-                    DbType = System.Data.DbType.DateTime,
-                    Direction = System.Data.ParameterDirection.Output
-                };
-
-                var sql = "exec GetSessionLastRenewalDate @SessionId, @Result OUT";
-                _ = dbContext.Database.ExecuteSqlRaw(sql, inSessionId, outResult);
-
-                if (DateTime.TryParse(outResult.Value.ToString(), out DateTime spDateTimeResult))
-                {
-                    if (DateTime.Now - spDateTimeResult > SessionExpirationTimeSpan)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        ContinueSession(sessionId);
-                    }
+                    return Task.FromResult<bool?>(true);
                 }
                 else
-                    return null;
+                {
+                    ContinueSession(sessionId);
+                    return Task.FromResult<bool?>(false);
+                }
             }
-            return false;
+
+            return Task.FromResult<bool?>(null);
         }
 
-        private bool ContinueSession(string sessionId)
+        private Task<bool> ContinueSession(string sessionId)
         {
-            using (var dbContext = new BookLibraryContext())
+            using var dbContext = new BookLibraryContext();
+
+            var sessionRecord = dbContext.Sessions.FirstOrDefault(record => record.SessionId == sessionId);
+            if (sessionRecord != null)
             {
-                var inSessionId = new SqlParameter
-                {
-                    ParameterName = "SessionId",
-                    Value = sessionId,
-                    DbType = System.Data.DbType.String,
-                    Direction = System.Data.ParameterDirection.Input
-                };
-                var inRenewDate = new SqlParameter
-                {
-                    ParameterName = "RenewDate",
-                    Value = DateTime.Now,
-                    DbType = System.Data.DbType.DateTime,
-                    Direction = System.Data.ParameterDirection.Input
-                };
-                var outResult = new SqlParameter
-                {
-                    ParameterName = "Result",
-                    DbType = System.Data.DbType.Int32,
-                    Direction = System.Data.ParameterDirection.Output
-                };
-
-                var sql = "exec RenewSession @SessionId, @RenewDate, @Result OUT";
-                _ = dbContext.Database.ExecuteSqlRaw(sql, inSessionId, inRenewDate, outResult);
-
-                if (int.TryParse(outResult.Value.ToString(), out int spResult))
-                    if (spResult == 1)
-                    {
-                        return true;
-                    }
+                sessionRecord.LastRenewalDate = DateTime.UtcNow;
+                dbContext.SaveChanges();
+                return Task.FromResult(true);
             }
-            return false;
+
+            return Task.FromResult(false);
         }
     }
 }

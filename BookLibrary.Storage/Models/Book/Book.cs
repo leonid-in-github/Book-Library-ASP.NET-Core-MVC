@@ -1,24 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BookLibrary.Storage.Models.Book
 {
     public class Book
     {
-        public int? ID { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
-        public string Authors { get; set; }
+        public IEnumerable<string> Authors { get; set; }
         public DateTime Year { get; set; }
         public bool? Availability { get; set; }
 
-        public Book() { }
+        public Book(string name, IEnumerable<string> authors, DateTime year, bool availability) : this(0, name, authors, year, availability) { }
 
-        public Book(Book book)
+        public static Book FromPersistance(int id, string name, IEnumerable<string> authors, DateTime year, bool availability)
         {
-            ID = book.ID;
-            Name = book.Name;
-            Authors = book.Authors;
-            Year = book.Year;
-            Availability = book.Availability;
+            return new Book(id, name, authors, year, availability);
+        }
+
+        private Book(int id, string name, IEnumerable<string> authors, DateTime year, bool availability)
+        {
+            ID = id;
+            Name = name;
+            Authors = authors;
+            Year = year;
+            Availability = availability;
         }
     }
 }

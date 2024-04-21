@@ -29,10 +29,9 @@ namespace BookLibrary.WebServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IBookLibraryRepository, BookLibraryRepository>();
-            services.AddScoped<AccountRepository, AccountRepository>();
-            services.AddScoped<SessionRepository, SessionRepository>();
-            services.AddScoped<BooksRepository, BooksRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<ISessionRepository, SessionRepository>();
+            services.AddScoped<IBooksRepository, BooksRepository>();
 
             services.AddControllersWithViews();
 

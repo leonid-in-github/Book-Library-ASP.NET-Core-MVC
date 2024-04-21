@@ -1,290 +1,143 @@
 ﻿using BookLibrary.Storage.Contexts;
 using BookLibrary.Storage.Exceptions;
 using BookLibrary.Storage.Models.Account;
-using Microsoft.Data.SqlClient;
+using BookLibrary.Storage.Models.Records.Account;
 using Microsoft.EntityFrameworkCore;
-using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BookLibrary.Storage.Repositories
 {
-    public class AccountRepository
+    public class AccountRepository : IAccountRepository
     {
-        private readonly SessionRepository sessionRepository;
+        private readonly ISessionRepository sessionRepository;
 
-        public AccountRepository(SessionRepository sessionRepository)
+        public AccountRepository(ISessionRepository sessionRepository)
         {
             this.sessionRepository = sessionRepository;
         }
 
-        public int Login(string sessionId, string login, string password)
+        public async Task<int> Login(string sessionId, string login, string password)
         {
-            var inLogin = new SqlParameter
+            using var dbContext = new BookLibraryContext();
+            var accountRecord = dbContext.Accounts.FirstOrDefault(record => record.Login == login && record.Password == password);
+            if (accountRecord != null)
             {
-                ParameterName = "Login",
-                Value = login,
-                DbType = System.Data.DbType.String,
-                Direction = System.Data.ParameterDirection.Input
-            };
-            var inPassword = new SqlParameter
-            {
-                ParameterName = "Password",
-                Value = password,
-                DbType = System.Data.DbType.String,
-                Direction = System.Data.ParameterDirection.Input
-            };
-            var outResult = new SqlParameter
-            {
-                ParameterName = "Result",
-                DbType = System.Data.DbType.Int32,
-                Direction = System.Data.ParameterDirection.Output
-            };
-
-            var sql = "exec LoginAccount @Login, @Password, @Result OUT";
-            using (var dbContext = new BookLibraryContext())
-            {
-                _ = dbContext.Database.ExecuteSqlRaw(sql, inLogin, inPassword, outResult);
-            }
-            if (int.TryParse(outResult.Value.ToString(), out int accountId))
-                if (accountId > 0)
+                switch (await sessionRepository.CheckSessionExpiration(sessionId))
                 {
-                    switch (sessionRepository.CheckSessionExpiration(sessionId))
-                    {
-                        case null:
-                            if (!sessionRepository.RegisterSession(accountId, sessionId))
-                                return 0;
-                            break;
-                        case true:
-                            throw new SessionExpirationException("Application and DB session expiration time conflict.");
-                    }
-                    return accountId;
+                    case null:
+                        if (!await sessionRepository.RegisterSession(accountRecord.ID, sessionId))
+                            return 0;
+                        break;
+                    case true:
+                        throw new SessionExpirationException("Application and DB session expiration time conflict.");
                 }
+                return accountRecord.ID;
+            }
+
             return 0;
         }
 
-        public bool Logout(string sessionId)
+        public async Task<bool> Logout(string sessionId)
         {
-            var inSessionId = new SqlParameter
-            {
-                ParameterName = "SessionId",
-                Value = sessionId,
-                DbType = System.Data.DbType.String,
-                Direction = System.Data.ParameterDirection.Input
-            };
-            var inCloseDate = new SqlParameter
-            {
-                ParameterName = "CloseDate",
-                Value = DateTime.Now,
-                DbType = System.Data.DbType.DateTime,
-                Direction = System.Data.ParameterDirection.Input
-            };
-            var outResult = new SqlParameter
-            {
-                ParameterName = "Result",
-                DbType = System.Data.DbType.Int32,
-                Direction = System.Data.ParameterDirection.Output
-            };
-            var sql = "exec CloseSession @SessionId, @CloseDate, @Result OUT";
-            using (var dbContext = new BookLibraryContext())
-            {
-                _ = dbContext.Database.ExecuteSqlRaw(sql, inSessionId, inCloseDate, outResult);
-            }
-            if (int.TryParse(outResult.Value.ToString(), out int result))
-                if (result > 0)
-                {
-                    return true;
-                }
-            return false;
+            return await sessionRepository.CloseSession(sessionId);
         }
 
-        public int Register(string sessionId, string login, string password, string firstName, string lastName, string email)
+        public async Task<int> Register(string sessionId, string login, string password, string firstName, string lastName, string email)
         {
-            var inLogin = new SqlParameter
+            using var dbContext = new BookLibraryContext();
+            using var transaction = dbContext.Database.BeginTransaction();
+
+            var profileRecord = dbContext.Profiles.FirstOrDefault(record => record.FirstName == firstName && record.LastName == lastName && record.Email == email);
+            if (profileRecord == null)
             {
-                ParameterName = "Login",
-                Value = login,
-                DbType = System.Data.DbType.String,
-                Direction = System.Data.ParameterDirection.Input
-            };
-            var inPassword = new SqlParameter
+                profileRecord = new ProfileRecord
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Email = email
+                };
+                dbContext.Profiles.Add(profileRecord);
+                dbContext.SaveChanges();
+            }
+
+            var accountRecord = new AccountRecord
             {
-                ParameterName = "Password",
-                Value = password,
-                DbType = System.Data.DbType.String,
-                Direction = System.Data.ParameterDirection.Input
-            };
-            var inFirstName = new SqlParameter
-            {
-                ParameterName = "FirstName",
-                Value = firstName,
-                DbType = System.Data.DbType.String,
-                Direction = System.Data.ParameterDirection.Input
-            };
-            var inLastName = new SqlParameter
-            {
-                ParameterName = "LastName",
-                Value = lastName,
-                DbType = System.Data.DbType.String,
-                Direction = System.Data.ParameterDirection.Input
-            };
-            var inEmail = new SqlParameter
-            {
-                ParameterName = "Email",
-                Value = email,
-                DbType = System.Data.DbType.String,
-                Direction = System.Data.ParameterDirection.Input
-            };
-            var outResult = new SqlParameter
-            {
-                ParameterName = "Result",
-                DbType = System.Data.DbType.Int32,
-                Direction = System.Data.ParameterDirection.Output
+                Login = login,
+                Password = password,
+                ProfileId = profileRecord.ID,
+                ID = dbContext.Accounts.Max(record => record.ID) + 1
             };
 
-            var sql = "exec RegisterAccount @Login, @Password, @FirstName, @LastName, @Email, @Result OUT";
-            using (var dbContext = new BookLibraryContext())
-            {
-                _ = dbContext.Database.ExecuteSqlRaw(sql, inLogin, inPassword, inFirstName, inLastName, inEmail, outResult);
-            }
-            if (int.TryParse(outResult.Value.ToString(), out int accountId))
-                if (accountId == -1) return accountId;
-            switch (sessionRepository.CheckSessionExpiration(sessionId))
+            dbContext.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Accounts] ON");
+            dbContext.Accounts.Add(accountRecord);
+            dbContext.SaveChanges();
+            dbContext.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Accounts] OFF");
+            transaction.Commit();
+
+            switch (await sessionRepository.CheckSessionExpiration(sessionId))
             {
                 case null:
-                    if (!sessionRepository.RegisterSession(accountId, sessionId))
+                    if (!await sessionRepository.RegisterSession(accountRecord.ID, sessionId))
                         return 0;
                     break;
                 case true:
                     throw new SessionExpirationException("Application and DB session expiration time conflict.");
             }
-            return accountId;
+            return accountRecord.ID;
         }
 
-        public DisplayUserModel GetUser(int userId)
+        public Task<DisplayUserModel> GetUser(int userId)
         {
-            var inAccountId = new SqlParameter
+            using var dbContext = new BookLibraryContext();
+
+            var accountRecord = dbContext.Accounts.FirstOrDefault(record => record.ID == userId);
+            if (accountRecord != null)
             {
-                ParameterName = "AccountId",
-                Value = userId,
-                DbType = System.Data.DbType.Int32,
-                Direction = System.Data.ParameterDirection.Input
-            };
-            var outLogin = new SqlParameter
-            {
-                ParameterName = "Login",
-                DbType = System.Data.DbType.String,
-                Size = 32,
-                Direction = System.Data.ParameterDirection.Output
-            };
-            var outFirstName = new SqlParameter
-            {
-                ParameterName = "FirstName",
-                DbType = System.Data.DbType.String,
-                Size = 32,
-                Direction = System.Data.ParameterDirection.Output
-            };
-            var outLastName = new SqlParameter
-            {
-                ParameterName = "LastName",
-                DbType = System.Data.DbType.String,
-                Size = 32,
-                Direction = System.Data.ParameterDirection.Output
-            };
-            var outEmail = new SqlParameter
-            {
-                ParameterName = "Email",
-                DbType = System.Data.DbType.String,
-                Size = 32,
-                Direction = System.Data.ParameterDirection.Output
-            };
-            var sql = "exec GetUser @AccountId, @Login OUT, @FirstName OUT, @LastName OUT, @Email OUT";
-            using (var dbContext = new BookLibraryContext())
-            {
-                _ = dbContext.Database.ExecuteSqlRaw(sql, inAccountId, outLogin, outFirstName, outLastName, outEmail);
-            }
-            if (!string.IsNullOrEmpty(outLogin.Value.ToString()))
-            {
-                return new DisplayUserModel
+                var profileRecord = dbContext.Profiles.FirstOrDefault(record => record.ID == accountRecord.ProfileId);
+                if (profileRecord != null)
                 {
-                    Login = outLogin.Value.ToString(),
-                    FirstName = outFirstName.Value.ToString(),
-                    LastName = outLastName.Value.ToString(),
-                    Email = outEmail.Value.ToString()
-                };
+                    return Task.FromResult(new DisplayUserModel
+                    {
+                        Login = accountRecord.Login,
+                        FirstName = profileRecord.FirstName,
+                        LastName = profileRecord.LastName,
+                        Email = profileRecord.Email
+                    });
+                }
             }
-            return null;
 
+            return Task.FromResult<DisplayUserModel>(null);
         }
 
-        public bool ChangeAccountPassword(int accountId, string accountPassword, string newAccountPassword)
+        public Task<bool> ChangeAccountPassword(int accountId, string accountPassword, string newAccountPassword)
         {
-            var inAccountId = new SqlParameter
-            {
-                ParameterName = "AccountId",
-                Value = accountId,
-                DbType = System.Data.DbType.Int32,
-                Direction = System.Data.ParameterDirection.Input
-            };
-            var inPassword = new SqlParameter
-            {
-                ParameterName = "Password",
-                Value = accountPassword,
-                DbType = System.Data.DbType.String,
-                Direction = System.Data.ParameterDirection.Input
-            };
-            var inNewPassword = new SqlParameter
-            {
-                ParameterName = "NewPassword",
-                Value = newAccountPassword,
-                DbType = System.Data.DbType.String,
-                Direction = System.Data.ParameterDirection.Input
-            };
-            var outResult = new SqlParameter
-            {
-                ParameterName = "Result",
-                DbType = System.Data.DbType.Boolean,
-                Direction = System.Data.ParameterDirection.Output
-            };
-            var sql = "exec ChangeAccountPassword @AccountId, @Password, @NewPassword, @Result OUT";
-            using (var dbContext = new BookLibraryContext())
-            {
-                _ = dbContext.Database.ExecuteSqlRaw(sql, inAccountId, inPassword, inNewPassword, outResult);
-            }
-            bool.TryParse(outResult.Value.ToString(), out bool result);
+            using var dbContext = new BookLibraryContext();
 
-            return result;
+            var accountRecord = dbContext.Accounts.FirstOrDefault(record => record.ID == accountId);
+            if (accountRecord != null && accountRecord.Password == accountPassword)
+            {
+                accountRecord.Password = newAccountPassword;
+                dbContext.SaveChanges();
+                return Task.FromResult(true);
+            }
+
+            return Task.FromResult(false);
         }
 
-        public bool DeleteAccount(int accountId, string accountPassword)
+        public Task<bool> DeleteAccount(int accountId, string accountPassword)
         {
-            var inAccountId = new SqlParameter
+            using var dbContext = new BookLibraryContext();
+
+            var accountRecord = dbContext.Accounts.FirstOrDefault(record => record.ID == accountId);
+            if (accountRecord != null && accountRecord.Password == accountPassword)
             {
-                ParameterName = "AccountId",
-                Value = accountId,
-                DbType = System.Data.DbType.Int32,
-                Direction = System.Data.ParameterDirection.Input
-            };
-            var inPassword = new SqlParameter
-            {
-                ParameterName = "Password",
-                Value = accountPassword,
-                DbType = System.Data.DbType.String,
-                Direction = System.Data.ParameterDirection.Input
-            };
-            var outResult = new SqlParameter
-            {
-                ParameterName = "Result",
-                DbType = System.Data.DbType.Boolean,
-                Direction = System.Data.ParameterDirection.Output
-            };
-            var sql = "exec DeleteAccount @AccountId, @Password, @Result OUT";
-            using (var dbContext = new BookLibraryContext())
-            {
-                _ = dbContext.Database.ExecuteSqlRaw(sql, inAccountId, inPassword, outResult);
+                dbContext.Accounts.Remove(accountRecord);
+                dbContext.SaveChanges();
+                return Task.FromResult(true);
             }
-            bool.TryParse(outResult.Value.ToString(), out bool result);
 
-            return result;
-
+            return Task.FromResult(false);
         }
     }
 }

@@ -21,6 +21,9 @@ function LoadIndexBookTable() {
             },
             {
                 "sName": "AUTHORS",
+                "mRender": function (data, type, row) {
+                    return data.join(", ");
+                },
                 "bSortable": false
             },
             {

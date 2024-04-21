@@ -10,17 +10,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace BookLibrary.WebServer.Controllers
 {
     [Authorize]
     public class BooksController : Controller
     {
-        private readonly IBookLibraryRepository repository;
+        private readonly IBooksRepository booksRepository;
 
-        public BooksController(IBookLibraryRepository repository)
+        public BooksController(IBooksRepository booksRepository)
         {
-            this.repository = repository;
+            this.booksRepository = booksRepository;
         }
 
         public IActionResult AddBook()
@@ -29,107 +30,109 @@ namespace BookLibrary.WebServer.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddBook(AddBookModel book)
+        public async Task<IActionResult> AddBook(AddBookModel addBookModel)
         {
             if (ModelState.IsValid)
             {
-                repository.Books.AddBook(book);
+                var book = addBookModel.ToDomain();
+                await booksRepository.AddBook(book);
 
                 return RedirectToAction("Index", "Home");
             }
             return View();
         }
 
-        public IActionResult DeleteBook(int bookId)
+        public async Task<IActionResult> DeleteBook(int bookId)
         {
             if (bookId < 0)
             {
                 return BadRequest();
             }
 
-            repository.Books.DeleteBook(bookId);
+            await booksRepository.DeleteBook(bookId);
 
             return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult EditBook(int bookId)
+        public async Task<IActionResult> EditBook(int bookId)
         {
             if (bookId < 0)
             {
                 return BadRequest();
             }
 
-            var book = new EditBookModel(repository.Books.GetBook(bookId));
+            var book = new EditBookModel(await booksRepository.GetBook(bookId));
             book.ID = bookId;
             return View(book);
 
         }
 
         [HttpPost]
-        public IActionResult EditBook(EditBookModel book)
+        public async Task<IActionResult> EditBook(EditBookModel editBookModel)
         {
+            var book = editBookModel.ToDomain();
             if (ModelState.IsValid)
             {
-                repository.Books.UpdateBook(book);
+                await booksRepository.UpdateBook(book);
 
                 return RedirectToAction("Index", "Home");
             }
             return View(book);
         }
 
-        public IActionResult BookTrack(int bookId)
+        public async Task<IActionResult> BookTrack(int bookId)
         {
             if (bookId < 0)
             {
                 return BadRequest();
             }
 
-            if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId))
+            if (int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId))
             {
                 var tracksCount =
                     Request.Cookies["BookTrackTableSelectedMode"] == null ? BookTrackTableModes.Default : Request.Cookies["BookTrackTableSelectedMode"].ToString();
-                var bookTrackModel = (BookTrackModel)repository.Books.GetBookTrack(userId, (int)bookId, tracksCount);
+                var bookTrackModel = (BookTrackModel)await booksRepository.GetBookTrack(userId, (int)bookId, tracksCount);
 
                 return View(bookTrackModel);
             }
             return new EmptyResult();
         }
 
-        public IActionResult TakeBook(int bookId)
+        public async Task<IActionResult> TakeBook(int bookId)
         {
             if (bookId < 0)
             {
                 return BadRequest();
             }
 
-            if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId))
+            if (int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId))
             {
-                repository.Books.TakeBook(userId, bookId);
+                await booksRepository.TakeBook(userId, bookId);
             }
 
             return RedirectToAction("BookTrack", "Books", new RouteValueDictionary(new { bookId = bookId }));
         }
 
-        public IActionResult PutBook(int bookId)
+        public async Task<IActionResult> PutBook(int bookId)
         {
             if (bookId < 0)
             {
                 return BadRequest();
             }
 
-            if (Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId))
+            if (int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId))
             {
-                repository.Books.PutBook(userId, bookId);
+                await booksRepository.PutBook(userId, bookId);
             }
 
             return RedirectToAction("BookTrack", "Books", new RouteValueDictionary(new { bookId }));
         }
 
-        public IActionResult MainBooksTableAjaxHandler(JQueryDataTableParamModel param)
+        public async Task<IActionResult> MainBooksTableAjaxHandler(JQueryDataTableParamModel param)
         {
-            Int32.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId);
-            var booksList = GetBooksList(userId, param.sSearch, param.iDisplayStart, param.iDisplayLength);
-            var booksTotalCount = GetBooksTotalCount(userId, param.sSearch);
+            int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId);
+            var booksList = await GetBooksList(userId, param.sSearch, param.iDisplayStart, param.iDisplayLength);
+            var booksTotalCount = await GetBooksTotalCount(userId, param.sSearch);
 
             var isNameSortable = Convert.ToBoolean(Request.Query["bSortable_0"]);
             var isAuthorsSortable = Convert.ToBoolean(Request.Query["bSortable_1"]);
@@ -154,7 +157,7 @@ namespace BookLibrary.WebServer.Controllers
             else if (sortColumnIndex == 1 && isAuthorsSortable)
             {
                 Func<Book, string> orderingFunction;
-                orderingFunction = (a => a.Authors);
+                orderingFunction = (a => string.Join(", ", a.Authors));
                 if (sortDirection == "asc")
                     booksList = booksList.OrderBy(orderingFunction, StringComparer.Ordinal);
                 else
@@ -209,25 +212,25 @@ namespace BookLibrary.WebServer.Controllers
 
         #region Private
 
-        private IEnumerable<Book> GetBooksList(int userId, string searchString, int from, int count)
+        private async Task<IEnumerable<Book>> GetBooksList(int userId, string searchString, int from, int count)
         {
             return Request.Cookies["TableSelectedMode"]?.ToString() switch
             {
-                "all" => repository.Books.GetBooks(searchString, from, count),
-                "avaliable" => repository.Books.GetAvaliableBooks(searchString, from, count),
-                "takenByUser" => repository.Books.GetBooksByUser(userId, searchString, from, count),
-                _ => repository.Books.GetBooks(searchString, from, count)
+                "all" => await booksRepository.GetBooks(searchString, false, -1, from, count),
+                "avaliable" => await booksRepository.GetAvaliableBooks(searchString, from, count),
+                "takenByUser" => await booksRepository.GetBooksByUser(userId, searchString, from, count),
+                _ => await booksRepository.GetBooks(searchString, false, -1, from, count)
             };
         }
 
-        private int GetBooksTotalCount(int userId, string searchString)
+        private async Task<int> GetBooksTotalCount(int userId, string searchString)
         {
             return Request.Cookies["TableSelectedMode"]?.ToString() switch
             {
-                "all" => repository.Books.GetBooksTotalCount(searchString),
-                "avaliable" => repository.Books.GetAvaliableBooksTotalCount(searchString),
-                "takenByUser" => repository.Books.GetBooksByUserTotalCount(userId, searchString),
-                _ => repository.Books.GetBooksTotalCount(searchString)
+                "all" => await booksRepository.GetBooksTotalCount(searchString),
+                "avaliable" => await booksRepository.GetAvaliableBooksTotalCount(searchString),
+                "takenByUser" => await booksRepository.GetBooksByUserTotalCount(userId, searchString),
+                _ => await booksRepository.GetBooksTotalCount(searchString)
             };
         }
 
