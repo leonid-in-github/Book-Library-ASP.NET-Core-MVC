@@ -134,15 +134,14 @@ namespace BookLibrary.Storage.Repositories
                         tracksQuery = tracksQuery.Take(int.Parse(tracksCount)).OrderByDescending(record => record.ActionTime);
                     }
 
-                    result.TracksList = tracksQuery.Select(bookTrack => new BookTrack
-                    {
-                        BookId = bookId,
-                        BookName = bookRecord.Name,
-                        Action = bookTrack.Action,
-                        ActionTime = bookTrack.ActionTime,
-                        Email = profileRecord.Email,
-                        Login = accountRecord.Login
-                    }).ToList();
+                    result.TracksList = tracksQuery.Select(bookTrack => BookTrack.FromPersistence(
+                        bookId,
+                        bookRecord.Name,
+                        accountRecord.Login,
+                        profileRecord.Email,
+                        bookTrack.ActionTime,
+                        bookTrack.Action
+                    )).ToList();
                 }
             }
 
@@ -239,7 +238,7 @@ namespace BookLibrary.Storage.Repositories
 
         private IQueryable<Book> SelectBooksFromBookRecords(BookLibraryContext dbContext, IQueryable<BookRecord> bookRecords)
         {
-            var books = bookRecords.Select(book => Book.FromPersistance(
+            var books = bookRecords.Select(book => Book.FromPersistence(
                 book.ID,
                 book.Name,
                 dbContext.Authors.Join(

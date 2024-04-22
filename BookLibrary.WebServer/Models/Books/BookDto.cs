@@ -30,7 +30,7 @@ namespace BookLibrary.WebServer.Models.Books
             }
             else
             {
-                return Book.FromPersistance(ID, Name, Authors?.Split(", "), Year, Availability ?? true);
+                return Book.FromPersistence(ID, Name, Authors?.Split(", "), Year, Availability ?? true);
             }
         }
     }

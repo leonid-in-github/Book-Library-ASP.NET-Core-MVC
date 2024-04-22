@@ -1,9 +1,20 @@
 ﻿
-$(document).ready(function () {  
-    document.cookie = "TableSelectedMode=all";
+$(document).ready(function () {
+    if (!getCookieValue("TableSelectedMode")) {
+        document.cookie = "TableSelectedMode=all";
+    }
+    $("#SelectedMode").val(getCookieValue("TableSelectedMode"));
     LoadIndexBookTable();
     //document.cookie = 'TableSelectedMode=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 });
+
+function getCookieValue(name) {
+    const regex = new RegExp(`(^| )${name}=([^;]+)`)
+    const match = document.cookie.match(regex)
+    if (match) {
+        return match[2]
+    }
+}
 
 function LoadIndexBookTable() {
     

@@ -1,6 +1,5 @@
 ﻿$(function () {
     $("#SelectedMode").change(function () {
-
         var value = $(this).val();
 
         document.cookie = "TableSelectedMode=" + value;

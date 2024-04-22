@@ -17,7 +17,7 @@ namespace BookLibrary.WebServer.Models.Accounts
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        public static explicit operator UserModel(DisplayUserModel model)
+        public static explicit operator UserModel(User model)
         {
             return new UserModel { Login = model.Login, FirstName = model.FirstName, LastName = model.LastName, Email = model.Email };
         }

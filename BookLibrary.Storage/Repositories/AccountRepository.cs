@@ -87,7 +87,7 @@ namespace BookLibrary.Storage.Repositories
             return accountRecord.ID;
         }
 
-        public Task<DisplayUserModel> GetUser(int userId)
+        public Task<User> GetUser(int userId)
         {
             using var dbContext = new BookLibraryContext();
 
@@ -97,17 +97,16 @@ namespace BookLibrary.Storage.Repositories
                 var profileRecord = dbContext.Profiles.FirstOrDefault(record => record.ID == accountRecord.ProfileId);
                 if (profileRecord != null)
                 {
-                    return Task.FromResult(new DisplayUserModel
-                    {
-                        Login = accountRecord.Login,
-                        FirstName = profileRecord.FirstName,
-                        LastName = profileRecord.LastName,
-                        Email = profileRecord.Email
-                    });
+                    return Task.FromResult(User.FromPersistence(
+                        accountRecord.Login,
+                        profileRecord.FirstName,
+                        profileRecord.LastName,
+                        profileRecord.Email
+                    ));
                 }
             }
 
-            return Task.FromResult<DisplayUserModel>(null);
+            return Task.FromResult<User>(null);
         }
 
         public Task<bool> ChangeAccountPassword(int accountId, string accountPassword, string newAccountPassword)

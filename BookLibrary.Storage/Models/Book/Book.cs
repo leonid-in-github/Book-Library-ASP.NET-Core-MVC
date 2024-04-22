@@ -13,7 +13,7 @@ namespace BookLibrary.Storage.Models.Book
 
         public Book(string name, IEnumerable<string> authors, DateTime year, bool availability) : this(0, name, authors, year, availability) { }
 
-        public static Book FromPersistance(int id, string name, IEnumerable<string> authors, DateTime year, bool availability)
+        public static Book FromPersistence(int id, string name, IEnumerable<string> authors, DateTime year, bool availability)
         {
             return new Book(id, name, authors, year, availability);
         }
