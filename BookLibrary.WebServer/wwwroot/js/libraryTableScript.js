@@ -1,5 +1,5 @@
 ﻿
-$(document).ready(function () {
+$(function () {
     if (!getCookieValue("TableSelectedMode")) {
         document.cookie = "TableSelectedMode=all";
     }

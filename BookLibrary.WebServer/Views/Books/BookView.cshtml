@@ -34,7 +34,7 @@
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(function() {
         var authorsString = '@Html.Raw(Model == null ? string.Empty : Model.Authors)';
         if(authorsString){
             authors = authorsString.split(', ');

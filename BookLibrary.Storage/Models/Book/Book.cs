@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BookLibrary.Storage.Models.Book
 {
@@ -22,7 +23,7 @@ namespace BookLibrary.Storage.Models.Book
         {
             ID = id;
             Name = name;
-            Authors = authors;
+            Authors = authors.Where(author => !string.IsNullOrEmpty(author)).Select(author => author.Trim());
             Year = year;
             Availability = availability;
         }
