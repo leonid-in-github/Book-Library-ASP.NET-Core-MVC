@@ -3,8 +3,7 @@
 namespace BookLibrary.Storage.Exceptions
 {
     [Serializable]
-    public class SessionExpirationException : Exception
+    public class SessionExpirationException(string message) : Exception(message)
     {
-        public SessionExpirationException(string message) : base(message) { }
     }
 }
