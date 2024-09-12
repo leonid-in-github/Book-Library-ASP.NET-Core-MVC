@@ -15,14 +15,9 @@ using System.Threading.Tasks;
 namespace BookLibrary.WebServer.Controllers
 {
     [Authorize]
-    public class BooksController : Controller
+    public class BooksController(IBooksRepository booksRepository) : Controller
     {
-        private readonly IBooksRepository booksRepository;
-
-        public BooksController(IBooksRepository booksRepository)
-        {
-            this.booksRepository = booksRepository;
-        }
+        private readonly IBooksRepository booksRepository = booksRepository;
 
         public IActionResult AddBook()
         {
@@ -61,8 +56,10 @@ namespace BookLibrary.WebServer.Controllers
                 return BadRequest();
             }
 
-            var book = new EditBookModel(await booksRepository.GetBook(bookId));
-            book.ID = bookId;
+            var book = new EditBookModel(await booksRepository.GetBook(bookId))
+            {
+                ID = bookId
+            };
             return View(book);
 
         }
@@ -110,7 +107,7 @@ namespace BookLibrary.WebServer.Controllers
                 await booksRepository.TakeBook(userId, bookId);
             }
 
-            return RedirectToAction("BookTrack", "Books", new RouteValueDictionary(new { bookId = bookId }));
+            return RedirectToAction("BookTrack", "Books", new RouteValueDictionary(new { bookId }));
         }
 
         public async Task<IActionResult> PutBook(int bookId)
@@ -130,7 +127,7 @@ namespace BookLibrary.WebServer.Controllers
 
         public async Task<IActionResult> MainBooksTableAjaxHandler(JQueryDataTableParamModel param)
         {
-            int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId);
+            _ = int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId);
             var booksList = await GetBooksList(userId, param.sSearch, param.iDisplayStart, param.iDisplayLength);
             var booksTotalCount = await GetBooksTotalCount(userId, param.sSearch);
 
@@ -203,7 +200,7 @@ namespace BookLibrary.WebServer.Controllers
 
             return Json(new
             {
-                sEcho = param.sEcho,
+                param.sEcho,
                 iTotalRecords = booksTotalCount,
                 iTotalDisplayRecords = booksTotalCount,
                 aaData = result
@@ -217,7 +214,7 @@ namespace BookLibrary.WebServer.Controllers
             return Request.Cookies["TableSelectedMode"]?.ToString() switch
             {
                 "all" => await booksRepository.GetBooks(searchString, false, -1, from, count),
-                "avaliable" => await booksRepository.GetAvaliableBooks(searchString, from, count),
+                "available" => await booksRepository.GetAvailableBooks(searchString, from, count),
                 "takenByUser" => await booksRepository.GetBooksByUser(userId, searchString, from, count),
                 _ => await booksRepository.GetBooks(searchString, false, -1, from, count)
             };
@@ -228,7 +225,7 @@ namespace BookLibrary.WebServer.Controllers
             return Request.Cookies["TableSelectedMode"]?.ToString() switch
             {
                 "all" => await booksRepository.GetBooksTotalCount(searchString),
-                "avaliable" => await booksRepository.GetAvaliableBooksTotalCount(searchString),
+                "available" => await booksRepository.GetAvailableBooksTotalCount(searchString),
                 "takenByUser" => await booksRepository.GetBooksByUserTotalCount(userId, searchString),
                 _ => await booksRepository.GetBooksTotalCount(searchString)
             };

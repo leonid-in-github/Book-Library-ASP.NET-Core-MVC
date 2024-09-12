@@ -7,12 +7,12 @@ namespace BookLibrary.WebServer.Models.Home
     {
         public IndexModel()
         {
-            TableModes = new List<SelectListItem>()
-            {
+            TableModes =
+            [
                 new SelectListItem {Value = "all", Text = "All" },
-                new SelectListItem {Value = "avaliable", Text = "Avaliable" },
+                new SelectListItem {Value = "available", Text = "Available" },
                 new SelectListItem {Value = "takenByUser", Text = "Taken by user" }
-            };
+            ];
 
         }
 

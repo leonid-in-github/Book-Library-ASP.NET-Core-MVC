@@ -13,19 +13,12 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Book_Libary_ASP.NET_Core_MVC.Controllers
+namespace BookLibrary.WebServer.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController(IOptions<SessionConfig> config, IAccountRepository accountRepository) : Controller
     {
-        private readonly IAccountRepository accountRepository;
-        private readonly IOptions<SessionConfig> _config;
-
-        public AccountController(IOptions<SessionConfig> config, IAccountRepository accountRepository)
-        {
-            _config = config;
-            this.accountRepository = accountRepository;
-
-        }
+        private readonly IAccountRepository accountRepository = accountRepository;
+        private readonly IOptions<SessionConfig> _config = config;
 
         public IActionResult Login()
         {
@@ -45,7 +38,7 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
                     await accountRepository.Login(sessionId, loginModel.Login, loginModel.Password);
                 if (accountId == 0)
                 {
-                    ModelState.AddModelError("LoginMassege", "Login failed. Incorrect login or password.");
+                    ModelState.AddModelError("LoginMessage", "Login failed. Incorrect login or password.");
                     return View();
                 }
 
@@ -62,7 +55,7 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
                         Expires = DateTime.UtcNow.AddDays(-1)
                     });
                 }
-                ModelState.AddModelError("LoginMassege", "Retry.");
+                ModelState.AddModelError("LoginMessage", "Retry.");
             }
             return View(loginModel);
         }
@@ -111,7 +104,7 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
 
                     if (accountId == -1)
                     {
-                        ModelState.AddModelError("RegistrationMassege", "Account already exists.");
+                        ModelState.AddModelError("RegistrationMessage", "Account already exists.");
                         return View();
                     }
 
@@ -128,7 +121,7 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
                             Expires = DateTime.UtcNow.AddDays(-1)
                         });
                     }
-                    ModelState.AddModelError("RegistrationMassege", "Retry.");
+                    ModelState.AddModelError("RegistrationMessage", "Retry.");
                 }
             }
             return View();
@@ -165,7 +158,7 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
                         return RedirectToAction("GetUser", "Account");
                     else
                     {
-                        ModelState.AddModelError("ChangePasswordMassege", "Change password failed. Incorrect data.");
+                        ModelState.AddModelError("ChangePasswordMessage", "Change password failed. Incorrect data.");
                         return View();
                     }
                 }
@@ -194,7 +187,7 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("DeleteAccountMassege", "Delete account failed. Incorrect password.");
+                        ModelState.AddModelError("DeleteAccountMessage", "Delete account failed. Incorrect password.");
                         return View();
                     }
                 }
@@ -208,10 +201,10 @@ namespace Book_Libary_ASP.NET_Core_MVC.Controllers
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
-                new Claim(ClaimTypes.NameIdentifier, dbUserId.ToString())
+                new(ClaimsIdentity.DefaultNameClaimType, userName),
+                new(ClaimTypes.NameIdentifier, dbUserId.ToString())
             };
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
         }
 

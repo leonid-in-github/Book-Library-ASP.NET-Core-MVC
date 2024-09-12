@@ -8,14 +8,9 @@ using System.Threading.Tasks;
 
 namespace BookLibrary.Storage.Repositories
 {
-    public class AccountRepository : IAccountRepository
+    public class AccountRepository(ISessionRepository sessionRepository) : IAccountRepository
     {
-        private readonly ISessionRepository sessionRepository;
-
-        public AccountRepository(ISessionRepository sessionRepository)
-        {
-            this.sessionRepository = sessionRepository;
-        }
+        private readonly ISessionRepository sessionRepository = sessionRepository;
 
         public async Task<int> Login(string sessionId, string login, string password)
         {

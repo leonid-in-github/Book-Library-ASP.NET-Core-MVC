@@ -1,21 +1,12 @@
 ﻿using BookLibrary.WebServer.Models;
 using BookLibrary.WebServer.Models.Home;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Diagnostics;
-using System.Linq;
 
-namespace Book_Libary_ASP.NET_Core_MVC.Controllers
+namespace BookLibrary.WebServer.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
         public IActionResult Index()
         {
             var viewmodel = new IndexModel();

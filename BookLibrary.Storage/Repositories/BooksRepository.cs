@@ -25,7 +25,7 @@ namespace BookLibrary.Storage.Repositories
             return Task.FromResult(BuildGetBooksQuery(dbContext, searchString, onlyAvailable, userId, from, count).ToList());
         }
 
-        public Task<List<Book>> GetAvaliableBooks(string searchString = "", int from = 0, int count = 10)
+        public Task<List<Book>> GetAvailableBooks(string searchString = "", int from = 0, int count = 10)
         {
             return GetBooks(searchString, true, -1, from, count);
         }
@@ -47,7 +47,7 @@ namespace BookLibrary.Storage.Repositories
             return Task.FromResult(BuildGetBooksQuery(dbContext, searchString, false, userId).Count());
         }
 
-        public Task<int> GetAvaliableBooksTotalCount(string searchString = "")
+        public Task<int> GetAvailableBooksTotalCount(string searchString = "")
         {
             using var dbContext = new BookLibraryContext();
             return Task.FromResult(BuildGetBooksQuery(dbContext, searchString, true).Count());
@@ -158,14 +158,14 @@ namespace BookLibrary.Storage.Repositories
                         }
                         ).OrderByDescending(record => record.ActionTime);
 
-                    result.TracksList = tracksQueryJoinAccountsJoinProfiles.Select(bookTrack => BookTrack.FromPersistence(
+                    result.TracksList = [.. tracksQueryJoinAccountsJoinProfiles.Select(bookTrack => BookTrack.FromPersistence(
                         bookId,
                         bookRecord.Name,
                         bookTrack.Login,
                         bookTrack.Email,
                         bookTrack.ActionTime,
                         bookTrack.Action
-                    )).ToList();
+                    ))];
                 }
             }
 
@@ -183,18 +183,12 @@ namespace BookLibrary.Storage.Repositories
                 var bookRecord = dbContext.Books.FirstOrDefault(record => record.ID == bookId);
                 if (bookRecord != null)
                 {
-                    switch (action)
+                    bookRecord.Availability = action switch
                     {
-                        case BookAction.Took:
-                            bookRecord.Availability = false;
-                            break;
-                        case BookAction.Put:
-                            bookRecord.Availability = true;
-                            break;
-                        default:
-                            throw new NotSupportedException($"Action {action} is not supported");
-                    }
-
+                        BookAction.Took => false,
+                        BookAction.Put => true,
+                        _ => throw new NotSupportedException($"Action {action} is not supported"),
+                    };
                     var bookTrackingRecord = new BookTrackingRecord
                     {
                         AccountId = accountId,
@@ -223,7 +217,7 @@ namespace BookLibrary.Storage.Repositories
 
         #region Private
 
-        private IQueryable<Book> BuildGetBooksQuery(BookLibraryContext dbContext, string searchString = "", bool onlyAvailable = false, int userId = -1, int from = 0, int count = 10)
+        private static IQueryable<Book> BuildGetBooksQuery(BookLibraryContext dbContext, string searchString = "", bool onlyAvailable = false, int userId = -1, int from = 0, int count = 10)
         {
             IQueryable<BookRecord> booksQuery = dbContext.Books;
             if (userId > -1)
@@ -260,7 +254,7 @@ namespace BookLibrary.Storage.Repositories
             return books;
         }
 
-        private IQueryable<Book> SelectBooksFromBookRecords(BookLibraryContext dbContext, IQueryable<BookRecord> bookRecords)
+        private static IQueryable<Book> SelectBooksFromBookRecords(BookLibraryContext dbContext, IQueryable<BookRecord> bookRecords)
         {
             var books = bookRecords.Select(book => Book.FromPersistence(
                 book.ID,
@@ -277,7 +271,7 @@ namespace BookLibrary.Storage.Repositories
             return books;
         }
 
-        private void SaveBookAuthors(BookLibraryContext dbContext, IEnumerable<string> authors, int bookId)
+        private static void SaveBookAuthors(BookLibraryContext dbContext, IEnumerable<string> authors, int bookId)
         {
             if (authors is not null)
             {

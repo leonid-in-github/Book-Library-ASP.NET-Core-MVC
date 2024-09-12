@@ -73,7 +73,7 @@ namespace BookLibrary.Storage.Repositories
             return Task.FromResult<bool?>(null);
         }
 
-        private Task<bool> ContinueSession(string sessionId)
+        private static Task<bool> ContinueSession(string sessionId)
         {
             using var dbContext = new BookLibraryContext();
 
