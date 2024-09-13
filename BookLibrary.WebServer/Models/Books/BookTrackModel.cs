@@ -6,29 +6,19 @@ namespace BookLibrary.WebServer.Models.Books
 {
     public class BookTrackModel
     {
-        public BookTrackModel()
-        {
-            BookTrackList = new List<BookTrack>();
-
-            SelectedMode = BookTrackTableModes.Default;
-
-            TableModes = new List<SelectListItem>()
-            {
-                new SelectListItem {Value = BookTrackTableModes.Default, Text = "10" },
-                new SelectListItem {Value = BookTrackTableModes._100, Text = "100" },
-                new SelectListItem {Value = BookTrackTableModes.All, Text = "All" }
-            };
-
-        }
-
         public int? BookId { get; set; }
         public string BookName { get; set; }
         public bool? BookAvailability { get; set; }
-        public bool CanBePuted { get; set; }
-        public string SelectedMode { get; set; }
-        public List<BookTrack> BookTrackList { get; set; }
+        public bool CanBePut { get; set; }
+        public string SelectedMode { get; set; } = BookTrackTableModes.Default;
+        public List<BookTrack> BookTrackList { get; set; } = [];
 
-        public List<SelectListItem> TableModes { set; get; }
+        public List<SelectListItem> TableModes { set; get; } =
+        [
+            new SelectListItem {Value = BookTrackTableModes.Default, Text = "10" },
+            new SelectListItem {Value = BookTrackTableModes._100, Text = "100" },
+            new SelectListItem {Value = BookTrackTableModes.All, Text = "All" }
+        ];
 
         public static explicit operator BookTrackModel(BookTrackList model)
         {
@@ -37,7 +27,7 @@ namespace BookLibrary.WebServer.Models.Books
                 BookId = model.BookId,
                 BookName = model.BookName,
                 BookAvailability = model.BookAvailability,
-                CanBePuted = model.CanBePuted,
+                CanBePut = model.CanBePut,
                 BookTrackList = model.TracksList
             };
         }

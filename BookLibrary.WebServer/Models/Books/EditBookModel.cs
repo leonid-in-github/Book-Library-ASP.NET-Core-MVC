@@ -4,7 +4,7 @@ namespace BookLibrary.WebServer.Models.Books
 {
     public class EditBookModel : ActionBookModel
     {
-        public string UpdateBookMassege { get; set; }
+        public string UpdateBookMessage { get; set; }
 
         public EditBookModel() { }
 

@@ -13,7 +13,7 @@
                 <form asp-controller="Books" asp-action="EditBook" method="post">
                     <input type="hidden" asp-for="ID" />
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <span asp-validation-for="UpdateBookMassege" class="text-danger"></span>
+                    <span asp-validation-for="UpdateBookMessage" class="text-danger"></span>
                     @await Html.PartialAsync("~/Views/Books/BookView.cshtml", Model)
                     <div class="form-group container">
                         <input type="submit" value="Edit" class="btn btn-primary" />

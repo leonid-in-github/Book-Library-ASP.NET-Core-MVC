@@ -120,7 +120,7 @@ namespace BookLibrary.Storage.Repositories
 
             var bookTookTracks = dbContext.BookTracking.Where(record => record.BookId == bookId && record.Action == BookAction.Took.ToString());
             var lastBookTookTrack = bookTookTracks.FirstOrDefault(record => record.ActionTime == bookTookTracks.Max(track => track.ActionTime));
-            result.CanBePuted = accountId == lastBookTookTrack?.AccountId;
+            result.CanBePut = accountId == lastBookTookTrack?.AccountId;
 
             var accountRecord = dbContext.Accounts.FirstOrDefault(record => record.ID == accountId);
             if (accountRecord != null)
@@ -138,7 +138,8 @@ namespace BookLibrary.Storage.Repositories
                        dbContext.Accounts,
                        track => track.AccountId,
                        account => account.ID,
-                       (track, account) => new {
+                       (track, account) => new
+                       {
                            account.Login,
                            account.ProfileId,
                            track.ActionTime,
@@ -150,7 +151,8 @@ namespace BookLibrary.Storage.Repositories
                         dbContext.Profiles,
                         track => track.ProfileId,
                         profile => profile.ID,
-                        (track, profile) => new {
+                        (track, profile) => new
+                        {
                             track.Login,
                             profile.Email,
                             track.ActionTime,

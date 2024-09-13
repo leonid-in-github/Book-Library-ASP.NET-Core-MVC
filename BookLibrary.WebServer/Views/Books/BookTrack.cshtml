@@ -18,7 +18,7 @@
         {
             <a asp-area="" asp-controller="Books" asp-action="TakeBook" asp-route-bookId="@Model.BookId" class="btn btn-primary">Take Book</a>
         }
-        else if (Model.BookAvailability == false && Model.CanBePuted == true)
+        else if (Model.BookAvailability == false && Model.CanBePut == true)
         {
             <a asp-area="" asp-controller="Books" asp-action="PutBook" asp-route-bookId="@Model.BookId" class="btn btn-primary">Put Book</a>
         }
