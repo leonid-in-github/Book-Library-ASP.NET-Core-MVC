@@ -2,6 +2,7 @@ using BookLibrary.Storage;
 using BookLibrary.Storage.Contexts;
 using BookLibrary.Storage.Repositories;
 using BookLibrary.WebServer.AppConfig;
+using BookLibrary.WebServer.Models.JQueryModels;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,6 +27,11 @@ namespace BookLibrary.WebServer
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<ISessionRepository, SessionRepository>();
             services.AddScoped<IBooksRepository, BooksRepository>();
+
+            services.AddControllers(options =>
+            {
+                options.ModelBinderProviders.Insert(0, new DataTableParametersBinderProvider());
+            });
 
             services.AddControllersWithViews();
 

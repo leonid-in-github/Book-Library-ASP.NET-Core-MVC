@@ -19,55 +19,56 @@ function getCookieValue(name) {
 function LoadIndexBookTable() {
     
     $('#library-table').DataTable({
-        "bServerSide": true,
-        "sAjaxSource": "Books/MainBooksTableAjaxHandler",
-        "bProcessing": true,
-        "aoColumns": [
+        serverSide: true,
+        ajax: "Books/BooksTableAjaxHandler",
+        processing: true,
+        columns: [
             {
-                "sName": "NAME",
-                "bSortable": false,
-                "mRender": function (data, type, row) {
+                name: "NAME",
+                sortable: false,
+                render: function (data, type, row) {
                     return '<a href=\"Books/BookTrack?bookId=' + row[4] + '\" title="' + data + '">' + data + '</a>';
                 }
             },
             {
-                "sName": "AUTHORS",
-                "mRender": function (data, type, row) {
+                name: "AUTHORS",
+                render: function (data, type, row) {
                     return data.join(", ");
                 },
-                "bSortable": false
+                sortable: false
             },
             {
-                "sName": "YEAR",
-                "bSortable": true,
-                "mRender": function (data, type, row) {
+                name: "YEAR",
+                sortable: true,
+                render: function (data, type, row) {
                     return new Date(data).getFullYear();
                 },
-                "width": "10%"
+                width: "10%"
             },
             {
-                "sName": "AVAILABILITY",
-                "bSortable": true,
-                "mRender": function (data, type, row) {
+                name: "AVAILABILITY",
+                sortable: true,
+                render: function (data, type, row) {
                     return data === "True" ? "Available" : "Not available";
                 },
-                "width": "15%"
+                width: "15%"
             },
             {
-                "sName": "ID",
-                "bSearchable": false,
-                "bSortable": false,
-                "mRender": function (data, type, row) {
+                name: "ID",
+                searchable: false,
+                sortable: false,
+                render: function (data, type, row) {
                     return '<a href=\"Books/EditBook?bookId=' +
                         data + '\">Edit</a> | ' +
                         '<a href=\"Books/DeleteBook?bookId=' +
                         data +
                         '\" onClick=\"return confirm(\'Are you sure you want to delete this book?\');\">Delete</a>';
                 },
-                "width": "15%"
+                width: "15%"
             }
 
-        ]
+        ],
+        order: []
     });
 
 }

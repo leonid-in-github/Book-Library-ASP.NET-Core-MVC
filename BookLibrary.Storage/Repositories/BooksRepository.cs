@@ -219,7 +219,7 @@ namespace BookLibrary.Storage.Repositories
 
         #region Private
 
-        private static IQueryable<Book> BuildGetBooksQuery(BookLibraryContext dbContext, string searchString = "", bool onlyAvailable = false, int userId = -1, int from = 0, int count = 10)
+        private static IQueryable<Book> BuildGetBooksQuery(BookLibraryContext dbContext, string searchString = "", bool onlyAvailable = false, int userId = -1, int from = 0, int count = 0)
         {
             IQueryable<BookRecord> booksQuery = dbContext.Books;
             if (userId > -1)
@@ -250,7 +250,11 @@ namespace BookLibrary.Storage.Repositories
                 booksQuery = booksQuery.Where(book => book.Availability);
             }
 
-            booksQuery = booksQuery.Skip(from).Take(count);
+            if (count > 0)
+            {
+                booksQuery = booksQuery.Skip(from).Take(count);
+            }
+
             var books = SelectBooksFromBookRecords(dbContext, booksQuery);
 
             return books;

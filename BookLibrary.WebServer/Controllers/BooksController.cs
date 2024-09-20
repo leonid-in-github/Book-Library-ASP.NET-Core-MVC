@@ -125,67 +125,57 @@ namespace BookLibrary.WebServer.Controllers
             return RedirectToAction("BookTrack", "Books", new RouteValueDictionary(new { bookId }));
         }
 
-        public async Task<IActionResult> MainBooksTableAjaxHandler(JQueryDataTableParamModel param)
+        public async Task<IActionResult> BooksTableAjaxHandler([ModelBinder(BinderType = typeof(DataTableParametersBinder))]
+            DataTableParameters parameters)
         {
             _ = int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId);
-            var booksList = await GetBooksList(userId, param.sSearch, param.iDisplayStart, param.iDisplayLength);
-            var booksTotalCount = await GetBooksTotalCount(userId, param.sSearch);
-
-            var isNameSortable = Convert.ToBoolean(Request.Query["bSortable_0"]);
-            var isAuthorsSortable = Convert.ToBoolean(Request.Query["bSortable_1"]);
-            var isYearSortable = Convert.ToBoolean(Request.Query["bSortable_2"]);
-            var isAvailabilitySortable = Convert.ToBoolean(Request.Query["bSortable_3"]);
-            var isIdSortable = Convert.ToBoolean(Request.Query["bSortable_4"]);
-
-            var sortColumnIndex = Convert.ToInt32(Request.Query["iSortCol_0"]);
-
-
-            var sortDirection = Request.Query["sSortDir_0"]; // asc or desc
-            if (sortColumnIndex == 0 && isNameSortable)
+            var booksList = await GetBooksList(userId, parameters.Search.Value, parameters.Start, parameters.Length);
+            var booksTotalCount = await GetBooksTotalCount(userId, parameters.Search.Value);
+            var orderColumnIndex = parameters.Order.FirstOrDefault()?.Column;
+            var orderDirection = parameters.Order.FirstOrDefault()?.Dir?.ToLower();
+            var isColumnOrderable = parameters.Columns.Find(column => column.Data == orderColumnIndex)?.Orderable;
+            if (isColumnOrderable == true)
             {
-                Func<Book, string> orderingFunction;
-                orderingFunction = (a => a.Name);
-
-                if (sortDirection == "asc")
-                    booksList = booksList.OrderBy(orderingFunction, StringComparer.Ordinal);
-                else
-                    booksList = booksList.OrderByDescending(orderingFunction, StringComparer.Ordinal);
-            }
-            else if (sortColumnIndex == 1 && isAuthorsSortable)
-            {
-                Func<Book, string> orderingFunction;
-                orderingFunction = (a => string.Join(", ", a.Authors));
-                if (sortDirection == "asc")
-                    booksList = booksList.OrderBy(orderingFunction, StringComparer.Ordinal);
-                else
-                    booksList = booksList.OrderByDescending(orderingFunction, StringComparer.Ordinal);
-            }
-            else if (sortColumnIndex == 2 && isYearSortable)
-            {
-                Func<Book, DateTime> orderingFunction;
-                orderingFunction = (a => a.Year);
-                if (sortDirection == "asc")
-                    booksList = booksList.OrderBy(orderingFunction);
-                else
-                    booksList = booksList.OrderByDescending(orderingFunction);
-            }
-            else if (sortColumnIndex == 3 && isAvailabilitySortable)
-            {
-                Func<Book, bool?> orderingFunction;
-                orderingFunction = (a => a.Availability);
-                if (sortDirection == "asc")
-                    booksList = booksList.OrderBy(orderingFunction);
-                else
-                    booksList = booksList.OrderByDescending(orderingFunction);
-            }
-            else if (sortColumnIndex == 4 && isIdSortable)
-            {
-                Func<Book, int?> orderingFunction;
-                orderingFunction = (a => a.ID);
-                if (sortDirection == "asc")
-                    booksList = booksList.OrderBy(orderingFunction);
-                else
-                    booksList = booksList.OrderByDescending(orderingFunction);
+                switch (orderColumnIndex)
+                {
+                    case 0:
+                        Func<Book, string> nameOrderingFunction = (a => a.Name);
+                        if (orderDirection == "asc")
+                            booksList = booksList.OrderBy(nameOrderingFunction, StringComparer.Ordinal);
+                        else
+                            booksList = booksList.OrderByDescending(nameOrderingFunction, StringComparer.Ordinal);
+                        break;
+                    case 1:
+                        Func<Book, string> authorsOrderingFunction = (a => string.Join(", ", a.Authors));
+                        if (orderDirection == "asc")
+                            booksList = booksList.OrderBy(authorsOrderingFunction, StringComparer.Ordinal);
+                        else
+                            booksList = booksList.OrderByDescending(authorsOrderingFunction, StringComparer.Ordinal);
+                        break;
+                    case 2:
+                        Func<Book, DateTime> yearOrderingFunction = (a => a.Year);
+                        if (orderDirection == "asc")
+                            booksList = booksList.OrderBy(yearOrderingFunction);
+                        else
+                            booksList = booksList.OrderByDescending(yearOrderingFunction);
+                        break;
+                    case 3:
+                        Func<Book, bool?> availabilityOrderingFunction = (a => a.Availability);
+                        if (orderDirection == "asc")
+                            booksList = booksList.OrderBy(availabilityOrderingFunction);
+                        else
+                            booksList = booksList.OrderByDescending(availabilityOrderingFunction);
+                        break;
+                    case 4:
+                        Func<Book, int?> IdOrderingFunction = (a => a.ID);
+                        if (orderDirection == "asc")
+                            booksList = booksList.OrderBy(IdOrderingFunction);
+                        else
+                            booksList = booksList.OrderByDescending(IdOrderingFunction);
+                        break;
+                    default:
+                        throw new ArgumentException("Invalid order column index");
+                }
             }
 
             var result = from a in booksList
@@ -200,10 +190,10 @@ namespace BookLibrary.WebServer.Controllers
 
             return Json(new
             {
-                param.sEcho,
-                iTotalRecords = booksTotalCount,
-                iTotalDisplayRecords = booksTotalCount,
-                aaData = result
+                draw = parameters.Draw,
+                recordsTotal = booksTotalCount,
+                recordsFiltered = booksTotalCount,
+                data = result
             });
         }
 
