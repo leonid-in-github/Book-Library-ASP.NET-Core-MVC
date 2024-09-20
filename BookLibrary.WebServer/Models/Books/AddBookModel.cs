@@ -1,7 +1,19 @@
-﻿namespace BookLibrary.WebServer.Models.Books
+﻿using BookLibrary.Storage.Models.Book;
+
+namespace BookLibrary.WebServer.Models.Books
 {
     public class AddBookModel : ActionBookModel
     {
-        public string AddBookMassege { get; set; }
+        public AddBookModel()
+        {
+
+        }
+
+        public AddBookModel(Book book) : base(book)
+        {
+
+        }
+
+        public string AddBookMessage { get; set; }
     }
 }
