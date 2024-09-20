@@ -20,10 +20,10 @@ namespace BookLibrary.Storage.Repositories
         }
 
         public Task<List<Book>> GetBooks(
-            string searchString = "", 
-            bool onlyAvailable = false, 
-            int userId = -1, 
-            int from = 0, 
+            string searchString = "",
+            bool onlyAvailable = false,
+            int userId = -1,
+            int from = 0,
             int count = 10,
             string orderColumnName = null,
             string orderDirection = "asc")
@@ -33,8 +33,8 @@ namespace BookLibrary.Storage.Repositories
         }
 
         public Task<List<Book>> GetAvailableBooks(
-            string searchString = "", 
-            int from = 0, 
+            string searchString = "",
+            int from = 0,
             int count = 10,
             string orderColumnName = null,
             string orderDirection = "asc")
@@ -43,9 +43,9 @@ namespace BookLibrary.Storage.Repositories
         }
 
         public Task<List<Book>> GetBooksByUser(
-            int userId, 
-            string searchString = "", 
-            int from = 0, 
+            int userId,
+            string searchString = "",
+            int from = 0,
             int count = 10,
             string orderColumnName = null,
             string orderDirection = "asc")
@@ -282,9 +282,9 @@ namespace BookLibrary.Storage.Repositories
 
                 booksQuery = orderColumnName switch
                 {
-                    nameof(BookRecord.Name) => isDescending ? booksQuery.OrderByDescending(book => book.Name) : booksQuery.OrderBy(book => book.Name),
-                    nameof(BookRecord.Year) => isDescending ? booksQuery.OrderByDescending(book => book.Year) : booksQuery.OrderBy(book => book.Year),
-                    nameof(BookRecord.Availability) => isDescending ? booksQuery.OrderByDescending(book => book.Availability)
+                    nameof(Book.Name) => isDescending ? booksQuery.OrderByDescending(book => book.Name) : booksQuery.OrderBy(book => book.Name),
+                    nameof(Book.Year) => isDescending ? booksQuery.OrderByDescending(book => book.Year) : booksQuery.OrderBy(book => book.Year),
+                    nameof(Book.Availability) => isDescending ? booksQuery.OrderByDescending(book => book.Availability)
                     : booksQuery.OrderBy(book => book.Availability),
                     _ => throw new ArgumentException("Invalid order column name")
                 };

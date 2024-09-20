@@ -5,7 +5,6 @@ using BookLibrary.WebServer.Models.JQueryModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -134,11 +133,11 @@ namespace BookLibrary.WebServer.Controllers
             var orderDirection = parameters.Order.FirstOrDefault()?.Dir?.ToLower();
             var isColumnOrderable = parameters.Columns.Find(column => column.Data == orderColumnIndex)?.Orderable;
             var booksList = await GetBooksList(
-                userId, 
-                parameters.Search.Value, 
-                parameters.Start, 
+                userId,
+                parameters.Search.Value,
+                parameters.Start,
                 parameters.Length,
-                isColumnOrderable == true ? orderColumnName : null, 
+                isColumnOrderable == true ? orderColumnName : null,
                 orderDirection);
             var booksTotalCount = await GetBooksTotalCount(userId, parameters.Search.Value);
             var result = from a in booksList
@@ -163,9 +162,9 @@ namespace BookLibrary.WebServer.Controllers
         #region Private
 
         private async Task<IEnumerable<Book>> GetBooksList(
-            int userId, 
-            string searchString, 
-            int from, 
+            int userId,
+            string searchString,
+            int from,
             int count,
             string orderColumnName = null,
             string orderDirection = "asc")
