@@ -9,11 +9,29 @@ namespace BookLibrary.Storage.Repositories
         Task AddBook(Book book);
         Task DeleteBook(int bookId);
         Task DoBookAction(BookAction action, int accountId, int bookId);
-        Task<List<Book>> GetAvailableBooks(string searchString = "", int from = 0, int count = 10);
+        Task<List<Book>> GetAvailableBooks(
+            string searchString = "", 
+            int from = 0, 
+            int count = 0,
+            string orderColumnName = null,
+            string orderDirection = "asc");
         Task<int> GetAvailableBooksTotalCount(string searchString = "");
         Task<Book> GetBook(int bookId);
-        Task<List<Book>> GetBooks(string searchString = "", bool onlyAvailable = false, int userId = -1, int from = 0, int count = 10);
-        Task<List<Book>> GetBooksByUser(int userId, string searchString = "", int from = 0, int count = 10);
+        Task<List<Book>> GetBooks(
+            string searchString = "", 
+            bool onlyAvailable = false, 
+            int userId = -1, 
+            int from = 0, 
+            int count = 0,
+            string orderColumnName = null,
+            string orderDirection = "asc");
+        Task<List<Book>> GetBooksByUser(
+            int userId, 
+            string searchString = "", 
+            int from = 0, 
+            int count = 0,
+            string orderColumnName = null,
+            string orderDirection = "asc");
         Task<int> GetBooksByUserTotalCount(int userId, string searchString = "");
         Task<int> GetBooksTotalCount(string searchString = "");
         Task<BookTrackList> GetBookTrack(int accountId, int bookId, string tracksCount);

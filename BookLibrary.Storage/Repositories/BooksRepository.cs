@@ -19,20 +19,38 @@ namespace BookLibrary.Storage.Repositories
             return Task.FromResult(books.FirstOrDefault());
         }
 
-        public Task<List<Book>> GetBooks(string searchString = "", bool onlyAvailable = false, int userId = -1, int from = 0, int count = 10)
+        public Task<List<Book>> GetBooks(
+            string searchString = "", 
+            bool onlyAvailable = false, 
+            int userId = -1, 
+            int from = 0, 
+            int count = 10,
+            string orderColumnName = null,
+            string orderDirection = "asc")
         {
             using var dbContext = new BookLibraryContext();
-            return Task.FromResult(BuildGetBooksQuery(dbContext, searchString, onlyAvailable, userId, from, count).ToList());
+            return Task.FromResult(BuildGetBooksQuery(dbContext, searchString, onlyAvailable, userId, from, count, orderColumnName, orderDirection).ToList());
         }
 
-        public Task<List<Book>> GetAvailableBooks(string searchString = "", int from = 0, int count = 10)
+        public Task<List<Book>> GetAvailableBooks(
+            string searchString = "", 
+            int from = 0, 
+            int count = 10,
+            string orderColumnName = null,
+            string orderDirection = "asc")
         {
-            return GetBooks(searchString, true, -1, from, count);
+            return GetBooks(searchString, true, -1, from, count, orderColumnName, orderDirection);
         }
 
-        public Task<List<Book>> GetBooksByUser(int userId, string searchString = "", int from = 0, int count = 10)
+        public Task<List<Book>> GetBooksByUser(
+            int userId, 
+            string searchString = "", 
+            int from = 0, 
+            int count = 10,
+            string orderColumnName = null,
+            string orderDirection = "asc")
         {
-            return GetBooks(searchString, false, userId, from, count);
+            return GetBooks(searchString, false, userId, from, count, orderColumnName, orderDirection);
         }
 
         public Task<int> GetBooksTotalCount(string searchString = "")
@@ -219,7 +237,15 @@ namespace BookLibrary.Storage.Repositories
 
         #region Private
 
-        private static IQueryable<Book> BuildGetBooksQuery(BookLibraryContext dbContext, string searchString = "", bool onlyAvailable = false, int userId = -1, int from = 0, int count = 0)
+        private static IQueryable<Book> BuildGetBooksQuery(
+            BookLibraryContext dbContext,
+            string searchString = "",
+            bool onlyAvailable = false,
+            int userId = -1,
+            int from = 0,
+            int count = 0,
+            string orderColumnName = null,
+            string orderDirection = "asc")
         {
             IQueryable<BookRecord> booksQuery = dbContext.Books;
             if (userId > -1)
@@ -248,6 +274,21 @@ namespace BookLibrary.Storage.Repositories
             if (onlyAvailable)
             {
                 booksQuery = booksQuery.Where(book => book.Availability);
+            }
+
+            if (!string.IsNullOrEmpty(orderColumnName))
+            {
+                var isDescending = orderDirection.Equals("desc", StringComparison.OrdinalIgnoreCase);
+
+                booksQuery = orderColumnName switch
+                {
+                    nameof(BookRecord.Name) => isDescending ? booksQuery.OrderByDescending(book => book.Name) : booksQuery.OrderBy(book => book.Name),
+                    nameof(BookRecord.Year) => isDescending ? booksQuery.OrderByDescending(book => book.Year) : booksQuery.OrderBy(book => book.Year),
+                    nameof(BookRecord.Availability) => isDescending ? booksQuery.OrderByDescending(book => book.Availability)
+                    : booksQuery.OrderBy(book => book.Availability),
+                    _ => throw new ArgumentException("Invalid order column name")
+                };
+
             }
 
             if (count > 0)

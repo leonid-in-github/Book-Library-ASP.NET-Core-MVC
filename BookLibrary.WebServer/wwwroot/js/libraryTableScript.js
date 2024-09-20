@@ -24,21 +24,21 @@ function LoadIndexBookTable() {
         processing: true,
         columns: [
             {
-                name: "NAME",
-                sortable: false,
+                name: "Name",
+                sortable: true,
                 render: function (data, type, row) {
                     return '<a href=\"Books/BookTrack?bookId=' + row[4] + '\" title="' + data + '">' + data + '</a>';
                 }
             },
             {
-                name: "AUTHORS",
+                name: "Authors",
                 render: function (data, type, row) {
                     return data.join(", ");
                 },
                 sortable: false
             },
             {
-                name: "YEAR",
+                name: "Year",
                 sortable: true,
                 render: function (data, type, row) {
                     return new Date(data).getFullYear();
@@ -46,7 +46,7 @@ function LoadIndexBookTable() {
                 width: "10%"
             },
             {
-                name: "AVAILABILITY",
+                name: "Availability",
                 sortable: true,
                 render: function (data, type, row) {
                     return data === "True" ? "Available" : "Not available";

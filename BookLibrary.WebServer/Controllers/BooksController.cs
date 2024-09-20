@@ -129,55 +129,18 @@ namespace BookLibrary.WebServer.Controllers
             DataTableParameters parameters)
         {
             _ = int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId);
-            var booksList = await GetBooksList(userId, parameters.Search.Value, parameters.Start, parameters.Length);
-            var booksTotalCount = await GetBooksTotalCount(userId, parameters.Search.Value);
+            var orderColumnName = parameters.Order.FirstOrDefault()?.Name;
             var orderColumnIndex = parameters.Order.FirstOrDefault()?.Column;
             var orderDirection = parameters.Order.FirstOrDefault()?.Dir?.ToLower();
             var isColumnOrderable = parameters.Columns.Find(column => column.Data == orderColumnIndex)?.Orderable;
-            if (isColumnOrderable == true)
-            {
-                switch (orderColumnIndex)
-                {
-                    case 0:
-                        Func<Book, string> nameOrderingFunction = (a => a.Name);
-                        if (orderDirection == "asc")
-                            booksList = booksList.OrderBy(nameOrderingFunction, StringComparer.Ordinal);
-                        else
-                            booksList = booksList.OrderByDescending(nameOrderingFunction, StringComparer.Ordinal);
-                        break;
-                    case 1:
-                        Func<Book, string> authorsOrderingFunction = (a => string.Join(", ", a.Authors));
-                        if (orderDirection == "asc")
-                            booksList = booksList.OrderBy(authorsOrderingFunction, StringComparer.Ordinal);
-                        else
-                            booksList = booksList.OrderByDescending(authorsOrderingFunction, StringComparer.Ordinal);
-                        break;
-                    case 2:
-                        Func<Book, DateTime> yearOrderingFunction = (a => a.Year);
-                        if (orderDirection == "asc")
-                            booksList = booksList.OrderBy(yearOrderingFunction);
-                        else
-                            booksList = booksList.OrderByDescending(yearOrderingFunction);
-                        break;
-                    case 3:
-                        Func<Book, bool?> availabilityOrderingFunction = (a => a.Availability);
-                        if (orderDirection == "asc")
-                            booksList = booksList.OrderBy(availabilityOrderingFunction);
-                        else
-                            booksList = booksList.OrderByDescending(availabilityOrderingFunction);
-                        break;
-                    case 4:
-                        Func<Book, int?> IdOrderingFunction = (a => a.ID);
-                        if (orderDirection == "asc")
-                            booksList = booksList.OrderBy(IdOrderingFunction);
-                        else
-                            booksList = booksList.OrderByDescending(IdOrderingFunction);
-                        break;
-                    default:
-                        throw new ArgumentException("Invalid order column index");
-                }
-            }
-
+            var booksList = await GetBooksList(
+                userId, 
+                parameters.Search.Value, 
+                parameters.Start, 
+                parameters.Length,
+                isColumnOrderable == true ? orderColumnName : null, 
+                orderDirection);
+            var booksTotalCount = await GetBooksTotalCount(userId, parameters.Search.Value);
             var result = from a in booksList
                          select new ArrayList {
 
@@ -199,14 +162,20 @@ namespace BookLibrary.WebServer.Controllers
 
         #region Private
 
-        private async Task<IEnumerable<Book>> GetBooksList(int userId, string searchString, int from, int count)
+        private async Task<IEnumerable<Book>> GetBooksList(
+            int userId, 
+            string searchString, 
+            int from, 
+            int count,
+            string orderColumnName = null,
+            string orderDirection = "asc")
         {
             return Request.Cookies["TableSelectedMode"]?.ToString() switch
             {
-                "all" => await booksRepository.GetBooks(searchString, false, -1, from, count),
-                "available" => await booksRepository.GetAvailableBooks(searchString, from, count),
-                "takenByUser" => await booksRepository.GetBooksByUser(userId, searchString, from, count),
-                _ => await booksRepository.GetBooks(searchString, false, -1, from, count)
+                "all" => await booksRepository.GetBooks(searchString, false, -1, from, count, orderColumnName, orderDirection),
+                "available" => await booksRepository.GetAvailableBooks(searchString, from, count, orderColumnName, orderDirection),
+                "takenByUser" => await booksRepository.GetBooksByUser(userId, searchString, from, count, orderColumnName, orderDirection),
+                _ => await booksRepository.GetBooks(searchString, false, -1, from, count, orderColumnName, orderDirection)
             };
         }
 
