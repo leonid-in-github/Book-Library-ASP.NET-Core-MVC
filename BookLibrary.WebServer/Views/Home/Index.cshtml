@@ -16,7 +16,7 @@
                 <div style="margin: 10px 0px;">
                     <select asp-for="SelectedMode" asp-items="@(new SelectList(Model.TableModes,"Value","Text"))" class="form-control" style="left: 10pt; top: -3.4pt; position: relative; color: darkblue; margin-top: 5pt; width: 120pt; display: inline-block;">
                     </select>
-                    <a class="btn btn-primary" style="display: inline-block; float: right;" asp-area="" asp-controller="Books" asp-action="AddBook">Add Book</a>
+                <a class="btn btn-primary" style="display: inline-block; float: right;" asp-area="" asp-controller="Books" asp-action="AddBook">Add Book</a>
                 </div>
 
                 <br />

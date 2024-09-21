@@ -20,7 +20,7 @@ function LoadIndexBookTable() {
     
     $('#library-table').DataTable({
         serverSide: true,
-        ajax: "Books/BooksTableAjaxHandler",
+        ajax: "api/books",
         processing: true,
         columns: [
             {
