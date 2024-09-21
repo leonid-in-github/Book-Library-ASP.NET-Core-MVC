@@ -46,7 +46,7 @@ namespace BookLibrary.WebServer.Controllers
 
                 return RedirectToAction("Index", "Home");
             }
-            catch (SessionExpirationException)
+            catch (SessionExpiredException)
             {
                 if (Request.Cookies[_config.Value.SessionCookieName] != null)
                 {
@@ -112,7 +112,7 @@ namespace BookLibrary.WebServer.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
-                catch (SessionExpirationException)
+                catch (SessionExpiredException)
                 {
                     if (Request.Cookies[_config.Value.SessionCookieName] != null)
                     {

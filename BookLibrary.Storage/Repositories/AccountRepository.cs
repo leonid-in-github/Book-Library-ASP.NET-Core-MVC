@@ -25,7 +25,7 @@ namespace BookLibrary.Storage.Repositories
                             return 0;
                         break;
                     case true:
-                        throw new SessionExpirationException("Application and DB session expiration time conflict.");
+                        throw new SessionExpiredException("Application and DB session expiration time conflict.");
                 }
                 return accountRecord.ID;
             }
@@ -77,7 +77,7 @@ namespace BookLibrary.Storage.Repositories
                         return 0;
                     break;
                 case true:
-                    throw new SessionExpirationException("Application and DB session expiration time conflict.");
+                    throw new SessionExpiredException("Application and DB session expiration time conflict.");
             }
             return accountRecord.ID;
         }
