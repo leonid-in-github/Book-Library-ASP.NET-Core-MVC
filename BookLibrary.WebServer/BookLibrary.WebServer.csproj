@@ -23,11 +23,4 @@
   <ItemGroup>
     <ProjectReference Include="..\BookLibrary.Storage\BookLibrary.Storage.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="C:\Users\Leonid\.nuget\packages\datatables.net\2.1.6\contentFiles\any\any\wwwroot\js\dataTables.js">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
 </Project>
