@@ -20,7 +20,7 @@ namespace BookLibrary.WebServer.Controllers
         private readonly IBooksRepository booksRepository = booksRepository;
 
         [HttpGet]
-        public async Task<IActionResult> BooksTableAjaxHandler([ModelBinder(BinderType = typeof(DataTableParametersBinder))]
+        public async Task<IActionResult> GetBooks([ModelBinder(BinderType = typeof(DataTableParametersBinder))]
             DataTableParameters parameters)
         {
             _ = int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId);
