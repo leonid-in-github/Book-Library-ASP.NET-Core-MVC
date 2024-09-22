@@ -33,7 +33,7 @@ namespace BookLibrary.WebServer.Controllers
             try
             {
                 var sessionId = Guid.NewGuid().ToString();
-                Response.Cookies.Append("sessionId", sessionId);
+                Response.Cookies.Append($"{_config.Value.SessionCookieName}Guid", sessionId);
                 var accountId =
                     await accountRepository.Login(sessionId, loginModel.Login, loginModel.Password);
                 if (accountId == 0)
@@ -71,7 +71,7 @@ namespace BookLibrary.WebServer.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            var sessionId = Request.Cookies["sessionId"];
+            var sessionId = Request.Cookies[$"{_config.Value.SessionCookieName}Guid"];
             await accountRepository.Logout(sessionId);
 
             HttpContext.Session.Clear();
@@ -97,7 +97,7 @@ namespace BookLibrary.WebServer.Controllers
                 try
                 {
                     var sessionId = Guid.NewGuid().ToString();
-                    Response.Cookies.Append("sessionId", sessionId);
+                    Response.Cookies.Append($"{_config.Value.SessionCookieName}Guid", sessionId);
                     var accountId =
                         await accountRepository.Register(sessionId, registrationModel.Login, registrationModel.Password,
                         registrationModel.FirstName, registrationModel.LastName, registrationModel.Email);
