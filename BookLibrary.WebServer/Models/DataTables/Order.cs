@@ -1,4 +1,4 @@
-﻿namespace BookLibrary.WebServer.Models.JQueryModels
+﻿namespace BookLibrary.WebServer.Models.DataTables
 {
     public class Order
     {

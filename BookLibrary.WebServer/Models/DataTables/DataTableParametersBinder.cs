@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BookLibrary.WebServer.Models.JQueryModels
+namespace BookLibrary.WebServer.Models.DataTables
 {
     public class DataTableParametersBinder : IModelBinder
     {

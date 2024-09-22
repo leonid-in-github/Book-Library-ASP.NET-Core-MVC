@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BookLibrary.WebServer.Models.JQueryModels
+namespace BookLibrary.WebServer.Models.DataTables
 {
     public class DataTableParameters
     {

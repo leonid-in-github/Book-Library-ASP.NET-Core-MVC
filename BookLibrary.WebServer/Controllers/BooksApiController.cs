@@ -1,6 +1,6 @@
 ﻿using BookLibrary.Storage.Models.Book;
 using BookLibrary.Storage.Repositories;
-using BookLibrary.WebServer.Models.JQueryModels;
+using BookLibrary.WebServer.Models.DataTables;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;

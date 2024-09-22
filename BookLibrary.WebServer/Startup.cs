@@ -2,7 +2,7 @@ using BookLibrary.Storage;
 using BookLibrary.Storage.Contexts;
 using BookLibrary.Storage.Repositories;
 using BookLibrary.WebServer.AppConfig;
-using BookLibrary.WebServer.Models.JQueryModels;
+using BookLibrary.WebServer.Models.DataTables;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

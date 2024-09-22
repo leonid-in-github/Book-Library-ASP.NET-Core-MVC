@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\datatables\**" />
+    <Content Remove="wwwroot\datatables\**" />
+    <EmbeddedResource Remove="wwwroot\datatables\**" />
+    <None Remove="wwwroot\datatables\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Models\Books\BookTrackActionModel.cs" />
     <Compile Remove="Models\Books\DisplayBook.cs" />
   </ItemGroup>

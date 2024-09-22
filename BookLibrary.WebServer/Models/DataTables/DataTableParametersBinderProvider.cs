@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
-namespace BookLibrary.WebServer.Models.JQueryModels
+namespace BookLibrary.WebServer.Models.DataTables
 {
     public class DataTableParametersBinderProvider : IModelBinderProvider
     {
