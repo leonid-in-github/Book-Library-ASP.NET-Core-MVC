@@ -7,13 +7,10 @@
         document.getElementById("SelectedMode").style.display = "none";
     }
 
-    $("#SelectedMode").change(function () {
-
+    $("#SelectedMode").on("change", function () {
         var value = $(this).val();
-
-        document.cookie = "BookTrackTableSelectedMode=" + value;
+        document.cookie = `BookTrackTableSelectedMode=${value}`;
         location.reload();
-
     });
 });
 
