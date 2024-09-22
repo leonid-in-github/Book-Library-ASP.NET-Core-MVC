@@ -66,7 +66,6 @@ function LoadIndexBookTable() {
                 },
                 width: "15%"
             }
-
         ],
         order: []
     });

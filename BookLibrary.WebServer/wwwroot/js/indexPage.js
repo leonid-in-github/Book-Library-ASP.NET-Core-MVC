@@ -4,11 +4,9 @@
         document.cookie = `TableSelectedMode=${value}`;
         ReloadIndexBookTable1();
     });
-
 });
 
 function ReloadIndexBookTable1() {
-    
     $('#library-table').DataTable().ajax.reload();
 }
 
