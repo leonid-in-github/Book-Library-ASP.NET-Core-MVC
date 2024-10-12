@@ -6,7 +6,7 @@ namespace BookLibrary.WebServer.Models.Books
 {
     public class BookDto
     {
-        public int ID { get; set; }
+        public Guid? Id { get; set; }
         [Required]
         [DataType(DataType.Text)]
         [Display(Name = "Name")]
@@ -28,7 +28,7 @@ namespace BookLibrary.WebServer.Models.Books
 
         public BookDto(Book book)
         {
-            ID = book.ID;
+            Id = book.Id;
             Name = book.Name;
             Authors = string.Join(", ", book.Authors);
             Year = book.Year;
@@ -37,13 +37,13 @@ namespace BookLibrary.WebServer.Models.Books
 
         public Book ToDomain()
         {
-            if (ID == 0)
+            if (Id is null)
             {
                 return new Book(Name, Authors?.Split(", "), Year, Availability ?? true);
             }
             else
             {
-                return Book.FromPersistence(ID, Name, Authors?.Split(", "), Year, Availability ?? true);
+                return Book.FromPersistence((Guid)Id, Name, Authors?.Split(", "), Year, Availability ?? true);
             }
         }
     }

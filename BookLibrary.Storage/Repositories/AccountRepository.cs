@@ -2,7 +2,7 @@
 using BookLibrary.Storage.Exceptions;
 using BookLibrary.Storage.Models.Account;
 using BookLibrary.Storage.Models.Records.Account;
-using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,7 +12,7 @@ namespace BookLibrary.Storage.Repositories
     {
         private readonly ISessionRepository sessionRepository = sessionRepository;
 
-        public async Task<int> Login(string sessionId, string login, string password)
+        public async Task<Guid?> Login(string sessionId, string login, string password)
         {
             using var dbContext = new BookLibraryContext();
             var accountRecord = dbContext.Accounts.FirstOrDefault(record => record.Login == login && record.Password == password);
@@ -21,16 +21,16 @@ namespace BookLibrary.Storage.Repositories
                 switch (await sessionRepository.CheckSessionExpiration(sessionId))
                 {
                     case null:
-                        if (!await sessionRepository.RegisterSession(accountRecord.ID, sessionId))
-                            return 0;
+                        if (!await sessionRepository.RegisterSession(accountRecord.Id, sessionId))
+                            return null;
                         break;
                     case true:
                         throw new SessionExpiredException("Application and DB session expiration time conflict.");
                 }
-                return accountRecord.ID;
+                return accountRecord.Id;
             }
 
-            return 0;
+            return null;
         }
 
         public async Task<bool> Logout(string sessionId)
@@ -38,7 +38,7 @@ namespace BookLibrary.Storage.Repositories
             return await sessionRepository.CloseSession(sessionId);
         }
 
-        public async Task<int> Register(string sessionId, string login, string password, string firstName, string lastName, string email)
+        public async Task<Guid?> Register(string sessionId, string login, string password, string firstName, string lastName, string email)
         {
             using var dbContext = new BookLibraryContext();
             using var transaction = dbContext.Database.BeginTransaction();
@@ -60,36 +60,34 @@ namespace BookLibrary.Storage.Repositories
             {
                 Login = login,
                 Password = password,
-                ProfileId = profileRecord.ID,
-                ID = dbContext.Accounts.Max(record => record.ID) + 1
+                ProfileId = profileRecord.Id,
+                Id = Guid.NewGuid()
             };
 
-            dbContext.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Accounts] ON");
             dbContext.Accounts.Add(accountRecord);
             dbContext.SaveChanges();
-            dbContext.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Accounts] OFF");
             transaction.Commit();
 
             switch (await sessionRepository.CheckSessionExpiration(sessionId))
             {
                 case null:
-                    if (!await sessionRepository.RegisterSession(accountRecord.ID, sessionId))
-                        return 0;
+                    if (!await sessionRepository.RegisterSession(accountRecord.Id, sessionId))
+                        return null;
                     break;
                 case true:
                     throw new SessionExpiredException("Application and DB session expiration time conflict.");
             }
-            return accountRecord.ID;
+            return accountRecord.Id;
         }
 
-        public Task<User> GetUser(int userId)
+        public Task<User> GetUser(Guid userId)
         {
             using var dbContext = new BookLibraryContext();
 
-            var accountRecord = dbContext.Accounts.FirstOrDefault(record => record.ID == userId);
+            var accountRecord = dbContext.Accounts.FirstOrDefault(record => record.Id == userId);
             if (accountRecord != null)
             {
-                var profileRecord = dbContext.Profiles.FirstOrDefault(record => record.ID == accountRecord.ProfileId);
+                var profileRecord = dbContext.Profiles.FirstOrDefault(record => record.Id == accountRecord.ProfileId);
                 if (profileRecord != null)
                 {
                     return Task.FromResult(User.FromPersistence(
@@ -104,11 +102,11 @@ namespace BookLibrary.Storage.Repositories
             return Task.FromResult<User>(null);
         }
 
-        public Task<bool> ChangeAccountPassword(int accountId, string accountPassword, string newAccountPassword)
+        public Task<bool> ChangeAccountPassword(Guid accountId, string accountPassword, string newAccountPassword)
         {
             using var dbContext = new BookLibraryContext();
 
-            var accountRecord = dbContext.Accounts.FirstOrDefault(record => record.ID == accountId);
+            var accountRecord = dbContext.Accounts.FirstOrDefault(record => record.Id == accountId);
             if (accountRecord != null && accountRecord.Password == accountPassword)
             {
                 accountRecord.Password = newAccountPassword;
@@ -119,11 +117,11 @@ namespace BookLibrary.Storage.Repositories
             return Task.FromResult(false);
         }
 
-        public Task<bool> DeleteAccount(int accountId, string accountPassword)
+        public Task<bool> DeleteAccount(Guid accountId, string accountPassword)
         {
             using var dbContext = new BookLibraryContext();
 
-            var accountRecord = dbContext.Accounts.FirstOrDefault(record => record.ID == accountId);
+            var accountRecord = dbContext.Accounts.FirstOrDefault(record => record.Id == accountId);
             if (accountRecord != null && accountRecord.Password == accountPassword)
             {
                 dbContext.Accounts.Remove(accountRecord);

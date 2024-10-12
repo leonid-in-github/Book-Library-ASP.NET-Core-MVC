@@ -36,7 +36,7 @@ namespace BookLibrary.WebServer.Controllers
                 Response.Cookies.Append($"{_config.Value.SessionCookieName}Guid", sessionId);
                 var accountId =
                     await accountRepository.Login(sessionId, loginModel.Login, loginModel.Password);
-                if (accountId == 0)
+                if (accountId is null)
                 {
                     ModelState.AddModelError("LoginMessage", "Login failed. Incorrect login or password.");
                     return View();
@@ -102,7 +102,7 @@ namespace BookLibrary.WebServer.Controllers
                         await accountRepository.Register(sessionId, registrationModel.Login, registrationModel.Password,
                         registrationModel.FirstName, registrationModel.LastName, registrationModel.Email);
 
-                    if (accountId == -1)
+                    if (accountId is null)
                     {
                         ModelState.AddModelError("RegistrationMessage", "Account already exists.");
                         return View();
@@ -130,9 +130,9 @@ namespace BookLibrary.WebServer.Controllers
         [Authorize]
         public async Task<IActionResult> GetUser()
         {
-            if (int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
+            if (Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid accountId))
             {
-                var model = (UserModel)await accountRepository.GetUser((int)aId);
+                var model = (UserModel)await accountRepository.GetUser(accountId);
                 return View(model);
             }
 
@@ -150,9 +150,9 @@ namespace BookLibrary.WebServer.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
+                if (Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid accountId))
                 {
-                    var result = await accountRepository.ChangeAccountPassword((int)aId, model.Password, model.NewPassword);
+                    var result = await accountRepository.ChangeAccountPassword(accountId, model.Password, model.NewPassword);
 
                     if (result)
                         return RedirectToAction("GetUser", "Account");
@@ -177,9 +177,9 @@ namespace BookLibrary.WebServer.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int aId))
+                if (Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid accountId))
                 {
-                    var result = await accountRepository.DeleteAccount((int)aId, model.Password);
+                    var result = await accountRepository.DeleteAccount(accountId, model.Password);
                     if (result)
                     {
                         await LogoutApplication();
@@ -197,7 +197,7 @@ namespace BookLibrary.WebServer.Controllers
 
         #region Private
 
-        private async Task Authenticate(string userName, int dbUserId)
+        private async Task Authenticate(string userName, Guid? dbUserId)
         {
             var claims = new List<Claim>
             {
@@ -208,7 +208,7 @@ namespace BookLibrary.WebServer.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
         }
 
-        private void SetupSession(int accountId, string accountLogin)
+        private void SetupSession(Guid? accountId, string accountLogin)
         {
             _ = Authenticate(accountLogin, accountId);
         }

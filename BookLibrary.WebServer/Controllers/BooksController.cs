@@ -2,6 +2,7 @@
 using BookLibrary.WebServer.Models.Books;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -29,28 +30,18 @@ namespace BookLibrary.WebServer.Controllers
             return View();
         }
 
-        public async Task<IActionResult> DeleteBook(int bookId)
+        public async Task<IActionResult> DeleteBook(Guid bookId)
         {
-            if (bookId < 0)
-            {
-                return BadRequest();
-            }
-
             await booksRepository.DeleteBook(bookId);
 
             return RedirectToAction("Index", "Home");
         }
 
-        public async Task<IActionResult> EditBook(int bookId)
+        public async Task<IActionResult> EditBook(Guid bookId)
         {
-            if (bookId < 0)
-            {
-                return BadRequest();
-            }
-
             var book = new EditBookModel(await booksRepository.GetBook(bookId))
             {
-                ID = bookId
+                Id = bookId
             };
             return View(book);
 
@@ -69,32 +60,22 @@ namespace BookLibrary.WebServer.Controllers
             return View(book);
         }
 
-        public async Task<IActionResult> BookTrack(int bookId)
+        public async Task<IActionResult> BookTrack(Guid bookId)
         {
-            if (bookId < 0)
-            {
-                return BadRequest();
-            }
-
-            if (int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId))
+            if (Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId))
             {
                 var tracksCount =
                     Request.Cookies["BookTrackTableSelectedMode"] == null ? BookTrackTableModes.Default : Request.Cookies["BookTrackTableSelectedMode"].ToString();
-                var bookTrackModel = (BookTrackModel)await booksRepository.GetBookTrack(userId, (int)bookId, tracksCount);
+                var bookTrackModel = (BookTrackModel)await booksRepository.GetBookTrack(userId, bookId, tracksCount);
 
                 return View(bookTrackModel);
             }
             return new EmptyResult();
         }
 
-        public async Task<IActionResult> TakeBook(int bookId)
+        public async Task<IActionResult> TakeBook(Guid bookId)
         {
-            if (bookId < 0)
-            {
-                return BadRequest();
-            }
-
-            if (int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId))
+            if (Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId))
             {
                 await booksRepository.TakeBook(userId, bookId);
             }
@@ -102,14 +83,9 @@ namespace BookLibrary.WebServer.Controllers
             return RedirectToAction("BookTrack", "Books", new RouteValueDictionary(new { bookId }));
         }
 
-        public async Task<IActionResult> PutBook(int bookId)
+        public async Task<IActionResult> PutBook(Guid bookId)
         {
-            if (bookId < 0)
-            {
-                return BadRequest();
-            }
-
-            if (int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId))
+            if (Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId))
             {
                 await booksRepository.PutBook(userId, bookId);
             }

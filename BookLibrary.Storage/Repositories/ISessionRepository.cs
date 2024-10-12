@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace BookLibrary.Storage.Repositories
 {
@@ -6,6 +7,6 @@ namespace BookLibrary.Storage.Repositories
     {
         Task<bool?> CheckSessionExpiration(string sessionId);
         Task<bool> CloseSession(string sessionId);
-        Task<bool> RegisterSession(int accountId, string sessionId);
+        Task<bool> RegisterSession(Guid accountId, string sessionId);
     }
 }

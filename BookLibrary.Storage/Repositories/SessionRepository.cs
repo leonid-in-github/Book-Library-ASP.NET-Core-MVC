@@ -15,7 +15,7 @@ namespace BookLibrary.Storage.Repositories
                 new TimeSpan(TimeSpan.TicksPerMinute * StorageParameters.SessionTimeoutInMinutes);
         }
 
-        public Task<bool> RegisterSession(int accountId, string sessionId)
+        public Task<bool> RegisterSession(Guid accountId, string sessionId)
         {
             using var dbContext = new BookLibraryContext();
 

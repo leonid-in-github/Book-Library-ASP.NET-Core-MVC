@@ -1,12 +1,13 @@
 ﻿using BookLibrary.Storage.Models.Book;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 
 namespace BookLibrary.WebServer.Models.Books
 {
     public class BookTrackModel
     {
-        public int? BookId { get; set; }
+        public Guid? BookId { get; set; }
         public string BookName { get; set; }
         public bool? BookAvailability { get; set; }
         public bool CanBePut { get; set; }

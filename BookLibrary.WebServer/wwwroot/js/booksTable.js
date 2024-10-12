@@ -54,7 +54,7 @@ function LoadIndexBookTable() {
                 width: "15%"
             },
             {
-                name: "ID",
+                name: "Id",
                 searchable: false,
                 sortable: false,
                 render: function (data, type, row) {

@@ -11,7 +11,7 @@
         <div class="row">
             <div class="w-100">
                 <form asp-controller="Books" asp-action="EditBook" method="post">
-                    <input type="hidden" asp-for="ID" />
+                    <input type="hidden" asp-for="Id" />
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <span asp-validation-for="UpdateBookMessage" class="text-danger"></span>
                     @await Html.PartialAsync("~/Views/Books/BookView.cshtml", Model)

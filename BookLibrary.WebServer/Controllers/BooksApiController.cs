@@ -4,6 +4,7 @@ using BookLibrary.WebServer.Models.DataTables;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace BookLibrary.WebServer.Controllers
         public async Task<IActionResult> GetBooks([ModelBinder(BinderType = typeof(DataTableParametersBinder))]
             DataTableParameters parameters)
         {
-            _ = int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId);
+            _ = Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId);
             var orderColumnName = parameters.Order.FirstOrDefault()?.Name;
             var orderColumnIndex = parameters.Order.FirstOrDefault()?.Column;
             var orderDirection = parameters.Order.FirstOrDefault()?.Dir?.ToLower();
@@ -43,7 +44,7 @@ namespace BookLibrary.WebServer.Controllers
                             a.Authors,
                             a.Year.ToString("MM/dd/yyyy hh:mm tt"),
                             a.Availability.ToString(),
-                            a.ID.ToString()
+                            a.Id.ToString()
                         };
 
             return Ok(new
@@ -58,7 +59,7 @@ namespace BookLibrary.WebServer.Controllers
         #region Private
 
         private async Task<IEnumerable<Book>> GetBooksList(
-            int userId,
+            Guid userId,
             string searchString,
             int from,
             int count,
@@ -67,14 +68,14 @@ namespace BookLibrary.WebServer.Controllers
         {
             return Request.Cookies["TableSelectedMode"]?.ToString() switch
             {
-                "all" => await booksRepository.GetBooks(searchString, false, -1, from, count, orderColumnName, orderDirection),
+                "all" => await booksRepository.GetBooks(searchString, false, null, from, count, orderColumnName, orderDirection),
                 "available" => await booksRepository.GetAvailableBooks(searchString, from, count, orderColumnName, orderDirection),
                 "takenByUser" => await booksRepository.GetBooksByUser(userId, searchString, from, count, orderColumnName, orderDirection),
-                _ => await booksRepository.GetBooks(searchString, false, -1, from, count, orderColumnName, orderDirection)
+                _ => await booksRepository.GetBooks(searchString, false, null, from, count, orderColumnName, orderDirection)
             };
         }
 
-        private async Task<int> GetBooksTotalCount(int userId, string searchString)
+        private async Task<int> GetBooksTotalCount(Guid userId, string searchString)
         {
             return Request.Cookies["TableSelectedMode"]?.ToString() switch
             {
