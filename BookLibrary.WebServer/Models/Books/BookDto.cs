@@ -19,7 +19,7 @@ namespace BookLibrary.WebServer.Models.Books
         [DataType(DataType.Date)]
         [Display(Name = "Year")]
         public DateTime Year { get; set; }
-        public bool? Availability { get; set; }
+        public bool? IsAvailable { get; set; }
 
         public BookDto()
         {
@@ -32,18 +32,18 @@ namespace BookLibrary.WebServer.Models.Books
             Name = book.Name;
             Authors = string.Join(", ", book.Authors);
             Year = book.Year;
-            Availability = book.Availability;
+            IsAvailable = book.IsAvailable;
         }
 
         public Book ToDomain()
         {
             if (Id is null)
             {
-                return new Book(Name, Authors?.Split(", "), Year, Availability ?? true);
+                return new Book(Name, Authors?.Split(", "), Year, IsAvailable ?? true);
             }
             else
             {
-                return Book.FromPersistence((Guid)Id, Name, Authors?.Split(", "), Year, Availability ?? true);
+                return Book.FromPersistence((Guid)Id, Name, Authors?.Split(", "), Year, IsAvailable ?? true);
             }
         }
     }

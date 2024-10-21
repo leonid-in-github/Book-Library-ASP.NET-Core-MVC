@@ -9,7 +9,7 @@ namespace BookLibrary.WebServer.Models.Books
     {
         public Guid? BookId { get; set; }
         public string BookName { get; set; }
-        public bool? BookAvailability { get; set; }
+        public bool? IsBookAvailable { get; set; }
         public bool CanBePut { get; set; }
         public string SelectedMode { get; set; } = BookTrackTableModes.Default;
         public List<BookTrack> BookTrackList { get; set; } = [];
@@ -27,7 +27,7 @@ namespace BookLibrary.WebServer.Models.Books
             {
                 BookId = model.BookId,
                 BookName = model.BookName,
-                BookAvailability = model.BookAvailability,
+                IsBookAvailable = model.IsBookAvailable,
                 CanBePut = model.CanBePut,
                 BookTrackList = model.TracksList
             };

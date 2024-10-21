@@ -115,7 +115,7 @@ namespace BookLibrary.Storage.Repositories
 
             bookRecord.Name = book.Name;
             bookRecord.Year = book.Year;
-            bookRecord.Availability = book.Availability ?? true;
+            bookRecord.IsAvailable = book.IsAvailable ?? true;
             dbContext.BooksAuthors.RemoveRange(dbContext.BooksAuthors.Where(record => record.BookId == book.Id));
             dbContext.SaveChanges();
 
@@ -134,7 +134,7 @@ namespace BookLibrary.Storage.Repositories
 
             result.BookId = bookRecord?.Id;
             result.BookName = bookRecord?.Name;
-            result.BookAvailability = bookRecord?.Availability;
+            result.IsBookAvailable = bookRecord?.IsAvailable;
 
             var bookTookTracks = dbContext.BookTracking.Where(record => record.BookId == bookId && record.Action == BookAction.Took.ToString());
             var lastBookTookTrack = bookTookTracks.FirstOrDefault(record => record.ActionTime == bookTookTracks.Max(track => track.ActionTime));
@@ -203,7 +203,7 @@ namespace BookLibrary.Storage.Repositories
                 var bookRecord = dbContext.Books.FirstOrDefault(record => record.Id == bookId);
                 if (bookRecord != null)
                 {
-                    bookRecord.Availability = action switch
+                    bookRecord.IsAvailable = action switch
                     {
                         BookAction.Took => false,
                         BookAction.Put => true,
@@ -257,7 +257,7 @@ namespace BookLibrary.Storage.Repositories
                         BookId = bookTrackGroup.Key,
                         ActionTime = bookTrackGroup.Max(bookTrack => bookTrack.ActionTime)
                     }).OrderBy(bookTrack => bookTrack.ActionTime);
-                booksQuery = booksQuery.Where(book => !book.Availability).Join(bookTracks, book => book.Id, bookTrack => bookTrack.BookId, (book, bookTrack) => book);
+                booksQuery = booksQuery.Where(book => !book.IsAvailable).Join(bookTracks, book => book.Id, bookTrack => bookTrack.BookId, (book, bookTrack) => book);
             }
 
             if (!string.IsNullOrEmpty(searchString))
@@ -273,7 +273,7 @@ namespace BookLibrary.Storage.Repositories
 
             if (onlyAvailable)
             {
-                booksQuery = booksQuery.Where(book => book.Availability);
+                booksQuery = booksQuery.Where(book => book.IsAvailable);
             }
 
             if (!string.IsNullOrEmpty(orderColumnName))
@@ -284,8 +284,8 @@ namespace BookLibrary.Storage.Repositories
                 {
                     nameof(Book.Name) => isDescending ? booksQuery.OrderByDescending(book => book.Name) : booksQuery.OrderBy(book => book.Name),
                     nameof(Book.Year) => isDescending ? booksQuery.OrderByDescending(book => book.Year) : booksQuery.OrderBy(book => book.Year),
-                    nameof(Book.Availability) => isDescending ? booksQuery.OrderByDescending(book => book.Availability)
-                    : booksQuery.OrderBy(book => book.Availability),
+                    nameof(Book.IsAvailable) => isDescending ? booksQuery.OrderByDescending(book => book.IsAvailable)
+                    : booksQuery.OrderBy(book => book.IsAvailable),
                     _ => throw new ArgumentException("Invalid order column name")
                 };
 
@@ -313,7 +313,7 @@ namespace BookLibrary.Storage.Repositories
                     (author, bookAuthor) => author)
                 .Select(authorRecord => authorRecord.Name).ToList(),
                 book.Year,
-                book.Availability
+                book.IsAvailable
             ));
             return books;
         }

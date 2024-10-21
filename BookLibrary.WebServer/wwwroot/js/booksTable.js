@@ -46,7 +46,7 @@ function LoadIndexBookTable() {
                 width: "10%"
             },
             {
-                name: "Availability",
+                name: "IsAvailable",
                 sortable: true,
                 render: function (data, type, row) {
                     return data === "True" ? "Available" : "Not available";
