@@ -43,7 +43,7 @@ namespace BookLibrary.WebServer.Controllers
                             a.Name,
                             a.Authors,
                             a.Year.ToString("MM/dd/yyyy hh:mm tt"),
-                            a.IsAvailable.ToString(),
+                            a.IsAvailable,
                             a.Id.ToString()
                         };
 

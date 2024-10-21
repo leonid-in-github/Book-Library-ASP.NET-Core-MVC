@@ -72,7 +72,7 @@ function LoadIndexBookTable() {
 }
 
 function readonlyCheckbox (data, type, full, meta) {
-    var is_checked = data == "True" ? "checked" : "";
+    var is_checked = data == true ? "checked" : "";
     return '<input type="checkbox" class="checkbox" onclick="return false;"' +
         is_checked + ' />';
 }
