@@ -48,9 +48,8 @@ function LoadIndexBookTable() {
             {
                 name: "IsAvailable",
                 sortable: true,
-                render: function (data, type, row) {
-                    return data === "True" ? "Available" : "Not available";
-                },
+                render: readonlyCheckbox,
+                className: 'text-center',
                 width: "15%"
             },
             {
@@ -70,4 +69,10 @@ function LoadIndexBookTable() {
         order: []
     });
 
+}
+
+function readonlyCheckbox (data, type, full, meta) {
+    var is_checked = data == "True" ? "checked" : "";
+    return '<input type="checkbox" class="checkbox" onclick="return false;"' +
+        is_checked + ' />';
 }
