@@ -42,7 +42,6 @@ namespace BookLibrary.Storage.Repositories
         {
             using var dbContext = new BookLibraryContext();
             using var transaction = dbContext.Database.BeginTransaction();
-
             var profileRecord = dbContext.Profiles.FirstOrDefault(record => record.FirstName == firstName && record.LastName == lastName && record.Email == email);
             if (profileRecord == null)
             {
@@ -83,7 +82,6 @@ namespace BookLibrary.Storage.Repositories
         public Task<User> GetUser(Guid userId)
         {
             using var dbContext = new BookLibraryContext();
-
             var accountRecord = dbContext.Accounts.FirstOrDefault(record => record.Id == userId);
             if (accountRecord != null)
             {
@@ -99,13 +97,12 @@ namespace BookLibrary.Storage.Repositories
                 }
             }
 
-            return Task.FromResult<User>(null);
+            return null;
         }
 
         public Task<bool> ChangeAccountPassword(Guid accountId, string accountPassword, string newAccountPassword)
         {
             using var dbContext = new BookLibraryContext();
-
             var accountRecord = dbContext.Accounts.FirstOrDefault(record => record.Id == accountId);
             if (accountRecord != null && accountRecord.Password == accountPassword)
             {
@@ -120,7 +117,6 @@ namespace BookLibrary.Storage.Repositories
         public Task<bool> DeleteAccount(Guid accountId, string accountPassword)
         {
             using var dbContext = new BookLibraryContext();
-
             var accountRecord = dbContext.Accounts.FirstOrDefault(record => record.Id == accountId);
             if (accountRecord != null && accountRecord.Password == accountPassword)
             {
